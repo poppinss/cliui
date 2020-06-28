@@ -20,4 +20,9 @@ export type LoggerOptions = {
 	dimIcons: boolean
 }
 
+export type ActionOptions = {
+	colors: boolean
+	dim: boolean
+}
+
 export type LoggingTypes = 'success' | 'error' | 'fatal' | 'warning' | 'info' | 'debug'
