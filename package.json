@@ -24,7 +24,7 @@
 	"author": "virk,poppinss",
 	"license": "MIT",
 	"devDependencies": {
-		"@adonisjs/mrm-preset": "^2.3.3",
+		"@adonisjs/mrm-preset": "^2.3.4",
 		"@types/node": "^14.0.14",
 		"commitizen": "^4.1.2",
 		"cz-conventional-changelog": "^3.2.0",
@@ -70,5 +70,9 @@
 	"np": {
 		"contents": ".",
 		"anyBranch": false
+	},
+	"dependencies": {
+		"@poppinss/colors": "^1.1.1",
+		"color-support": "^1.1.3"
 	}
 }
