@@ -58,7 +58,7 @@ export class Action {
 	 * Mark action as skipped
 	 */
 	public skipped(message: string) {
-		const label = this.getLabel('skip', 'magenta')
+		const label = this.getLabel('skip', 'cyan')
 		this.logger.debug(`${label} ${message}`)
 	}
 

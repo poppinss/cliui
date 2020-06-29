@@ -186,7 +186,7 @@ test.group('Logger | warning', () => {
 })
 
 test.group('Logger | info', () => {
-	test('log warning message with icon', (assert) => {
+	test('log info message with icon', (assert) => {
 		const logger = new Logger({}, true)
 		const renderer = new MemoryRenderer()
 
@@ -195,7 +195,7 @@ test.group('Logger | info', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `cyan(${icons.info})  Hello world`,
+				message: `blue(${icons.info})  Hello world`,
 				stream: 'stdout',
 			},
 		])
@@ -212,7 +212,7 @@ test.group('Logger | debug', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `magenta(${icons.bullet})  Hello world`,
+				message: `cyan(${icons.bullet})  Hello world`,
 				stream: 'stdout',
 			},
 		])

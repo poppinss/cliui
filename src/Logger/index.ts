@@ -92,9 +92,9 @@ export class Logger {
 			case 'warning':
 				return this.colorizeIcon('yellow', icons.warning)
 			case 'info':
-				return this.colorizeIcon('cyan', icons.info)
+				return this.colorizeIcon('blue', icons.info)
 			case 'debug':
-				return this.colorizeIcon('magenta', icons.bullet)
+				return this.colorizeIcon('cyan', icons.bullet)
 			case 'await':
 				return this.colorizeIcon('yellow', icons.squareSmallFilled)
 		}

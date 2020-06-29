@@ -53,7 +53,7 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `magenta(${icons.bullet})  underline(magenta(skip)) hello world`,
+				message: `cyan(${icons.bullet})  underline(cyan(skip)) hello world`,
 				stream: 'stdout',
 			},
 		])

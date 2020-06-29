@@ -13,9 +13,20 @@ import stringWidth from 'string-width'
 import { icons } from '../Icons'
 import { getBest } from '../Colors'
 import { ConsoleRenderer } from '../Renderer/Console'
-import { InstructionsLine, RendererContract } from '../Contracts'
+import { InstructionsLine, InstructionsOptions, RendererContract } from '../Contracts'
 
+/**
+ * The box styling used by the instructions
+ */
 const BOX = boxes.round
+
+/**
+ * Default config options
+ */
+const DEFAULTS: InstructionsOptions = {
+	icons: true,
+	colors: true,
+}
 
 /**
  * The API to render instructions wrapped inside a box
@@ -61,9 +72,31 @@ export class Instructions {
 	/**
 	 * Reference to the colors
 	 */
-	private colors = getBest(this.testing, true)
+	private colors: ReturnType<typeof getBest>
 
-	constructor(private testing: boolean = false) {}
+	/**
+	 * Options
+	 */
+	public options: InstructionsOptions
+
+	constructor(options?: Partial<InstructionsOptions>, private testing: boolean = false) {
+		this.options = { ...DEFAULTS, ...options }
+		this.options.colors = this.shouldEnableColors(this.options.colors)
+		this.colors = getBest(this.testing, this.options.colors)
+	}
+
+	/**
+	 * Returns a boolean telling if we should enable or disable the
+	 * colors. We override the user defined "true" value if the
+	 * user terminal doesn't support colors
+	 */
+	private shouldEnableColors(userDefined: boolean) {
+		if (userDefined === true) {
+			return require('color-support').level > 0
+		}
+
+		return false
+	}
 
 	/**
 	 * Returns the renderer for rendering the messages
@@ -78,21 +111,21 @@ export class Instructions {
 	/**
 	 * Repeats text for given number of times
 	 */
-	private repeat (text: string, times: number) {
+	private repeat(text: string, times: number) {
 		return new Array(times + 1).join(text)
 	}
 
 	/**
 	 * Adds dim transformation
 	 */
-	private dim (text: string): string {
+	private dim(text: string): string {
 		return this.colors.gray(text) as string
 	}
 
 	/**
 	 * Wraps content inside the left and right vertical lines
 	 */
-	private wrapInVerticalLines (content: string, leftWhitespace: string, rightWhitespace: string) {
+	private wrapInVerticalLines(content: string, leftWhitespace: string, rightWhitespace: string) {
 		return `${this.dim(BOX.vertical)}${leftWhitespace}${content}${rightWhitespace}${this.dim(BOX.vertical)}`
 	}
 
@@ -119,7 +152,7 @@ export class Instructions {
 	 * lines
 	 */
 	private getContentLine(line: InstructionsLine): string {
-		const rightWhitespace = this.repeat(' ', (this.widestLineLength - line.width) + this.rightPadding)
+		const rightWhitespace = this.repeat(' ', this.widestLineLength - line.width + this.rightPadding)
 		const leftWhitespace = this.repeat(' ', this.leftPadding)
 		return this.wrapInVerticalLines(line.text, leftWhitespace, rightWhitespace)
 	}
@@ -127,7 +160,7 @@ export class Instructions {
 	/**
 	 * Returns the heading line with the border bottom
 	 */
-	private getHeading (): string | undefined {
+	private getHeading(): string | undefined {
 		if (!this.state.heading) {
 			return
 		}
@@ -137,7 +170,7 @@ export class Instructions {
 		const horizontalLength = this.widestLineLength + this.leftPadding + this.rightPadding
 		const horizontalLine = this.repeat(this.dim(boxes.single.horizontal), horizontalLength)
 		const leftWhitespace = this.repeat(' ', this.leftPadding)
-		const rightWhitespace = this.repeat(' ', (this.widestLineLength - width) + this.rightPadding)
+		const rightWhitespace = this.repeat(' ', this.widestLineLength - width + this.rightPadding)
 
 		const headingContent = this.wrapInVerticalLines(this.state.heading, leftWhitespace, rightWhitespace)
 		const headingLine = this.wrapInVerticalLines(horizontalLine, '', '')
@@ -147,14 +180,14 @@ export class Instructions {
 	/**
 	 * Returns node for a empty line
 	 */
-	private getEmptyLineNode () {
+	private getEmptyLineNode() {
 		return { text: '', width: 0 }
 	}
 
 	/**
 	 * Returns instructions lines with the padding
 	 */
-	private getLinesWithPadding () {
+	private getLinesWithPadding() {
 		const top = new Array(this.paddingTop).fill('').map(this.getEmptyLineNode)
 		const bottom = new Array(this.paddingBottom).fill('').map(this.getEmptyLineNode)
 		return top.concat(this.state.content).concat(bottom)
@@ -182,8 +215,7 @@ export class Instructions {
 	 * in a new line inside a box
 	 */
 	public add(text: string): this {
-		text
-		text = `${this.dim(icons.pointer)} ${text}`
+		text = this.options.icons ? `${this.dim(icons.pointer)} ${text}` : `${text}`
 
 		const width = stringWidth(text)
 		if (width > this.widestLineLength) {
@@ -211,7 +243,9 @@ export class Instructions {
 
 		const top = this.getTopLine()
 		const heading = this.getHeading()
-		const body = this.getLinesWithPadding().map((line) => this.getContentLine(line)).join('\n')
+		const body = this.getLinesWithPadding()
+			.map((line) => this.getContentLine(line))
+			.join('\n')
 		const bottom = this.getBottomLine()
 
 		let output = `${top}\n`

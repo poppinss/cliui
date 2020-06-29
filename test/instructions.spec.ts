@@ -1,11 +1,11 @@
 /*
-* @poppinss/cliui
-*
-* (c) Harminder Virk <virk@adonisjs.com>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * @poppinss/cliui
+ *
+ * (c) Harminder Virk <virk@adonisjs.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 import test from 'japa'
 
@@ -15,7 +15,7 @@ import { MemoryRenderer } from '../src/Renderer/Memory'
 
 test.group('Instructions', () => {
 	test('render instruction line', (assert) => {
-		const instructions = new Instructions(true)
+		const instructions = new Instructions({}, true)
 		const renderer = new MemoryRenderer()
 
 		instructions.useRenderer(renderer)
@@ -31,7 +31,7 @@ test.group('Instructions', () => {
 	})
 
 	test('render multiple instruction lines', (assert) => {
-		const instructions = new Instructions(true)
+		const instructions = new Instructions({}, true)
 		const renderer = new MemoryRenderer()
 
 		instructions.useRenderer(renderer)
@@ -52,7 +52,7 @@ test.group('Instructions', () => {
 	})
 
 	test('render instruction heading', (assert) => {
-		const instructions = new Instructions(true)
+		const instructions = new Instructions({}, true)
 		const renderer = new MemoryRenderer()
 
 		instructions.useRenderer(renderer)
@@ -72,6 +72,32 @@ test.group('Instructions', () => {
 			},
 			{
 				message: `gray(${icons.pointer}) hi world`,
+				stream: 'stdout',
+			},
+		])
+	})
+
+	test('disable icons', (assert) => {
+		const instructions = new Instructions({ icons: false }, true)
+		const renderer = new MemoryRenderer()
+
+		instructions.useRenderer(renderer)
+		instructions.heading('hey')
+		instructions.add('hello world')
+		instructions.add('hi world')
+		instructions.render()
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: 'hey',
+				stream: 'stdout',
+			},
+			{
+				message: `hello world`,
+				stream: 'stdout',
+			},
+			{
+				message: `hi world`,
 				stream: 'stdout',
 			},
 		])
