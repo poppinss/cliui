@@ -1,5 +1,7 @@
 import { Logger } from '../src/Logger'
 import { Action } from '../src/Action'
+import { getBest } from '../src/Colors'
+import { Instructions } from '../src/Instructions'
 
 console.log('-------------------------------')
 console.log('ACTIONS')
@@ -33,7 +35,16 @@ console.log('SUFFIX')
 console.log('-------------------------------')
 logger.debug('installing packages', undefined, 'npm install')
 
+// console.log('-------------------------------')
+// console.log('SPINNER')
+// console.log('-------------------------------')
+// logger.await('installing packages', undefined, 'npm install')
+
 console.log('-------------------------------')
-console.log('SPINNER')
+console.log('INSTRUCTIONS')
 console.log('-------------------------------')
-logger.await('installing packages', undefined, 'npm install')
+const instructions = new Instructions()
+
+instructions.add(`cd ${getBest(false, true).yellow('app')}`)
+instructions.add(`Run ${getBest(false, true).yellow('node ace serve --dev')}`)
+instructions.render()

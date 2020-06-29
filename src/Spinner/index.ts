@@ -62,7 +62,7 @@ export class Spinner {
 	/**
 	 * Update the text and persist right away
 	 */
-	private updateAndPersist (frameIndex: number) {
+	private updateAndPersist(frameIndex: number) {
 		/**
 		 * Print the message as it is in testing mode
 		 */

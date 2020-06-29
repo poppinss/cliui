@@ -19,7 +19,10 @@ export type LoggerOptions = {
 	dim: boolean
 	dimIcons: boolean
 }
-
 export type ActionOptions = LoggerOptions
-
 export type LoggingTypes = 'success' | 'error' | 'fatal' | 'warning' | 'info' | 'debug' | 'await'
+
+export type InstructionsLine = {
+	text: string
+	width: number
+}
