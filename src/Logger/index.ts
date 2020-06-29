@@ -11,6 +11,7 @@ import { Colors } from '@poppinss/colors'
 
 import { icons } from '../Icons'
 import { getBest } from '../Colors'
+import { Spinner } from '../Spinner'
 import { ConsoleRenderer } from '../Renderer/Console'
 import { LoggerOptions, RendererContract, LoggingTypes } from '../Contracts'
 
@@ -30,7 +31,7 @@ const DEFAULTS: LoggerOptions = {
  * and colors
  */
 export class Logger {
-	private options: LoggerOptions
+	public options: LoggerOptions
 	private colors: ReturnType<typeof getBest>
 	private iconColors: ReturnType<typeof getBest>
 	private renderer?: RendererContract
@@ -93,7 +94,9 @@ export class Logger {
 			case 'info':
 				return this.colorizeIcon('cyan', icons.info)
 			case 'debug':
-				return this.colorizeIcon('blue', icons.bullet)
+				return this.colorizeIcon('magenta', icons.bullet)
+			case 'await':
+				return this.colorizeIcon('yellow', icons.squareSmallFilled)
 		}
 	}
 
@@ -153,7 +156,7 @@ export class Logger {
 			.split('\n')
 			.splice(1)
 			.map((line) => {
-				return `      ${this.colors.dim(line)}`
+				return `${this.colors.dim(line)}`
 			})
 			.join('\n')}`
 	}
@@ -172,9 +175,9 @@ export class Logger {
 	 */
 	public success(message: string, prefix?: string, suffix?: string) {
 		message = this.decorateMessage(message)
+		message = this.prefixIcon(message, this.getIcon('success'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
-		message = this.prefixIcon(message, this.getIcon('success'))
 
 		this.getRenderer().log(message)
 	}
@@ -185,9 +188,9 @@ export class Logger {
 	public error(message: string | { message: string }, prefix?: string, suffix?: string) {
 		message = typeof message === 'string' ? message : message.message
 		message = this.decorateMessage(message)
+		message = this.prefixIcon(message, this.getIcon('error'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
-		message = this.prefixIcon(message, this.getIcon('error'))
 
 		this.getRenderer().logError(message)
 	}
@@ -200,9 +203,9 @@ export class Logger {
 
 		message = typeof message === 'string' ? message : message.message
 		message = this.decorateMessage(message)
+		message = this.prefixIcon(message, this.getIcon('error'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
-		message = this.prefixIcon(message, this.getIcon('error'))
 
 		this.getRenderer().logError(`${message}${stack}`)
 	}
@@ -212,9 +215,9 @@ export class Logger {
 	 */
 	public warning(message: string, prefix?: string, suffix?: string) {
 		message = this.decorateMessage(message)
+		message = this.prefixIcon(message, this.getIcon('warning'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
-		message = this.prefixIcon(message, this.getIcon('warning'))
 
 		this.getRenderer().log(message)
 	}
@@ -224,9 +227,9 @@ export class Logger {
 	 */
 	public info(message: string, prefix?: string, suffix?: string) {
 		message = this.decorateMessage(message)
+		message = this.prefixIcon(message, this.getIcon('info'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
-		message = this.prefixIcon(message, this.getIcon('info'))
 
 		this.getRenderer().log(message)
 	}
@@ -236,10 +239,21 @@ export class Logger {
 	 */
 	public debug(message: string, prefix?: string, suffix?: string) {
 		message = this.decorateMessage(message)
+		message = this.prefixIcon(message, this.getIcon('debug'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
-		message = this.prefixIcon(message, this.getIcon('debug'))
 
 		this.getRenderer().log(message)
+	}
+
+	/**
+	 * Log a message with a spinner
+	 */
+	public await(message: string, prefix?: string, suffix?: string) {
+		message = this.decorateMessage(message)
+		message = this.prefixIcon(message, this.getIcon('await'))
+		message = this.addPrefix(message, prefix)
+		message = this.addSuffix(message, suffix)
+		return new Spinner(message, this.testing).start()
 	}
 }

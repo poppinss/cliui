@@ -9,12 +9,13 @@
 
 import test from 'japa'
 
+import { icons } from '../src/Icons'
 import { Action } from '../src/Action'
 import { MemoryRenderer } from '../src/Renderer/Memory'
 
 test.group('Action', () => {
 	test('log action in succeeded state', (assert) => {
-		const action = new Action({}, true)
+		const action = new Action('create', {}, true)
 		const renderer = new MemoryRenderer()
 
 		action.useRenderer(renderer)
@@ -22,14 +23,14 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: 'underline(green(success))  hello world',
+				message: `green(${icons.tick})  underline(green(create)) hello world`,
 				stream: 'stdout',
 			},
 		])
 	})
 
 	test('log action in failed state', (assert) => {
-		const action = new Action({}, true)
+		const action = new Action('create', {}, true)
 		const renderer = new MemoryRenderer()
 
 		action.useRenderer(renderer)
@@ -37,14 +38,14 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: 'underline(red(error))    hello world',
+				message: `red(${icons.cross})  underline(red(create)) hello world`,
 				stream: 'stderr',
 			},
 		])
 	})
 
 	test('log action in skipped state', (assert) => {
-		const action = new Action({}, true)
+		const action = new Action('create', {}, true)
 		const renderer = new MemoryRenderer()
 
 		action.useRenderer(renderer)
@@ -52,14 +53,14 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: 'underline(magenta(skip))     hello world',
+				message: `magenta(${icons.bullet})  underline(magenta(skip)) hello world`,
 				stream: 'stdout',
 			},
 		])
 	})
 
 	test('disable colors', (assert) => {
-		const action = new Action({ colors: false }, true)
+		const action = new Action('create', { colors: false }, true)
 		const renderer = new MemoryRenderer()
 
 		action.useRenderer(renderer)
@@ -67,14 +68,14 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: '[success]  hello world',
+				message: `${icons.tick}  [create] hello world`,
 				stream: 'stdout',
 			},
 		])
 	})
 
 	test('dim message', (assert) => {
-		const action = new Action({ dim: true }, true)
+		const action = new Action('create', { dim: true }, true)
 		const renderer = new MemoryRenderer()
 
 		action.useRenderer(renderer)
@@ -82,7 +83,7 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: 'dim(underline(green(success)))  dim(hello world)',
+				message: `dim(green(${icons.tick}))  dim(underline(green(create)) hello world)`,
 				stream: 'stdout',
 			},
 		])

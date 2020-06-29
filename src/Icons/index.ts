@@ -19,6 +19,7 @@ export const icons =
 				pointer: '>',
 				info: 'i',
 				warning: '‼',
+				squareSmallFilled: '[█]',
 		  }
 		: {
 				tick: '✔',
@@ -28,4 +29,5 @@ export const icons =
 				pointer: '❯',
 				info: 'ℹ',
 				warning: '⚠',
+				squareSmallFilled: '◼',
 		  }

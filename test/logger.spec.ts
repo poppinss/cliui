@@ -164,7 +164,7 @@ test.group('Logger | fatal', () => {
 
 		assert.lengthOf(renderer.logs, 1)
 		assert.equal(renderer.logs[0].stream, 'stderr')
-		assert.equal(renderer.logs[0].message.split('\n')[1], `      dim(    at ${__filename}:163:16)`)
+		assert.equal(renderer.logs[0].message.split('\n')[1], `dim(    at ${__filename}:163:16)`)
 	})
 })
 
@@ -212,7 +212,7 @@ test.group('Logger | debug', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `blue(${icons.bullet})  Hello world`,
+				message: `magenta(${icons.bullet})  Hello world`,
 				stream: 'stdout',
 			},
 		])
