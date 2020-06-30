@@ -81,21 +81,7 @@ export class Instructions {
 
 	constructor(options?: Partial<InstructionsOptions>, private testing: boolean = false) {
 		this.options = { ...DEFAULTS, ...options }
-		this.options.colors = this.shouldEnableColors(this.options.colors)
 		this.colors = getBest(this.testing, this.options.colors)
-	}
-
-	/**
-	 * Returns a boolean telling if we should enable or disable the
-	 * colors. We override the user defined "true" value if the
-	 * user terminal doesn't support colors
-	 */
-	private shouldEnableColors(userDefined: boolean) {
-		if (userDefined === true) {
-			return require('color-support').level > 0
-		}
-
-		return false
 	}
 
 	/**
@@ -167,14 +153,21 @@ export class Instructions {
 
 		const width = stringWidth(this.state.heading)
 
-		const horizontalLength = this.widestLineLength + this.leftPadding + this.rightPadding
-		const horizontalLine = this.repeat(this.dim(boxes.single.horizontal), horizontalLength)
+		/**
+		 * Creating the header text
+		 */
 		const leftWhitespace = this.repeat(' ', this.leftPadding)
 		const rightWhitespace = this.repeat(' ', this.widestLineLength - width + this.rightPadding)
-
 		const headingContent = this.wrapInVerticalLines(this.state.heading, leftWhitespace, rightWhitespace)
-		const headingLine = this.wrapInVerticalLines(horizontalLine, '', '')
-		return `${headingContent}\n${headingLine}`
+
+		/**
+		 * Creating the heading border bottom
+		 */
+		const horizontalLength = this.widestLineLength + this.leftPadding + this.rightPadding
+		const borderLine = this.repeat(this.dim(boxes.single.horizontal), horizontalLength)
+		const border = this.wrapInVerticalLines(borderLine, '', '')
+
+		return `${headingContent}\n${border}`
 	}
 
 	/**

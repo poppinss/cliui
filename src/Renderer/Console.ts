@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
+import logUpdate from 'log-update'
 import { RendererContract } from '../Contracts'
 
 /**
@@ -17,6 +18,23 @@ export class ConsoleRenderer implements RendererContract {
 		console.log(message)
 	}
 
+	/**
+	 * Log message by overwriting the existing one
+	 */
+	public logUpdate(message: string) {
+		logUpdate(message)
+	}
+
+	/**
+	 * Persist the last logged message
+	 */
+	public logUpdateDone() {
+		logUpdate.done()
+	}
+
+	/**
+	 * Log error
+	 */
 	public logError(message: string) {
 		console.error(message)
 	}

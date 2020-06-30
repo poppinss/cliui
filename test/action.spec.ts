@@ -10,12 +10,13 @@
 import test from 'japa'
 
 import { icons } from '../src/Icons'
-import { Action } from '../src/Action'
+import { Logger } from '../src/Logger'
+import { Action } from '../src/Logger/Action'
 import { MemoryRenderer } from '../src/Renderer/Memory'
 
 test.group('Action', () => {
 	test('log action in succeeded state', (assert) => {
-		const action = new Action('create', {}, true)
+		const action = new Action('create', new Logger({}, true))
 		const renderer = new MemoryRenderer()
 
 		action.useRenderer(renderer)
@@ -30,7 +31,7 @@ test.group('Action', () => {
 	})
 
 	test('log action in failed state', (assert) => {
-		const action = new Action('create', {}, true)
+		const action = new Action('create', new Logger({}, true))
 		const renderer = new MemoryRenderer()
 
 		action.useRenderer(renderer)
@@ -45,7 +46,7 @@ test.group('Action', () => {
 	})
 
 	test('log action in skipped state', (assert) => {
-		const action = new Action('create', {}, true)
+		const action = new Action('create', new Logger({}, true))
 		const renderer = new MemoryRenderer()
 
 		action.useRenderer(renderer)
@@ -60,7 +61,7 @@ test.group('Action', () => {
 	})
 
 	test('disable colors', (assert) => {
-		const action = new Action('create', { colors: false }, true)
+		const action = new Action('create', new Logger({ colors: false }, true))
 		const renderer = new MemoryRenderer()
 
 		action.useRenderer(renderer)
@@ -75,7 +76,7 @@ test.group('Action', () => {
 	})
 
 	test('dim message', (assert) => {
-		const action = new Action('create', { dim: true }, true)
+		const action = new Action('create', new Logger({ dim: true }, true))
 		const renderer = new MemoryRenderer()
 
 		action.useRenderer(renderer)

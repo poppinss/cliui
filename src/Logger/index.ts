@@ -10,8 +10,9 @@
 import { Colors } from '@poppinss/colors'
 
 import { icons } from '../Icons'
+import { Action } from './Action'
 import { getBest } from '../Colors'
-import { Spinner } from '../Spinner'
+import { Spinner } from './Spinner'
 import { ConsoleRenderer } from '../Renderer/Console'
 import { LoggerOptions, RendererContract, LoggingTypes } from '../Contracts'
 
@@ -24,6 +25,7 @@ const DEFAULTS: LoggerOptions = {
 	dimIcons: false,
 	colors: true,
 	iconColors: true,
+	interactive: true,
 }
 
 /**
@@ -31,25 +33,30 @@ const DEFAULTS: LoggerOptions = {
  * and colors
  */
 export class Logger {
+	/**
+	 * Logger configuration options
+	 */
 	public options: LoggerOptions
-	private colors: ReturnType<typeof getBest>
+
+	/**
+	 * The colors reference
+	 */
+	public colors: ReturnType<typeof getBest>
+
+	/**
+	 * The icon colors reference
+	 */
 	private iconColors: ReturnType<typeof getBest>
+
+	/**
+	 * The renderer to use to output logs
+	 */
 	private renderer?: RendererContract
 
 	constructor(options?: Partial<LoggerOptions>, private testing: boolean = false) {
 		this.options = { ...DEFAULTS, ...options }
 		this.colors = getBest(this.testing, this.options.colors)
 		this.iconColors = getBest(this.testing, this.options.iconColors && this.options.colors)
-	}
-
-	/**
-	 * Returns the renderer for rendering the messages
-	 */
-	private getRenderer() {
-		if (!this.renderer) {
-			this.renderer = new ConsoleRenderer()
-		}
-		return this.renderer
 	}
 
 	/**
@@ -146,12 +153,52 @@ export class Logger {
 	}
 
 	/**
+	 * Returns the renderer for rendering the messages
+	 */
+	private getRenderer() {
+		if (!this.renderer) {
+			this.renderer = new ConsoleRenderer()
+		}
+		return this.renderer
+	}
+
+	/**
 	 * Define a custom renderer. Logs to "stdout" and "stderr"
 	 * by default
 	 */
 	public useRenderer(renderer: RendererContract): this {
 		this.renderer = renderer
 		return this
+	}
+
+	/**
+	 * Log message using the renderer. It is similar to `console.log`
+	 * but uses the underlying renderer instead
+	 */
+	public log(message: string) {
+		this.getRenderer().log(message)
+	}
+
+	/**
+	 * Log message by overwriting the existing one
+	 */
+	public logUpdate(message: string) {
+		this.getRenderer().logUpdate(message)
+	}
+
+	/**
+	 * Persist the message logged using [[this.logUpdate]]
+	 */
+	public logUpdatePersist() {
+		this.getRenderer().logUpdateDone()
+	}
+
+	/**
+	 * Log error message using the renderer. It is similar to `console.error`
+	 * but uses the underlying renderer instead
+	 */
+	public logError(message: string) {
+		this.getRenderer().logError(message)
 	}
 
 	/**
@@ -163,7 +210,7 @@ export class Logger {
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
-		this.getRenderer().log(message)
+		this.log(message)
 	}
 
 	/**
@@ -176,7 +223,7 @@ export class Logger {
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
-		this.getRenderer().logError(message)
+		this.logError(message)
 	}
 
 	/**
@@ -191,7 +238,7 @@ export class Logger {
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
-		this.getRenderer().logError(`${message}${stack}`)
+		this.logError(`${message}${stack}`)
 	}
 
 	/**
@@ -203,7 +250,7 @@ export class Logger {
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
-		this.getRenderer().log(message)
+		this.log(message)
 	}
 
 	/**
@@ -215,7 +262,7 @@ export class Logger {
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
-		this.getRenderer().log(message)
+		this.log(message)
 	}
 
 	/**
@@ -227,7 +274,7 @@ export class Logger {
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
-		this.getRenderer().log(message)
+		this.log(message)
 	}
 
 	/**
@@ -238,6 +285,14 @@ export class Logger {
 		message = this.prefixIcon(message, this.getIcon('await'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
-		return new Spinner(message, this.testing).start()
+
+		return new Spinner(message, this, this.testing).start()
+	}
+
+	/**
+	 * Initiates a new action
+	 */
+	public action(title: string) {
+		return new Action(title, this)
 	}
 }

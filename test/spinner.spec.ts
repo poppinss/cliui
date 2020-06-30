@@ -8,44 +8,63 @@
  */
 
 import test from 'japa'
-import hookStd from 'hook-std'
-import { Spinner } from '../src/Spinner'
+import { Logger } from '../src/Logger'
+import { Spinner } from '../src/Logger/Spinner'
+import { MemoryRenderer } from '../src/Renderer/Memory'
 
 test.group('Spinner', () => {
-	test('print the message with progress bar', async (assert) => {
-		const spinner = new Spinner('hello world', true)
-		const fn = hookStd.stdout((output, unhook) => {
-			unhook()
-			assert.equal(output.trim(), 'hello world ...')
-		})
+	test('print the message with progress bar', (assert) => {
+		const logger = new Logger({}, true)
+		const renderer = new MemoryRenderer()
 
+		logger.useRenderer(renderer)
+		const spinner = new Spinner('hello world', logger, true)
 		spinner.start()
-		await fn
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: 'hello world ...',
+				stream: 'stdout',
+			},
+		])
 	})
 
 	test('update message on the update call', async (assert) => {
-		const spinner = new Spinner('hello world', true)
+		const logger = new Logger({}, true)
+		const renderer = new MemoryRenderer()
+
+		logger.useRenderer(renderer)
+		const spinner = new Spinner('hello world', logger, true)
+
 		spinner.start()
-
-		const fn = hookStd.stdout((output, unhook) => {
-			unhook()
-			assert.equal(output.trim(), 'hi world ...')
-		})
-
 		spinner.update('hi world')
-		await fn
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: 'hello world ...',
+				stream: 'stdout',
+			},
+			{
+				message: 'hi world ...',
+				stream: 'stdout',
+			},
+		])
 	})
 
-	test('stop should be a noop', async (assert) => {
-		const spinner = new Spinner('hello world', true)
+	test('stop in test mode must be a noop', async (assert) => {
+		const logger = new Logger({}, true)
+		const renderer = new MemoryRenderer()
 
-		const fn = hookStd.stdout((output, unhook) => {
-			unhook()
-			assert.equal(output.trim(), 'hello world ...')
-		})
-
+		logger.useRenderer(renderer)
+		const spinner = new Spinner('hello world', logger, true)
 		spinner.start()
 		spinner.stop()
-		await fn
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: 'hello world ...',
+				stream: 'stdout',
+			},
+		])
 	})
 })

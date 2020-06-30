@@ -9,6 +9,9 @@
 
 import { Colors, FakeColors, Raw } from '@poppinss/colors'
 
+/**
+ * Returns the colors instance based upon the environment
+ */
 export function getBest(testing: boolean, enabled: boolean) {
 	if (!enabled) {
 		return new Raw()

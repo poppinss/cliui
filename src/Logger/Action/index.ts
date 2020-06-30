@@ -9,9 +9,8 @@
 
 import { Colors } from '@poppinss/colors'
 
-import { Logger } from '../Logger'
-import { getBest } from '../Colors'
-import { ActionOptions, RendererContract } from '../Contracts'
+import { Logger } from '../index'
+import { RendererContract } from '../../Contracts'
 
 /**
  * Exposes the API to print actions in one of the following three states
@@ -21,10 +20,7 @@ import { ActionOptions, RendererContract } from '../Contracts'
  * - skipped
  */
 export class Action {
-	private logger = new Logger(this.options, this.testing)
-	private colors = getBest(this.testing, this.logger.options.colors)
-
-	constructor(private label: string, private options?: Partial<ActionOptions>, private testing: boolean = false) {}
+	constructor(private label: string, private logger: Logger) {}
 
 	/**
 	 * Returns the label
@@ -34,7 +30,7 @@ export class Action {
 			return `[${label}]`
 		}
 
-		return this.colors.underline()[color](label) as string
+		return this.logger.colors.underline()[color](label) as string
 	}
 
 	/**
