@@ -38,24 +38,8 @@ export class Logger {
 
 	constructor(options?: Partial<LoggerOptions>, private testing: boolean = false) {
 		this.options = { ...DEFAULTS, ...options }
-		this.options.colors = this.shouldEnableColors(this.options.colors)
-		this.options.iconColors = this.shouldEnableColors(this.options.iconColors)
-
 		this.colors = getBest(this.testing, this.options.colors)
 		this.iconColors = getBest(this.testing, this.options.iconColors && this.options.colors)
-	}
-
-	/**
-	 * Returns a boolean telling if we should enable or disable the
-	 * colors. We override the user defined "true" value if the
-	 * user terminal doesn't support colors
-	 */
-	private shouldEnableColors(userDefined: boolean) {
-		if (userDefined === true) {
-			return require('color-support').level > 0
-		}
-
-		return false
 	}
 
 	/**
