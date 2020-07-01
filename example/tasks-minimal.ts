@@ -34,8 +34,6 @@ tasks()
 	})
 	.add('install dependencies', async (logger, task) => {
 		await sleep(200)
-		logger.log(`installing dependencies ${logger.colors.cyan('npm i')}`)
-
 		const spinner = logger.await('installing')
 
 		await sleep(3000)
