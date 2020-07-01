@@ -89,4 +89,19 @@ test.group('Action', () => {
 			},
 		])
 	})
+
+	test('add skip reason to the log', (assert) => {
+		const action = new Action('create', new Logger({}, true))
+		const renderer = new MemoryRenderer()
+
+		action.useRenderer(renderer)
+		action.skipped('hello world', 'invalid message')
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: `cyan(${icons.bullet})  underline(cyan(skip)) hello world dim((invalid message))`,
+				stream: 'stdout',
+			},
+		])
+	})
 })

@@ -53,9 +53,14 @@ export class Action {
 	/**
 	 * Mark action as skipped
 	 */
-	public skipped(message: string) {
-		const label = this.getLabel('skip', 'cyan')
-		this.logger.debug(`${label} ${message}`)
+	public skipped(message: string, skipReason?: string) {
+		let logMessage = `${this.getLabel('skip', 'cyan')} ${message}`
+
+		if (skipReason) {
+			logMessage = `${logMessage} ${this.logger.colors.dim(`(${skipReason})`)}`
+		}
+
+		this.logger.debug(logMessage)
 	}
 
 	/**

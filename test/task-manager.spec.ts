@@ -104,7 +104,7 @@ test.group('TaskManager', () => {
 			},
 			{
 				message: renderer.logs[6].message,
-				stream: 'stdout',
+				stream: 'stderr',
 			},
 		])
 	})
@@ -156,7 +156,7 @@ test.group('TaskManager', () => {
 			},
 			{
 				message: renderer.logs[6].message,
-				stream: 'stdout',
+				stream: 'stderr',
 			},
 		])
 	})

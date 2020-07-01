@@ -90,7 +90,7 @@ export class VerboseRenderer {
 		 */
 		if (task.state === 'failed') {
 			task.completionMessage && this.logger.fatal(task.completionMessage)
-			this.getRenderer().log(`${pipe} ${this.logger.colors.red('failed')} ${duration}`)
+			this.getRenderer().logError(`${pipe} ${this.logger.colors.red('failed')} ${duration}`)
 			return
 		}
 

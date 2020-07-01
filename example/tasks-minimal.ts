@@ -38,6 +38,6 @@ tasks()
 
 		await sleep(3000)
 		spinner.stop()
-		await task.complete()
+		await task.fail(new Error('ahuh'))
 	})
 	.run()
