@@ -1,6 +1,6 @@
 {
 	"name": "@poppinss/cliui",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"description": "Highly opinionated command line UI KIT",
 	"scripts": {
 		"mrm": "mrm --preset=@adonisjs/mrm-preset",
