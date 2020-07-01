@@ -35,11 +35,11 @@ test.group('Action', () => {
 		const renderer = new MemoryRenderer()
 
 		action.useRenderer(renderer)
-		action.failed('hello world')
+		action.failed('hello world', 'File already exists')
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `red(${icons.cross})  underline(red(create)) hello world`,
+				message: `red(${icons.cross})  underline(red(create)) hello world dim((File already exists))`,
 				stream: 'stderr',
 			},
 		])

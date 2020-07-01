@@ -61,8 +61,8 @@ export class Action {
 	/**
 	 * Mark action as failed
 	 */
-	public failed(message: string) {
+	public failed(message: string, errorMessage: string) {
 		const label = this.getLabel(this.label, 'red')
-		this.logger.error(`${label} ${message}`)
+		this.logger.error(`${label} ${message} ${this.logger.colors.dim(`(${errorMessage})`)}`)
 	}
 }

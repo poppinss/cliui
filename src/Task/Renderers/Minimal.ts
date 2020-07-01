@@ -78,8 +78,12 @@ export class MinimalRenderer {
 	 */
 	private presentRunningTask(task: TaskContract, logLine?: string) {
 		let message = `${icons.pointer} ${task.title}`
-		message = logLine ? `${message}\n  ${logLine}` : message
-		return message
+		if (!logLine) {
+			return message
+		}
+
+		const lines = logLine.trim().split('\n')
+		return `${message}\n  ${lines[0]}`
 	}
 
 	/**
