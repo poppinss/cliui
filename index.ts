@@ -23,7 +23,7 @@ import { ConsoleRenderer } from './src/Renderer/Console'
  * Yes, we can install it as a dependency, but decided to copy/paste 4
  * lines. NO STRONG REASONS BEHIND IT
  */
-const interactive = Boolean(
+export const isInteractive = Boolean(
 	process.stdout && process.stdout.isTTY && process.env.TERM !== 'dumb' && !('CI' in process.env)
 )
 
@@ -32,7 +32,7 @@ const interactive = Boolean(
  * unless the terminal doesn't support color. Also "FORCE_COLOR"
  * env variable enables them forcefully.
  */
-const colors = !!process.env.FORCE_COLOR || colorSupport.level > 0
+export const supportsColors = !!process.env.FORCE_COLOR || colorSupport.level > 0
 
 /**
  * A boolean to know, if we are in testing mode or not. During tests
@@ -56,31 +56,51 @@ const consoleRenderer = new ConsoleRenderer()
 /**
  * Logger
  */
-export const logger = new Logger({ colors, interactive }, testing)
+export const logger = new Logger({ colors: supportsColors, interactive: isInteractive }, testing)
 logger.useRenderer(testing ? testingRenderer : consoleRenderer)
 
 /**
  * Reference to the instructions block to render a set of lines inside
  * a box.
  */
-export const instructions = () => new Instructions({ colors, icons: true }, testing)
+export const instructions = () => {
+	const instructionsInstance = new Instructions({ colors: supportsColors, icons: true }, testing)
+	instructionsInstance.useRenderer(testing ? testingRenderer : consoleRenderer)
+	return instructionsInstance
+}
 
 /**
  * Similar to instructions. But the lines are not prefix with a pointer `>`
  */
-export const sticker = () => new Instructions({ colors, icons: false }, testing)
+export const sticker = () => {
+	const stickerInstance = new Instructions({ colors: supportsColors, icons: false }, testing)
+	stickerInstance.useRenderer(testing ? testingRenderer : consoleRenderer)
+	return stickerInstance
+}
 
 /**
  * Initiates a group of tasks
  */
-export const tasks = () => new TaskManager({ colors, interactive }, testing)
+export const tasks = () => {
+	const manager = new TaskManager({ colors: supportsColors, interactive: isInteractive }, testing)
+	manager.useRenderer(testing ? testingRenderer : consoleRenderer)
+	return manager
+}
 
 /**
  * Initiate tasks in verbose mode
  */
-tasks.verbose = () => new TaskManager({ colors, interactive, verbose: true }, testing)
+tasks.verbose = () => {
+	const manager = new TaskManager({ colors: supportsColors, interactive: isInteractive, verbose: true }, testing)
+	manager.useRenderer(testing ? testingRenderer : consoleRenderer)
+	return manager
+}
 
 /**
  * Instantiate a new table
  */
-export const table = () => new Table({ colors }, testing)
+export const table = () => {
+	const tableInstance = new Table({ colors: supportsColors }, testing)
+	tableInstance.useRenderer(testing ? testingRenderer : consoleRenderer)
+	return tableInstance
+}
