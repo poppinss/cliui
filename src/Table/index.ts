@@ -1,11 +1,11 @@
 /*
-* @poppinss/cliui
-*
-* (c) Harminder Virk <virk@adonisjs.com>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * @poppinss/cliui
+ *
+ * (c) Harminder Virk <virk@adonisjs.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 import CliTable from 'cli-table3'
 import { getBest } from '../Colors'
@@ -24,9 +24,9 @@ const DEFAULTS: TableOptions = {
  */
 export class Table {
 	private state: {
-		colWidths?: number[],
-		head: string[],
-		rows: string[][],
+		colWidths?: number[]
+		head: string[]
+		rows: string[][]
 	} = {
 		head: [],
 		rows: [],
@@ -74,7 +74,7 @@ export class Table {
 	/**
 	 * Define table head
 	 */
-	public head (headColumns: string[]): this {
+	public head(headColumns: string[]): this {
 		this.state.head = headColumns.map((col) => this.colors.cyan(col))
 		return this
 	}
@@ -82,7 +82,7 @@ export class Table {
 	/**
 	 * Add a new table row
 	 */
-	public row (row: string[]): this {
+	public row(row: string[]): this {
 		this.state.rows.push(row)
 		return this
 	}
@@ -90,7 +90,7 @@ export class Table {
 	/**
 	 * Define custom column widths
 	 */
-	public columnWidths (widths: number[]): this {
+	public columnWidths(widths: number[]): this {
 		this.state.colWidths = widths
 		return this
 	}
@@ -98,7 +98,7 @@ export class Table {
 	/**
 	 * Render table
 	 */
-	public render () {
+	public render() {
 		if (this.testing) {
 			this.getRenderer().log(this.state.head.join('|'))
 			this.state.rows.forEach((row) => this.getRenderer().log(row.join('|')))
@@ -108,7 +108,7 @@ export class Table {
 		const cliTable = new CliTable({
 			head: this.state.head,
 			style: { head: [] },
-			...( this.state.colWidths ? { colWidths: this.state.colWidths } : {}),
+			...(this.state.colWidths ? { colWidths: this.state.colWidths } : {}),
 		})
 		this.state.rows.forEach((row) => cliTable.push(row))
 		this.getRenderer().log(cliTable.toString())

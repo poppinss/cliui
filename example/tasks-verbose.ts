@@ -2,7 +2,8 @@ import { tasks } from '../index'
 
 const sleep = (time: number) => new Promise((resolve) => setTimeout(resolve, time))
 
-tasks.verbose()
+tasks
+	.verbose()
 	.add('clone repo', async (logger, task) => {
 		await sleep(200)
 		logger.log(`cloning repo ${logger.colors.cyan('https://github.com/adonisjs/core')}`)
