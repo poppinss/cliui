@@ -84,6 +84,13 @@ export type LoggerOptions = {
 }
 
 /**
+ * Options accepted by table
+ */
+export type TableOptions = {
+	colors: boolean
+}
+
+/**
  * Options accepted by instructions
  */
 export type InstructionsOptions = {

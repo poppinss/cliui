@@ -9,6 +9,7 @@
 
 import colorSupport from 'color-support'
 
+import { Table } from './src/Table'
 import { Logger } from './src/Logger'
 import { TaskManager } from './src/Task/Manager'
 import { Instructions } from './src/Instructions'
@@ -78,3 +79,8 @@ export const tasks = () => new TaskManager({ colors, interactive }, testing)
  * Initiate tasks in verbose mode
  */
 tasks.verbose = () => new TaskManager({ colors, interactive, verbose: true }, testing)
+
+/**
+ * Instantiate a new table
+ */
+export const table = () => new Table({ colors }, testing)
