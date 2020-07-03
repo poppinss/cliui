@@ -2,9 +2,11 @@
 
 > Command line UI Kit used by AdonisJS
 
+![](https://res.cloudinary.com/adonis-js/image/upload/v1593614024/adonisjs.com/adonis-cli-ui-kit_oyxf4a.png)
+
 This repo is a command line UI Kit used by the AdonisJS framework to design its command line interfaces.
 
-The kit is highly opinionated and we will not allow configurable settings in the near future. We want to be consistent with our UI's without worrying about the configuration. **It's like getting in the [prettier mindset](https://prettier.io/docs/en/option-philosophy.html).**
+The kit is highly opinionated and we will not allow configurable settings in the near future. We want to be consistent with our UI's without worrying about the configuration.
 
 [![circleci-image]][circleci-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url]
 
@@ -324,30 +326,30 @@ Following is a very simple example of creating and running multiple tasks.
 import { tasks } from '@poppinss/cliui'
 
 await tasks()
-  .add('clone repo', async (logger, task) => {
-    logger.info(`cloning ${someRepoUrl}`)
+	.add('clone repo', async (logger, task) => {
+		logger.info(`cloning ${someRepoUrl}`)
 
-    await performClone()
-    await task.complete()
-  })
-  .add('install dependencies', async (logger, task) => {
-    const spinner = logger.await('running npm install')
+		await performClone()
+		await task.complete()
+	})
+	.add('install dependencies', async (logger, task) => {
+		const spinner = logger.await('running npm install')
 
-    await performInstall()
-    spinner.stop()
+		await performInstall()
+		spinner.stop()
 
-    await task.complete()
-  })
-  .run()
+		await task.complete()
+	})
+	.run()
 ```
 
 - The `add` method accepts the **task title** and the callback function to invoke in order to perform the task
 - Once, you are done with the task jobs, you must call `await task.complete()` to complete the task. The `await` is important here.
 - In order to **mark task as failed**, you can call the `task.fail` method. All upcoming tasks will be stopped in case of a failure.
-    
-    ```ts
-   	await task.fail(new Error('Network error'))
-    ```
+		
+		```ts
+		await task.fail(new Error('Network error'))
+		```
 
 By default, the `minimal` renderer is used and pivots to the verbose renderer only when terminal is not interactive.
 
@@ -359,9 +361,9 @@ In order to run tasks explicitly in the verbose mode, you can create the tasks i
 
 ```ts
 tasks.verbose()
-  .add()
-  .add()
-  .run()
+	.add()
+	.add()
+	.run()
 ```
 
 ![](https://res.cloudinary.com/adonis-js/image/upload/v1593599111/adonisjs.com/tasks-verbose_cq3ibx.gif)
