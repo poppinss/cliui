@@ -10,7 +10,7 @@
 const { platform } = process
 
 export const icons =
-	platform === 'win32' && process.env.CLI_UI_ICONS !== 'true'
+	platform === 'win32' && !process.env.WT_SESSION
 		? {
 				tick: '√',
 				cross: '×',
