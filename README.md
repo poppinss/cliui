@@ -380,4 +380,4 @@ tasks.verbose()
 [license-url]: LICENSE.md 'license'
 
 [audit-report-image]: https://img.shields.io/badge/-Audit%20Report-blueviolet?style=for-the-badge
-[audit-report-url]: https://htmlpreview.github.io/?https://github.com/poppinss/cli-ui/blob/develop/npm-audit.html "audit-report"
+[audit-report-url]: https://htmlpreview.github.io/?https://github.com/poppinss/cliui/blob/develop/npm-audit.html "audit-report"
