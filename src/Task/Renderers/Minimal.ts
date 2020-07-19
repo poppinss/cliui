@@ -99,7 +99,9 @@ export class MinimalRenderer {
 		}
 
 		const errorMessage =
-			typeof task.completionMessage === 'string' ? task.completionMessage : task.completionMessage.message
+			typeof task.completionMessage === 'string'
+				? task.completionMessage
+				: task.completionMessage.message
 
 		message = `${message}\n  ${this.logger.colors.red(errorMessage)}`
 		return message
@@ -141,7 +143,9 @@ export class MinimalRenderer {
 	 * Re-renders all tasks by inspecting their current state
 	 */
 	private renderTasks(logLine?: string) {
-		this.getRenderer().logUpdate(this.registeredTasks.map((task) => this.renderTask(task, logLine)).join('\n'))
+		this.getRenderer().logUpdate(
+			this.registeredTasks.map((task) => this.renderTask(task, logLine)).join('\n')
+		)
 	}
 
 	/**

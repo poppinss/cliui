@@ -229,7 +229,11 @@ export class Logger {
 	/**
 	 * Log fatal message
 	 */
-	public fatal(message: string | { message: string; stack?: string }, prefix?: string, suffix?: string) {
+	public fatal(
+		message: string | { message: string; stack?: string },
+		prefix?: string,
+		suffix?: string
+	) {
 		const stack = this.formatStack(typeof message === 'string' ? undefined : message.stack)
 
 		message = typeof message === 'string' ? message : message.message

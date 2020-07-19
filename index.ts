@@ -91,7 +91,10 @@ export const tasks = () => {
  * Initiate tasks in verbose mode
  */
 tasks.verbose = () => {
-	const manager = new TaskManager({ colors: supportsColors, interactive: isInteractive, verbose: true }, testing)
+	const manager = new TaskManager(
+		{ colors: supportsColors, interactive: isInteractive, verbose: true },
+		testing
+	)
 	manager.useRenderer(testing ? testingRenderer : consoleRenderer)
 	return manager
 }

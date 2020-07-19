@@ -112,7 +112,9 @@ export class Instructions {
 	 * Wraps content inside the left and right vertical lines
 	 */
 	private wrapInVerticalLines(content: string, leftWhitespace: string, rightWhitespace: string) {
-		return `${this.dim(BOX.vertical)}${leftWhitespace}${content}${rightWhitespace}${this.dim(BOX.vertical)}`
+		return `${this.dim(BOX.vertical)}${leftWhitespace}${content}${rightWhitespace}${this.dim(
+			BOX.vertical
+		)}`
 	}
 
 	/**
@@ -158,7 +160,11 @@ export class Instructions {
 		 */
 		const leftWhitespace = this.repeat(' ', this.leftPadding)
 		const rightWhitespace = this.repeat(' ', this.widestLineLength - width + this.rightPadding)
-		const headingContent = this.wrapInVerticalLines(this.state.heading, leftWhitespace, rightWhitespace)
+		const headingContent = this.wrapInVerticalLines(
+			this.state.heading,
+			leftWhitespace,
+			rightWhitespace
+		)
 
 		/**
 		 * Creating the heading border bottom
