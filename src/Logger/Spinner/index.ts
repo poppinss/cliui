@@ -37,9 +37,21 @@ export class Spinner {
 	 * Builds the message to the print from the text
 	 */
 	private messageBuilder: {
+		suffix?: string
+		prefix?: string
 		render: (text: string) => string
 	} = {
-		render: (text: string) => text,
+		render(text: string) {
+			if (this.prefix) {
+				text = `[${this.prefix}] ${text}`
+			}
+
+			if (this.suffix) {
+				text = `${text} ${this.suffix}`
+			}
+
+			return text
+		},
 	}
 
 	constructor(private text: string, private logger: Logger, private testing: boolean = false) {}
@@ -101,12 +113,20 @@ export class Spinner {
 	/**
 	 * Update spinner
 	 */
-	public update(text: string): this {
+	public update(text: string, prefix?: string, suffix?: string): this {
 		if (this.state !== 'running') {
 			return this
 		}
 
 		this.text = text
+
+		if (prefix !== undefined) {
+			this.messageBuilder.prefix = prefix
+		}
+
+		if (suffix !== undefined) {
+			this.messageBuilder.suffix = suffix
+		}
 
 		/**
 		 * Print the message as it is in testing mode or when the TTY is

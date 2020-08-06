@@ -218,3 +218,137 @@ test.group('Logger | debug', () => {
 		])
 	})
 })
+
+test.group('Logger | await', () => {
+	test('start spinner', (assert) => {
+		const logger = new Logger({}, true)
+		const renderer = new MemoryRenderer()
+
+		logger.useRenderer(renderer)
+		const spinner = logger.await('installing')
+		spinner.stop()
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: `yellow(${icons.squareSmallFilled})  installing ...`,
+				stream: 'stdout',
+			},
+		])
+	})
+
+	test('start spinner with a custom prefix', (assert) => {
+		const logger = new Logger({}, true)
+		const renderer = new MemoryRenderer()
+
+		logger.useRenderer(renderer)
+		const spinner = logger.await('installing', 'npm')
+		spinner.stop()
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: `gray([npm]) yellow(${icons.squareSmallFilled})  installing ...`,
+				stream: 'stdout',
+			},
+		])
+	})
+
+	test('updating spinner text must retain the prefix', (assert) => {
+		const logger = new Logger({}, true)
+		const renderer = new MemoryRenderer()
+
+		logger.useRenderer(renderer)
+		const spinner = logger.await('installing', 'npm')
+		spinner.update('updating')
+		spinner.stop()
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: `gray([npm]) yellow(${icons.squareSmallFilled})  installing ...`,
+				stream: 'stdout',
+			},
+			{
+				message: `gray([npm]) yellow(${icons.squareSmallFilled})  updating ...`,
+				stream: 'stdout',
+			},
+		])
+	})
+
+	test('update spinner with new prefix', (assert) => {
+		const logger = new Logger({}, true)
+		const renderer = new MemoryRenderer()
+
+		logger.useRenderer(renderer)
+		const spinner = logger.await('installing', 'npm')
+		spinner.update('updating', 'fs')
+		spinner.stop()
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: `gray([npm]) yellow(${icons.squareSmallFilled})  installing ...`,
+				stream: 'stdout',
+			},
+			{
+				message: `gray([fs]) yellow(${icons.squareSmallFilled})  updating ...`,
+				stream: 'stdout',
+			},
+		])
+	})
+
+	test('start spinner with a custom suffix', (assert) => {
+		const logger = new Logger({}, true)
+		const renderer = new MemoryRenderer()
+
+		logger.useRenderer(renderer)
+		const spinner = logger.await('installing', undefined, 'npm')
+		spinner.stop()
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: `yellow(${icons.squareSmallFilled})  installing dim(yellow((npm))) ...`,
+				stream: 'stdout',
+			},
+		])
+	})
+
+	test('updating spinner text must retain the suffix', (assert) => {
+		const logger = new Logger({}, true)
+		const renderer = new MemoryRenderer()
+
+		logger.useRenderer(renderer)
+		const spinner = logger.await('installing', undefined, 'npm')
+		spinner.update('updating')
+		spinner.stop()
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: `yellow(${icons.squareSmallFilled})  installing dim(yellow((npm))) ...`,
+				stream: 'stdout',
+			},
+			{
+				message: `yellow(${icons.squareSmallFilled})  updating dim(yellow((npm))) ...`,
+				stream: 'stdout',
+			},
+		])
+	})
+
+	test('update spinner with new suffix', (assert) => {
+		const logger = new Logger({}, true)
+		const renderer = new MemoryRenderer()
+
+		logger.useRenderer(renderer)
+		const spinner = logger.await('installing', undefined, 'npm')
+		spinner.update('updating', undefined, 'fs')
+		spinner.stop()
+
+		assert.deepEqual(renderer.logs, [
+			{
+				message: `yellow(${icons.squareSmallFilled})  installing dim(yellow((npm))) ...`,
+				stream: 'stdout',
+			},
+			{
+				message: `yellow(${icons.squareSmallFilled})  updating dim(yellow((fs))) ...`,
+				stream: 'stdout',
+			},
+		])
+	})
+})
