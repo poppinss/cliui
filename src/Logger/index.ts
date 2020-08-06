@@ -285,12 +285,20 @@ export class Logger {
 	 * Log a message with a spinner
 	 */
 	public await(message: string, prefix?: string, suffix?: string) {
-		message = this.decorateMessage(message)
-		message = this.prefixIcon(message, this.getIcon('await'))
-		message = this.addPrefix(message, prefix)
-		message = this.addSuffix(message, suffix)
+		const messageBuilder = {
+			prefix: prefix,
+			suffix: suffix,
+			logger: this,
+			render(text: string) {
+				text = this.logger.decorateMessage(text)
+				text = this.logger.prefixIcon(text, this.logger.getIcon('await'))
+				text = this.logger.addPrefix(text, this.prefix)
+				text = this.logger.addSuffix(text, this.suffix)
+				return text
+			},
+		}
 
-		return new Spinner(message, this, this.testing).start()
+		return new Spinner(message, this, this.testing).useMessageBuilder(messageBuilder).start()
 	}
 
 	/**

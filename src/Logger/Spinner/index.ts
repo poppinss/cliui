@@ -33,6 +33,15 @@ export class Spinner {
 	 */
 	private currentIndex = 0
 
+	/**
+	 * Builds the message to the print from the text
+	 */
+	private messageBuilder: {
+		render: (text: string) => string
+	} = {
+		render: (text: string) => text,
+	}
+
 	constructor(private text: string, private logger: Logger, private testing: boolean = false) {}
 
 	/**
@@ -55,7 +64,7 @@ export class Spinner {
 		 * not interactive
 		 */
 		if (this.testing || !this.logger.options.interactive) {
-			this.logger.logUpdate(`${this.text} ${this.frames[2]}`)
+			this.logger.logUpdate(`${this.messageBuilder.render(this.text)} ${this.frames[2]}`)
 			return
 		}
 
@@ -64,7 +73,7 @@ export class Spinner {
 		 * with some delay
 		 */
 		const frame = this.frames[this.currentIndex]
-		this.logger.logUpdate(`${this.text} ${frame}`)
+		this.logger.logUpdate(`${this.messageBuilder.render(this.text)} ${frame}`)
 
 		setTimeout(() => {
 			this.incrementIndex()
@@ -78,6 +87,14 @@ export class Spinner {
 	public start(): this {
 		this.state = 'running'
 		this.loop()
+		return this
+	}
+
+	/**
+	 * Define a custom message builder
+	 */
+	public useMessageBuilder(messageBuilder: { render: (text: string) => string }): this {
+		this.messageBuilder = messageBuilder
 		return this
 	}
 
@@ -96,7 +113,7 @@ export class Spinner {
 		 * not interactive
 		 */
 		if (this.testing || !this.logger.options.interactive) {
-			this.logger.logUpdate(`${this.text} ${this.frames[2]}`)
+			this.logger.logUpdate(`${this.messageBuilder.render(this.text)} ${this.frames[2]}`)
 			return this
 		}
 

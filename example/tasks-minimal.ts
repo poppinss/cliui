@@ -35,6 +35,9 @@ tasks()
 	.add('install dependencies', async (logger, task) => {
 		await sleep(200)
 		const spinner = logger.await('installing')
+		await sleep(1000)
+
+		spinner.update('updating')
 
 		await sleep(3000)
 		spinner.stop()
