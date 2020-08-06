@@ -2,6 +2,7 @@ build
 README.md
 docs
 *.md
+!README.md
 config.json
 .eslintrc.json
 package.json

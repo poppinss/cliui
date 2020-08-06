@@ -1,6 +1,7 @@
 ![](https://res.cloudinary.com/adonis-js/image/upload/v1593614024/adonisjs.com/adonis-cli-ui-kit_oyxf4a.png)
 
 # CLI UI
+
 > Command line UI Kit used by AdonisJS
 
 This repo is a command line UI Kit used by the AdonisJS framework to design its command line interfaces.
@@ -59,13 +60,7 @@ yarn add @poppinss/cliui
 Import the components you want to use from the package.
 
 ```ts
-import {
- logger,
- instructions,
- sticker,
- tasks,
- table,
-} from '@poppinss/cliui'
+import { logger, instructions, sticker, tasks, table } from '@poppinss/cliui'
 ```
 
 ```ts
@@ -77,11 +72,9 @@ await someTimeConsumingTask()
 spinner.stop()
 ```
 
-
 ## Logger
 
 ![](https://res.cloudinary.com/adonis-js/image/upload/v1593584884/adonisjs.com/logger_p5mlaw.png)
-
 
 The logger exposes the following methods.
 
@@ -110,7 +103,6 @@ logger.success('Account created', undefined, 'ap-south-1')
 
 // ✔  Account created (ap-south-1)
 ```
-
 
 > The prefix and suffix are support on all logger methods except `logger.action`
 
@@ -167,10 +159,9 @@ logger.debug('Something just happened')
 // ●  Something just happened
 ```
 
-
 ### `log(message)`
 
-Similar to `console.log`, but instead uses the Logger renderer. 
+Similar to `console.log`, but instead uses the Logger renderer.
 
 > We will talk about renderers later in this document, since they make testing of log message little bit easier.
 
@@ -202,7 +193,7 @@ Here is a complete example of showing the downloading progress.
 ```ts
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 50))
 
-async function run () {
+async function run() {
 	for (let i = 0; i <= 100; i = i + 2) {
 		await sleep()
 		logger.logUpdate(`downloading ${i}%`)
@@ -274,7 +265,6 @@ instructions()
 	.render()
 ```
 
-
 - Calling the `instructions()` begins a new instructions block
 - Next, you can add new lines by using the `.add()` method.
 - Finally, call the `render()` method to render it on the console.
@@ -345,10 +335,7 @@ await tasks()
 - The `add` method accepts the **task title** and the callback function to invoke in order to perform the task
 - Once, you are done with the task jobs, you must call `await task.complete()` to complete the task. The `await` is important here.
 - In order to **mark task as failed**, you can call the `task.fail` method. All upcoming tasks will be stopped in case of a failure.
-		
-		```ts
-		await task.fail(new Error('Network error'))
-		```
+  `ts await task.fail(new Error('Network error'))`
 
 By default, the `minimal` renderer is used and pivots to the verbose renderer only when terminal is not interactive.
 
@@ -359,25 +346,18 @@ By default, the `minimal` renderer is used and pivots to the verbose renderer on
 In order to run tasks explicitly in the verbose mode, you can create the tasks instance using `tasks.verbose()` method.
 
 ```ts
-tasks.verbose()
-	.add()
-	.add()
-	.run()
+tasks.verbose().add().add().run()
 ```
 
 ![](https://res.cloudinary.com/adonis-js/image/upload/v1593599111/adonisjs.com/tasks-verbose_cq3ibx.gif)
 
 [circleci-image]: https://img.shields.io/circleci/project/github/poppinss/cliui/master.svg?style=for-the-badge&logo=circleci
 [circleci-url]: https://circleci.com/gh/poppinss/cliui 'circleci'
-
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
 [typescript-url]: "typescript"
-
 [npm-image]: https://img.shields.io/npm/v/@poppinss/cliui.svg?style=for-the-badge&logo=npm
 [npm-url]: https://npmjs.org/package/@poppinss/cliui 'npm'
-
 [license-image]: https://img.shields.io/npm/l/@poppinss/cliui?color=blueviolet&style=for-the-badge
 [license-url]: LICENSE.md 'license'
-
 [audit-report-image]: https://img.shields.io/badge/-Audit%20Report-blueviolet?style=for-the-badge
-[audit-report-url]: https://htmlpreview.github.io/?https://github.com/poppinss/cliui/blob/develop/npm-audit.html "audit-report"
+[audit-report-url]: https://htmlpreview.github.io/?https://github.com/poppinss/cliui/blob/develop/npm-audit.html 'audit-report'
