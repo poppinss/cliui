@@ -194,12 +194,12 @@ Here is a complete example of showing the downloading progress.
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 50))
 
 async function run() {
-	for (let i = 0; i <= 100; i = i + 2) {
-		await sleep()
-		logger.logUpdate(`downloading ${i}%`)
-	}
+  for (let i = 0; i <= 100; i = i + 2) {
+    await sleep()
+    logger.logUpdate(`downloading ${i}%`)
+  }
 
-	logger.logUpdatePersist()
+  logger.logUpdatePersist()
 }
 
 run()
@@ -260,9 +260,9 @@ Instructions are mainly the steps we want someone to perform in order to achieve
 import { instructions, logger } from '@poppinss/cliui'
 
 instructions()
-	.add(`cd ${logger.colors.cyan('hello-world')}`)
-	.add(`Run ${logger.colors.cyan('node ace serve --watch')} to start the server`)
-	.render()
+  .add(`cd ${logger.colors.cyan('hello-world')}`)
+  .add(`Run ${logger.colors.cyan('node ace serve --watch')} to start the server`)
+  .render()
 ```
 
 - Calling the `instructions()` begins a new instructions block
@@ -284,11 +284,11 @@ It is helpful for displaying a message that needs the most attention. For exampl
 import { sticker, logger } from '@poppinss/cliui'
 
 sticker()
-	.add('Started HTTP server')
-	.add('')
-	.add(`Local address:    ${logger.colors.cyan('http://localhost:3333')}`)
-	.add(`Network address:  ${logger.colors.cyan('http://localhost:3333')}`)
-	.render()
+  .add('Started HTTP server')
+  .add('')
+  .add(`Local address:    ${logger.colors.cyan('http://localhost:3333')}`)
+  .add(`Network address:  ${logger.colors.cyan('http://localhost:3333')}`)
+  .render()
 ```
 
 ## Tasks
@@ -315,21 +315,21 @@ Following is a very simple example of creating and running multiple tasks.
 import { tasks } from '@poppinss/cliui'
 
 await tasks()
-	.add('clone repo', async (logger, task) => {
-		logger.info(`cloning ${someRepoUrl}`)
+  .add('clone repo', async (logger, task) => {
+    logger.info(`cloning ${someRepoUrl}`)
 
-		await performClone()
-		await task.complete()
-	})
-	.add('install dependencies', async (logger, task) => {
-		const spinner = logger.await('running npm install')
+    await performClone()
+    await task.complete()
+  })
+  .add('install dependencies', async (logger, task) => {
+    const spinner = logger.await('running npm install')
 
-		await performInstall()
-		spinner.stop()
+    await performInstall()
+    spinner.stop()
 
-		await task.complete()
-	})
-	.run()
+    await task.complete()
+  })
+  .run()
 ```
 
 - The `add` method accepts the **task title** and the callback function to invoke in order to perform the task
