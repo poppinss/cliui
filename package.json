@@ -32,24 +32,24 @@
   "license": "MIT",
   "devDependencies": {
     "@adonisjs/mrm-preset": "^2.4.0",
-    "@types/node": "^14.0.27",
-    "commitizen": "^4.1.2",
-    "cz-conventional-changelog": "^3.2.0",
+    "@types/node": "^14.6.2",
+    "commitizen": "^4.2.1",
+    "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^3.0.1",
     "doctoc": "^1.4.0",
-    "eslint": "^7.6.0",
+    "eslint": "^7.7.0",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-adonis": "^1.0.14",
+    "eslint-plugin-adonis": "^1.0.15",
     "eslint-plugin-prettier": "^3.1.4",
     "github-label-sync": "^2.0.0",
     "husky": "^4.2.5",
     "japa": "^3.1.1",
-    "mrm": "^2.3.3",
-    "np": "^6.3.2",
+    "mrm": "^2.3.5",
+    "np": "^6.5.0",
     "npm-audit-html": "^1.4.3",
-    "prettier": "^2.0.5",
+    "prettier": "^2.1.1",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.7"
+    "typescript": "^4.0.2"
   },
   "nyc": {
     "exclude": [
@@ -75,7 +75,7 @@
     "anyBranch": false
   },
   "dependencies": {
-    "@poppinss/colors": "^2.0.1",
+    "@poppinss/colors": "^2.0.2",
     "cli-boxes": "^2.2.0",
     "cli-table3": "^0.6.0",
     "color-support": "^1.1.3",
