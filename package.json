@@ -6,7 +6,9 @@
   "files": [
     "build/src",
     "build/index.d.ts",
-    "build/index.js"
+    "build/index.js",
+    "build/api.d.ts",
+    "build/api.js"
   ],
   "scripts": {
     "mrm": "mrm --preset=@adonisjs/mrm-preset",
