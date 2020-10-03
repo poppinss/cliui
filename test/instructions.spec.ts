@@ -24,7 +24,7 @@ test.group('Instructions', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `gray(${icons.pointer}) hello world`,
+				message: `dim(${icons.pointer}) hello world`,
 				stream: 'stdout',
 			},
 		])
@@ -41,11 +41,11 @@ test.group('Instructions', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `gray(${icons.pointer}) hello world`,
+				message: `dim(${icons.pointer}) hello world`,
 				stream: 'stdout',
 			},
 			{
-				message: `gray(${icons.pointer}) hi world`,
+				message: `dim(${icons.pointer}) hi world`,
 				stream: 'stdout',
 			},
 		])
@@ -67,11 +67,11 @@ test.group('Instructions', () => {
 				stream: 'stdout',
 			},
 			{
-				message: `gray(${icons.pointer}) hello world`,
+				message: `dim(${icons.pointer}) hello world`,
 				stream: 'stdout',
 			},
 			{
-				message: `gray(${icons.pointer}) hi world`,
+				message: `dim(${icons.pointer}) hi world`,
 				stream: 'stdout',
 			},
 		])

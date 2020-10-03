@@ -27,10 +27,17 @@ export class Action {
 	 */
 	private getLabel(label: string, color: keyof Colors) {
 		if (!this.logger.options.colors) {
-			return `[${label}]`
+			return `${label.toUpperCase()}:`
 		}
 
-		return this.logger.colors.underline()[color](label) as string
+		return `${this.logger.colors[color](`${label.toUpperCase()}:`)}`
+	}
+
+	private formatMessage(message: string) {
+		if (this.logger.options.dim) {
+			return this.logger.colors.dim(message)
+		}
+		return message
 	}
 
 	/**
@@ -47,27 +54,27 @@ export class Action {
 	 */
 	public succeeded(message: string) {
 		const label = this.getLabel(this.label, 'green')
-		this.logger.success(`${label} ${message}`)
+		this.logger.log(this.formatMessage(`${label} ${message}`))
 	}
 
 	/**
 	 * Mark action as skipped
 	 */
 	public skipped(message: string, skipReason?: string) {
-		let logMessage = `${this.getLabel('skip', 'cyan')} ${message}`
+		let logMessage = this.formatMessage(`${this.getLabel('skip', 'cyan')}   ${message}`)
 
 		if (skipReason) {
 			logMessage = `${logMessage} ${this.logger.colors.dim(`(${skipReason})`)}`
 		}
 
-		this.logger.debug(logMessage)
+		this.logger.log(logMessage)
 	}
 
 	/**
 	 * Mark action as failed
 	 */
 	public failed(message: string, errorMessage: string) {
-		const label = this.getLabel(this.label, 'red')
-		this.logger.error(`${label} ${message} ${this.logger.colors.dim(`(${errorMessage})`)}`)
+		let logMessage = this.formatMessage(`${this.getLabel('error', 'red')}  ${message}`)
+		this.logger.logError(`${logMessage} ${this.logger.colors.dim(`(${errorMessage})`)}`)
 	}
 }

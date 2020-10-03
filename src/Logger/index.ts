@@ -9,7 +9,6 @@
 
 import { Colors } from '@poppinss/colors'
 
-import { icons } from '../Icons'
 import { Action } from './Action'
 import { getBest } from '../Colors'
 import { Spinner } from './Spinner'
@@ -20,11 +19,10 @@ import { LoggerOptions, RendererContract, LoggingTypes } from '../Contracts'
  * Default config options
  */
 const DEFAULTS: LoggerOptions = {
-	icons: true,
 	dim: false,
-	dimIcons: false,
+	dimLabels: false,
 	colors: true,
-	iconColors: true,
+	labelColors: true,
 	interactive: true,
 }
 
@@ -44,9 +42,9 @@ export class Logger {
 	public colors: ReturnType<typeof getBest>
 
 	/**
-	 * The icon colors reference
+	 * The label colors reference
 	 */
-	private iconColors: ReturnType<typeof getBest>
+	private labelColors: ReturnType<typeof getBest>
 
 	/**
 	 * The renderer to use to output logs
@@ -56,38 +54,38 @@ export class Logger {
 	constructor(options?: Partial<LoggerOptions>, private testing: boolean = false) {
 		this.options = { ...DEFAULTS, ...options }
 		this.colors = getBest(this.testing, this.options.colors)
-		this.iconColors = getBest(this.testing, this.options.iconColors && this.options.colors)
+		this.labelColors = getBest(this.testing, this.options.labelColors && this.options.colors)
 	}
 
 	/**
-	 * Colors the icon
+	 * Colors the logger label
 	 */
-	private colorizeIcon(color: keyof Colors, figure: string): string {
-		if (this.options.dim || this.options.dimIcons) {
-			return this.iconColors.dim()[color](figure) as string
+	private colorizeLabel(color: keyof Colors, text: string): string {
+		if (this.options.dim || this.options.dimLabels) {
+			return `[ ${this.labelColors.dim()[color](text)} ]`
 		}
 
-		return this.iconColors[color](figure) as string
+		return `[ ${this.labelColors[color](text)} ]`
 	}
 
 	/**
-	 * Returns the icon for a given logging type
+	 * Returns the label for a given logging type
 	 */
-	private getIcon(type: LoggingTypes): string {
+	private getLabel(type: LoggingTypes): string {
 		switch (type) {
 			case 'success':
-				return this.colorizeIcon('green', icons.tick)
+				return this.colorizeLabel('green', 'success')
 			case 'error':
 			case 'fatal':
-				return this.colorizeIcon('red', icons.cross)
+				return this.colorizeLabel('red', type)
 			case 'warning':
-				return this.colorizeIcon('yellow', icons.warning)
+				return this.colorizeLabel('yellow', 'warn')
 			case 'info':
-				return this.colorizeIcon('blue', icons.info)
+				return this.colorizeLabel('blue', 'info')
 			case 'debug':
-				return this.colorizeIcon('cyan', icons.bullet)
+				return this.colorizeLabel('cyan', 'debug')
 			case 'await':
-				return this.colorizeIcon('yellow', icons.squareSmallFilled)
+				return this.colorizeLabel('cyan', 'wait')
 		}
 	}
 
@@ -111,18 +109,14 @@ export class Logger {
 		}
 
 		prefix = prefix.replace(/%time%/, new Date().toISOString())
-		return `${this.colors.gray(`[${prefix}]`)} ${message}`
+		return `${this.colors.dim(`[${prefix}]`)} ${message}`
 	}
 
 	/**
 	 * Prepends the prefix to the message
 	 */
-	private prefixIcon(message: string, icon: string) {
-		if (!this.options.icons) {
-			return message
-		}
-
-		return `${icon}  ${message}`
+	private prefixLabel(message: string, label: string) {
+		return `${label}  ${message}`
 	}
 
 	/**
@@ -206,7 +200,7 @@ export class Logger {
 	 */
 	public success(message: string, prefix?: string, suffix?: string) {
 		message = this.decorateMessage(message)
-		message = this.prefixIcon(message, this.getIcon('success'))
+		message = this.prefixLabel(message, this.getLabel('success'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
@@ -219,7 +213,7 @@ export class Logger {
 	public error(message: string | { message: string }, prefix?: string, suffix?: string) {
 		message = typeof message === 'string' ? message : message.message
 		message = this.decorateMessage(message)
-		message = this.prefixIcon(message, this.getIcon('error'))
+		message = this.prefixLabel(message, this.getLabel('error'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
@@ -238,7 +232,7 @@ export class Logger {
 
 		message = typeof message === 'string' ? message : message.message
 		message = this.decorateMessage(message)
-		message = this.prefixIcon(message, this.getIcon('error'))
+		message = this.prefixLabel(message, this.getLabel('error'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
@@ -250,7 +244,7 @@ export class Logger {
 	 */
 	public warning(message: string, prefix?: string, suffix?: string) {
 		message = this.decorateMessage(message)
-		message = this.prefixIcon(message, this.getIcon('warning'))
+		message = this.prefixLabel(message, this.getLabel('warning'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
@@ -262,7 +256,7 @@ export class Logger {
 	 */
 	public info(message: string, prefix?: string, suffix?: string) {
 		message = this.decorateMessage(message)
-		message = this.prefixIcon(message, this.getIcon('info'))
+		message = this.prefixLabel(message, this.getLabel('info'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
@@ -274,7 +268,7 @@ export class Logger {
 	 */
 	public debug(message: string, prefix?: string, suffix?: string) {
 		message = this.decorateMessage(message)
-		message = this.prefixIcon(message, this.getIcon('debug'))
+		message = this.prefixLabel(message, this.getLabel('debug'))
 		message = this.addPrefix(message, prefix)
 		message = this.addSuffix(message, suffix)
 
@@ -291,7 +285,7 @@ export class Logger {
 			logger: this,
 			render(text: string) {
 				text = this.logger.decorateMessage(text)
-				text = this.logger.prefixIcon(text, this.logger.getIcon('await'))
+				text = this.logger.prefixLabel(text, this.logger.getLabel('await'))
 				text = this.logger.addPrefix(text, this.prefix)
 				text = this.logger.addSuffix(text, this.suffix)
 				return text

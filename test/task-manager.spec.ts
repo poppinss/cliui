@@ -8,7 +8,7 @@
  */
 
 import test from 'japa'
-import { icons } from '../src/Icons'
+// import { icons } from '../src/Icons'
 import { TaskManager } from '../src/Task/Manager'
 import { MemoryRenderer } from '../src/Renderer/Memory'
 
@@ -99,7 +99,7 @@ test.group('TaskManager', () => {
 				stream: 'stdout',
 			},
 			{
-				message: `dim(│)  dim(red(${icons.cross}))  dim(Something went wrong)`,
+				message: `dim(│)  [ dim(red(error)) ]  dim(Something went wrong)`,
 				stream: 'stderr',
 			},
 			{
@@ -151,7 +151,7 @@ test.group('TaskManager', () => {
 				stream: 'stdout',
 			},
 			{
-				message: `│  ${icons.cross}  Something went wrong`,
+				message: `│  [ error ]  Something went wrong`,
 				stream: 'stderr',
 			},
 			{

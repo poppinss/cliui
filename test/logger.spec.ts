@@ -8,14 +8,12 @@
  */
 
 import test from 'japa'
-
-import { icons } from '../src/Icons'
 import { Logger } from '../src/Logger'
 import { MemoryRenderer } from '../src/Renderer/Memory'
 
-test.group('Logger | icons', () => {
-	test('do not add color to icon when iconColors property is set to false', (assert) => {
-		const logger = new Logger({ iconColors: false }, true)
+test.group('Logger | label', () => {
+	test('do not add color to label when labelColors property is set to false', (assert) => {
+		const logger = new Logger({ labelColors: false }, true)
 		const renderer = new MemoryRenderer()
 
 		logger.useRenderer(renderer)
@@ -23,13 +21,13 @@ test.group('Logger | icons', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `${icons.tick}  Hello world`,
+				message: `[ success ]  Hello world`,
 				stream: 'stdout',
 			},
 		])
 	})
 
-	test('do not add color to icon when colors property is set to false', (assert) => {
+	test('do not add color to label when colors property is set to false', (assert) => {
 		const logger = new Logger({ colors: false }, true)
 		const renderer = new MemoryRenderer()
 
@@ -38,14 +36,14 @@ test.group('Logger | icons', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `${icons.tick}  Hello world`,
+				message: `[ success ]  Hello world`,
 				stream: 'stdout',
 			},
 		])
 	})
 
-	test('dim icons when dimIcons property is set to true', (assert) => {
-		const logger = new Logger({ dimIcons: true }, true)
+	test('dim labels when dimLabels property is set to true', (assert) => {
+		const logger = new Logger({ dimLabels: true }, true)
 		const renderer = new MemoryRenderer()
 
 		logger.useRenderer(renderer)
@@ -53,13 +51,13 @@ test.group('Logger | icons', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `dim(green(${icons.tick}))  Hello world`,
+				message: `[ dim(green(success)) ]  Hello world`,
 				stream: 'stdout',
 			},
 		])
 	})
 
-	test('dim icons when dim property is set to true', (assert) => {
+	test('dim labels when dim property is set to true', (assert) => {
 		const logger = new Logger({ dim: true }, true)
 		const renderer = new MemoryRenderer()
 
@@ -68,22 +66,7 @@ test.group('Logger | icons', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `dim(green(${icons.tick}))  dim(Hello world)`,
-				stream: 'stdout',
-			},
-		])
-	})
-
-	test('do not set icons when icons are disabled', (assert) => {
-		const logger = new Logger({ icons: false }, true)
-		const renderer = new MemoryRenderer()
-
-		logger.useRenderer(renderer)
-		logger.success('Hello world')
-
-		assert.deepEqual(renderer.logs, [
-			{
-				message: `Hello world`,
+				message: `[ dim(green(success)) ]  dim(Hello world)`,
 				stream: 'stdout',
 			},
 		])
@@ -100,7 +83,7 @@ test.group('Logger | success', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `green(${icons.tick})  Hello world`,
+				message: `[ green(success) ]  Hello world`,
 				stream: 'stdout',
 			},
 		])
@@ -108,7 +91,7 @@ test.group('Logger | success', () => {
 })
 
 test.group('Logger | error', () => {
-	test('log error message with icon', (assert) => {
+	test('log error message with label', (assert) => {
 		const logger = new Logger({}, true)
 		const renderer = new MemoryRenderer()
 
@@ -117,7 +100,7 @@ test.group('Logger | error', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `red(${icons.cross})  Hello world`,
+				message: `[ red(error) ]  Hello world`,
 				stream: 'stderr',
 			},
 		])
@@ -132,7 +115,7 @@ test.group('Logger | error', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `red(${icons.cross})  Hello world`,
+				message: `[ red(error) ]  Hello world`,
 				stream: 'stderr',
 			},
 		])
@@ -149,7 +132,7 @@ test.group('Logger | fatal', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `red(${icons.cross})  Hello world`,
+				message: `[ red(error) ]  Hello world`,
 				stream: 'stderr',
 			},
 		])
@@ -164,7 +147,7 @@ test.group('Logger | fatal', () => {
 
 		assert.lengthOf(renderer.logs, 1)
 		assert.equal(renderer.logs[0].stream, 'stderr')
-		assert.equal(renderer.logs[0].message.split('\n')[1], `dim(    at ${__filename}:163:16)`)
+		assert.equal(renderer.logs[0].message.split('\n')[1], `dim(    at ${__filename}:146:16)`)
 	})
 })
 
@@ -178,7 +161,7 @@ test.group('Logger | warning', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `yellow(${icons.warning})  Hello world`,
+				message: `[ yellow(warn) ]  Hello world`,
 				stream: 'stdout',
 			},
 		])
@@ -195,7 +178,7 @@ test.group('Logger | info', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `blue(${icons.info})  Hello world`,
+				message: `[ blue(info) ]  Hello world`,
 				stream: 'stdout',
 			},
 		])
@@ -212,7 +195,7 @@ test.group('Logger | debug', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `cyan(${icons.bullet})  Hello world`,
+				message: `[ cyan(debug) ]  Hello world`,
 				stream: 'stdout',
 			},
 		])
@@ -230,7 +213,7 @@ test.group('Logger | await', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `yellow(${icons.squareSmallFilled})  installing ...`,
+				message: `[ cyan(wait) ]  installing ...`,
 				stream: 'stdout',
 			},
 		])
@@ -246,7 +229,7 @@ test.group('Logger | await', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `gray([npm]) yellow(${icons.squareSmallFilled})  installing ...`,
+				message: `dim([npm]) [ cyan(wait) ]  installing ...`,
 				stream: 'stdout',
 			},
 		])
@@ -263,11 +246,11 @@ test.group('Logger | await', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `gray([npm]) yellow(${icons.squareSmallFilled})  installing ...`,
+				message: `dim([npm]) [ cyan(wait) ]  installing ...`,
 				stream: 'stdout',
 			},
 			{
-				message: `gray([npm]) yellow(${icons.squareSmallFilled})  updating ...`,
+				message: `dim([npm]) [ cyan(wait) ]  updating ...`,
 				stream: 'stdout',
 			},
 		])
@@ -284,11 +267,11 @@ test.group('Logger | await', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `gray([npm]) yellow(${icons.squareSmallFilled})  installing ...`,
+				message: `dim([npm]) [ cyan(wait) ]  installing ...`,
 				stream: 'stdout',
 			},
 			{
-				message: `gray([fs]) yellow(${icons.squareSmallFilled})  updating ...`,
+				message: `dim([fs]) [ cyan(wait) ]  updating ...`,
 				stream: 'stdout',
 			},
 		])
@@ -304,7 +287,7 @@ test.group('Logger | await', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `yellow(${icons.squareSmallFilled})  installing dim(yellow((npm))) ...`,
+				message: `[ cyan(wait) ]  installing dim(yellow((npm))) ...`,
 				stream: 'stdout',
 			},
 		])
@@ -321,11 +304,11 @@ test.group('Logger | await', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `yellow(${icons.squareSmallFilled})  installing dim(yellow((npm))) ...`,
+				message: `[ cyan(wait) ]  installing dim(yellow((npm))) ...`,
 				stream: 'stdout',
 			},
 			{
-				message: `yellow(${icons.squareSmallFilled})  updating dim(yellow((npm))) ...`,
+				message: `[ cyan(wait) ]  updating dim(yellow((npm))) ...`,
 				stream: 'stdout',
 			},
 		])
@@ -342,11 +325,11 @@ test.group('Logger | await', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `yellow(${icons.squareSmallFilled})  installing dim(yellow((npm))) ...`,
+				message: `[ cyan(wait) ]  installing dim(yellow((npm))) ...`,
 				stream: 'stdout',
 			},
 			{
-				message: `yellow(${icons.squareSmallFilled})  updating dim(yellow((fs))) ...`,
+				message: `[ cyan(wait) ]  updating dim(yellow((fs))) ...`,
 				stream: 'stdout',
 			},
 		])

@@ -105,7 +105,7 @@ export class Instructions {
 	 * Adds dim transformation
 	 */
 	private dim(text: string): string {
-		return this.colors.gray(text) as string
+		return this.colors.dim(text)
 	}
 
 	/**

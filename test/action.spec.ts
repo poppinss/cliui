@@ -9,7 +9,6 @@
 
 import test from 'japa'
 
-import { icons } from '../src/Icons'
 import { Logger } from '../src/Logger'
 import { Action } from '../src/Logger/Action'
 import { MemoryRenderer } from '../src/Renderer/Memory'
@@ -24,7 +23,7 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `green(${icons.tick})  underline(green(create)) hello world`,
+				message: `green(${'CREATE:'}) hello world`,
 				stream: 'stdout',
 			},
 		])
@@ -39,7 +38,7 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `red(${icons.cross})  underline(red(create)) hello world dim((File already exists))`,
+				message: `red(ERROR:)  hello world dim((File already exists))`,
 				stream: 'stderr',
 			},
 		])
@@ -54,7 +53,7 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `cyan(${icons.bullet})  underline(cyan(skip)) hello world`,
+				message: `cyan(SKIP:)   hello world`,
 				stream: 'stdout',
 			},
 		])
@@ -69,7 +68,7 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `${icons.tick}  [create] hello world`,
+				message: `CREATE: hello world`,
 				stream: 'stdout',
 			},
 		])
@@ -84,7 +83,7 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `dim(green(${icons.tick}))  dim(underline(green(create)) hello world)`,
+				message: `dim(green(CREATE:) hello world)`,
 				stream: 'stdout',
 			},
 		])
@@ -99,7 +98,7 @@ test.group('Action', () => {
 
 		assert.deepEqual(renderer.logs, [
 			{
-				message: `cyan(${icons.bullet})  underline(cyan(skip)) hello world dim((invalid message))`,
+				message: `cyan(SKIP:)   hello world dim((invalid message))`,
 				stream: 'stdout',
 			},
 		])

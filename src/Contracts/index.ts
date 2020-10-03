@@ -76,10 +76,9 @@ export type LoggingTypes = 'success' | 'error' | 'fatal' | 'warning' | 'info' | 
  */
 export type LoggerOptions = {
 	colors: boolean
-	iconColors: boolean
-	icons: boolean
+	labelColors: boolean
 	dim: boolean
-	dimIcons: boolean
+	dimLabels: boolean
 	interactive: boolean
 }
 
