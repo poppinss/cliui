@@ -34,7 +34,7 @@
   "license": "MIT",
   "devDependencies": {
     "@adonisjs/mrm-preset": "^2.4.0",
-    "@adonisjs/require-ts": "^1.0.0",
+    "@adonisjs/require-ts": "^1.0.3",
     "@types/node": "^14.11.2",
     "commitizen": "^4.2.1",
     "cz-conventional-changelog": "^3.3.0",
