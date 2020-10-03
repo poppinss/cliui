@@ -1,4 +1,4 @@
-![](https://res.cloudinary.com/adonis-js/image/upload/v1593614024/adonisjs.com/adonis-cli-ui-kit_oyxf4a.png)
+![](./assets/logger.png)
 
 # CLI UI
 
@@ -14,7 +14,6 @@ The kit is highly opinionated and we will not allow configurable settings in the
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 ## Table of contents
 
-- [Why AdonisJS needs a CLI UI Kit?](#why-adonisjs-needs-a-cli-ui-kit)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Logger](#logger)
@@ -39,10 +38,6 @@ The kit is highly opinionated and we will not allow configurable settings in the
   - [Verbose renderer](#verbose-renderer)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-## Why AdonisJS needs a CLI UI Kit?
-
-Read this official blog post to learn more about it.
 
 ## Installation
 
@@ -74,7 +69,7 @@ spinner.stop()
 
 ## Logger
 
-![](https://res.cloudinary.com/adonis-js/image/upload/v1593584884/adonisjs.com/logger_p5mlaw.png)
+![](./assets/logger.png)
 
 The logger exposes the following methods.
 
@@ -85,7 +80,7 @@ Log success message. The message is printed to `stdout`.
 ```ts
 logger.success('Account created')
 
-// ✔  Account created
+// [ success ]  Account created
 ```
 
 Optional prefix
@@ -93,7 +88,7 @@ Optional prefix
 ```ts
 logger.success('Account created', 'ap-south-1')
 
-// [ap-south-1] ✔  Account created
+// [ap-south-1] [ success ]  Account created
 ```
 
 Optional suffix
@@ -101,7 +96,7 @@ Optional suffix
 ```ts
 logger.success('Account created', undefined, 'ap-south-1')
 
-// ✔  Account created (ap-south-1)
+// [ success ]  Account created (ap-south-1)
 ```
 
 > The prefix and suffix are support on all logger methods except `logger.action`
@@ -116,7 +111,7 @@ logger.error('Unable to write. Disk full')
 // Or log error object
 logger.error(new Error('Unable to write. Disk full'))
 
-// ✖  Unable to write. Disk full
+// [ error ]  Unable to write. Disk full
 ```
 
 ### `fatal(message, prefix?, suffix?)`
@@ -127,7 +122,7 @@ The `logger.error` does not print the error stack. You must use `logger.fatal` t
 logger.fatal(new Error('Unable to write. Disk full'))
 ```
 
-![](https://res.cloudinary.com/adonis-js/image/upload/v1593584886/adonisjs.com/logger-with-stack_lx2ja5.png)
+![](./assets/stack.png)
 
 ### `warning(message, prefix?, suffix?)`
 
@@ -136,7 +131,7 @@ Print a warning message. Message is written to `stdout`.
 ```ts
 logger.warning('Running out of disk space')
 
-// ⚠  Running out of disk space
+// [ warn ]  Running out of disk space
 ```
 
 ### `info(message, prefix?, suffix?)`
@@ -146,7 +141,7 @@ Print an info message. Message is again written to `stdout`.
 ```ts
 logger.info('Your account is has been updated')
 
-// ℹ  Your account is has been updated
+// [ info ]  Your account is has been updated
 ```
 
 ### `debug(message, prefix?, suffix?)`
@@ -156,7 +151,7 @@ Print a debug message. Message is printed to `stdout`.
 ```ts
 logger.debug('Something just happened')
 
-// ●  Something just happened
+// [ debug ]  Something just happened
 ```
 
 ### `log(message)`
@@ -205,11 +200,11 @@ async function run() {
 run()
 ```
 
-![](https://res.cloudinary.com/adonis-js/image/upload/v1593596242/adonisjs.com/logger-await_w36hog.gif)
+![](./assets/logger-update.gif)
 
 ## Action
 
-![](https://res.cloudinary.com/adonis-js/image/upload/v1593584883/adonisjs.com/actions_l5vd29.png)
+![](./assets/actions.png)
 
 In order to log results of an action/task, we make use of the `action` method.
 
@@ -249,7 +244,7 @@ action.failed('server.ts', 'File already exists')
 
 ## Instructions
 
-![](https://res.cloudinary.com/adonis-js/image/upload/v1593584883/adonisjs.com/instructions_s4rhqf.png)
+![](./assets/instructions.png)
 
 Instructions are mainly the steps we want someone to perform in order to achieve something. For example:
 
@@ -271,7 +266,7 @@ instructions()
 
 ## Sticker
 
-![](https://res.cloudinary.com/adonis-js/image/upload/v1593584884/adonisjs.com/sticker_zeudxb.png)
+![](./assets/sticker.png)
 
 Similar to the **instructions**, but a sticker does not prefix the lines with a pointer `>` arrow. Rest is all same.
 
@@ -339,7 +334,7 @@ await tasks()
 
 By default, the `minimal` renderer is used and pivots to the verbose renderer only when terminal is not interactive.
 
-![](https://res.cloudinary.com/adonis-js/image/upload/v1593599111/adonisjs.com/tasks-minimal_ilmngf.gif)
+![](./assets/tasks-minimal.gif)
 
 ### Verbose renderer
 
@@ -349,7 +344,7 @@ In order to run tasks explicitly in the verbose mode, you can create the tasks i
 tasks.verbose().add().add().run()
 ```
 
-![](https://res.cloudinary.com/adonis-js/image/upload/v1593599111/adonisjs.com/tasks-verbose_cq3ibx.gif)
+![](./assets/tasks-verbose.gif)
 
 [circleci-image]: https://img.shields.io/circleci/project/github/poppinss/cliui/master.svg?style=for-the-badge&logo=circleci
 [circleci-url]: https://circleci.com/gh/poppinss/cliui 'circleci'
