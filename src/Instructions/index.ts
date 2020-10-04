@@ -33,7 +33,7 @@ const DEFAULTS: InstructionsOptions = {
  */
 export class Instructions {
 	private state: {
-		heading?: string
+		heading?: InstructionsLine
 		content: InstructionsLine[]
 	} = {
 		content: [],
@@ -153,15 +153,17 @@ export class Instructions {
 			return
 		}
 
-		const width = stringWidth(this.state.heading)
-
 		/**
 		 * Creating the header text
 		 */
 		const leftWhitespace = this.repeat(' ', this.leftPadding)
-		const rightWhitespace = this.repeat(' ', this.widestLineLength - width + this.rightPadding)
+		const rightWhitespace = this.repeat(
+			' ',
+			this.widestLineLength - this.state.heading.width + this.rightPadding
+		)
+
 		const headingContent = this.wrapInVerticalLines(
-			this.state.heading,
+			this.state.heading.text,
 			leftWhitespace,
 			rightWhitespace
 		)
@@ -205,7 +207,12 @@ export class Instructions {
 	 * Define heading for instructions
 	 */
 	public heading(text: string): this {
-		this.state.heading = text
+		const width = stringWidth(text)
+		if (width > this.widestLineLength) {
+			this.widestLineLength = width
+		}
+
+		this.state.heading = { text, width }
 		return this
 	}
 
@@ -235,7 +242,7 @@ export class Instructions {
 		 * Render content as it is in testing mode
 		 */
 		if (this.testing) {
-			this.state.heading && renderer.log(this.state.heading)
+			this.state.heading && renderer.log(this.state.heading.text)
 			this.state.content.forEach(({ text }) => renderer.log(text))
 			return
 		}
