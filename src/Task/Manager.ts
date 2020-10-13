@@ -40,6 +40,16 @@ export class TaskManager {
 	 */
 	private tasks: { task: TaskContract; callback: TaskCallback }[] = []
 
+	/**
+	 * State of the tasks manager
+	 */
+	public state: 'idle' | 'running' | 'succeeded' | 'failed' = 'idle'
+
+	/**
+	 * Reference to the error raised by the task callback (if any)
+	 */
+	public error?: any
+
 	constructor(options?: Partial<TaskManagerOptions>, private testing: boolean = false) {
 		this.options = { ...DEFAULTS, ...options }
 		this.instantiateRenderer()
@@ -104,13 +114,19 @@ export class TaskManager {
 				return
 			}
 
+			this.error = message
+			this.state = 'failed'
 			task.task.fail(message)
 		}
 
 		/**
 		 * Invoke callback
 		 */
-		await task.callback(this.renderer.logger, { complete, fail })
+		try {
+			await task.callback(this.renderer.logger, { complete, fail })
+		} catch (error) {
+			await fail(error)
+		}
 	}
 
 	/**
@@ -134,7 +150,16 @@ export class TaskManager {
 	 * Run tasks
 	 */
 	public async run() {
+		if (this.state !== 'idle') {
+			return
+		}
+
+		this.state = 'running'
 		this.renderer.tasks(this.tasks.map(({ task }) => task)).render()
 		await this.runTask(0)
+
+		if (this.state === 'running') {
+			this.state = 'succeeded'
+		}
 	}
 }
