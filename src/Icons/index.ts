@@ -10,24 +10,24 @@
 const { platform } = process
 
 export const icons =
-	platform === 'win32' && !process.env.WT_SESSION
-		? {
-				tick: '√',
-				cross: '×',
-				bullet: '*',
-				nodejs: '♦',
-				pointer: '>',
-				info: 'i',
-				warning: '‼',
-				squareSmallFilled: '[█]',
-		  }
-		: {
-				tick: '✔',
-				cross: '✖',
-				bullet: '●',
-				nodejs: '⬢',
-				pointer: '❯',
-				info: 'ℹ',
-				warning: '⚠',
-				squareSmallFilled: '◼',
-		  }
+  platform === 'win32' && !process.env.WT_SESSION
+    ? {
+        tick: '√',
+        cross: '×',
+        bullet: '*',
+        nodejs: '♦',
+        pointer: '>',
+        info: 'i',
+        warning: '‼',
+        squareSmallFilled: '[█]',
+      }
+    : {
+        tick: '✔',
+        cross: '✖',
+        bullet: '●',
+        nodejs: '⬢',
+        pointer: '❯',
+        info: 'ℹ',
+        warning: '⚠',
+        squareSmallFilled: '◼',
+      }

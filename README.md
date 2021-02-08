@@ -348,15 +348,11 @@ tasks.verbose().add().add().run()
 
 [circleci-image]: https://img.shields.io/circleci/project/github/poppinss/cliui/master.svg?style=for-the-badge&logo=circleci
 [circleci-url]: https://circleci.com/gh/poppinss/cliui 'circleci'
-
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
 [typescript-url]: "typescript"
-
 [npm-image]: https://img.shields.io/npm/v/@poppinss/cliui.svg?style=for-the-badge&logo=npm
 [npm-url]: https://npmjs.org/package/@poppinss/cliui 'npm'
-
 [license-image]: https://img.shields.io/npm/l/@poppinss/cliui?color=blueviolet&style=for-the-badge
 [license-url]: LICENSE.md 'license'
-
 [synk-image]: https://img.shields.io/snyk/vulnerabilities/github/poppinss/cliui?label=Synk%20Vulnerabilities&style=for-the-badge
-[synk-url]: https://snyk.io/test/github/poppinss/cliui?targetFile=package.json "synk"
+[synk-url]: https://snyk.io/test/github/poppinss/cliui?targetFile=package.json 'synk'

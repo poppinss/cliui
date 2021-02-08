@@ -14,10 +14,10 @@ import { Logger } from '../Logger'
  * interface accepts a renderer
  */
 export interface RendererContract {
-	log(message: string): void
-	logError(message: string): void
-	logUpdate(message: string): void
-	logUpdateDone(): void
+  log(message: string): void
+  logError(message: string): void
+  logUpdate(message: string): void
+  logUpdateDone(): void
 }
 
 /**
@@ -29,14 +29,14 @@ export type UpdateListener = (task: TaskContract) => void
  * Shape of a task
  */
 export interface TaskContract {
-	title: string
-	state: 'idle' | 'running' | 'failed' | 'succeeded'
-	duration?: string
-	completionMessage?: string | { message: string; stack?: string }
-	start(): this
-	onUpdate(callback: UpdateListener): this
-	complete(message?: string): this
-	fail(error: string | { message: string; stack?: string }): this
+  title: string
+  state: 'idle' | 'running' | 'failed' | 'succeeded'
+  duration?: string
+  completionMessage?: string | { message: string; stack?: string }
+  start(): this
+  onUpdate(callback: UpdateListener): this
+  complete(message?: string): this
+  fail(error: string | { message: string; stack?: string }): this
 }
 
 /**
@@ -44,26 +44,26 @@ export interface TaskContract {
  * manager
  */
 export type TaskCallback = (
-	logger: Logger,
-	task: {
-		fail: (error: string | { message: string; stack?: string }) => Promise<void>
-		complete: (message?: string) => Promise<void>
-	}
+  logger: Logger,
+  task: {
+    fail: (error: string | { message: string; stack?: string }) => Promise<void>
+    complete: (message?: string) => Promise<void>
+  }
 ) => void | Promise<void>
 
 /**
  * Options accepted by the tasks renderers
  */
 export type TaskRendererOptions = {
-	colors: boolean
-	interactive: boolean
+  colors: boolean
+  interactive: boolean
 }
 
 /**
  * Options accepted by the tasks manager
  */
 export type TaskManagerOptions = TaskRendererOptions & {
-	verbose: boolean
+  verbose: boolean
 }
 
 /**
@@ -75,32 +75,32 @@ export type LoggingTypes = 'success' | 'error' | 'fatal' | 'warning' | 'info' | 
  * Options accepted by the logger
  */
 export type LoggerOptions = {
-	colors: boolean
-	labelColors: boolean
-	dim: boolean
-	dimLabels: boolean
-	interactive: boolean
+  colors: boolean
+  labelColors: boolean
+  dim: boolean
+  dimLabels: boolean
+  interactive: boolean
 }
 
 /**
  * Options accepted by table
  */
 export type TableOptions = {
-	colors: boolean
+  colors: boolean
 }
 
 /**
  * Options accepted by instructions
  */
 export type InstructionsOptions = {
-	icons: boolean
-	colors: boolean
+  icons: boolean
+  colors: boolean
 }
 
 /**
  * Shape of the instructions line
  */
 export type InstructionsLine = {
-	text: string
-	width: number
+  text: string
+  width: number
 }

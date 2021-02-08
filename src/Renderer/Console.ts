@@ -14,28 +14,28 @@ import { RendererContract } from '../Contracts'
  * Renders messages to the "stdout" and "stderr"
  */
 export class ConsoleRenderer implements RendererContract {
-	public log(message: string) {
-		console.log(message)
-	}
+  public log(message: string) {
+    console.log(message)
+  }
 
-	/**
-	 * Log message by overwriting the existing one
-	 */
-	public logUpdate(message: string) {
-		logUpdate(message)
-	}
+  /**
+   * Log message by overwriting the existing one
+   */
+  public logUpdate(message: string) {
+    logUpdate(message)
+  }
 
-	/**
-	 * Persist the last logged message
-	 */
-	public logUpdateDone() {
-		logUpdate.done()
-	}
+  /**
+   * Persist the last logged message
+   */
+  public logUpdateDone() {
+    logUpdate.done()
+  }
 
-	/**
-	 * Log error
-	 */
-	public logError(message: string) {
-		console.error(message)
-	}
+  /**
+   * Log error
+   */
+  public logError(message: string) {
+    console.error(message)
+  }
 }

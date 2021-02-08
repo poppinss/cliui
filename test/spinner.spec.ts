@@ -13,58 +13,58 @@ import { Spinner } from '../src/Logger/Spinner'
 import { MemoryRenderer } from '../src/Renderer/Memory'
 
 test.group('Spinner', () => {
-	test('print the message with progress bar', (assert) => {
-		const logger = new Logger({}, true)
-		const renderer = new MemoryRenderer()
+  test('print the message with progress bar', (assert) => {
+    const logger = new Logger({}, true)
+    const renderer = new MemoryRenderer()
 
-		logger.useRenderer(renderer)
-		const spinner = new Spinner('hello world', logger, true)
-		spinner.start()
+    logger.useRenderer(renderer)
+    const spinner = new Spinner('hello world', logger, true)
+    spinner.start()
 
-		assert.deepEqual(renderer.logs, [
-			{
-				message: 'hello world ...',
-				stream: 'stdout',
-			},
-		])
-	})
+    assert.deepEqual(renderer.logs, [
+      {
+        message: 'hello world ...',
+        stream: 'stdout',
+      },
+    ])
+  })
 
-	test('update message on the update call', async (assert) => {
-		const logger = new Logger({}, true)
-		const renderer = new MemoryRenderer()
+  test('update message on the update call', async (assert) => {
+    const logger = new Logger({}, true)
+    const renderer = new MemoryRenderer()
 
-		logger.useRenderer(renderer)
-		const spinner = new Spinner('hello world', logger, true)
+    logger.useRenderer(renderer)
+    const spinner = new Spinner('hello world', logger, true)
 
-		spinner.start()
-		spinner.update('hi world')
+    spinner.start()
+    spinner.update('hi world')
 
-		assert.deepEqual(renderer.logs, [
-			{
-				message: 'hello world ...',
-				stream: 'stdout',
-			},
-			{
-				message: 'hi world ...',
-				stream: 'stdout',
-			},
-		])
-	})
+    assert.deepEqual(renderer.logs, [
+      {
+        message: 'hello world ...',
+        stream: 'stdout',
+      },
+      {
+        message: 'hi world ...',
+        stream: 'stdout',
+      },
+    ])
+  })
 
-	test('stop in test mode must be a noop', async (assert) => {
-		const logger = new Logger({}, true)
-		const renderer = new MemoryRenderer()
+  test('stop in test mode must be a noop', async (assert) => {
+    const logger = new Logger({}, true)
+    const renderer = new MemoryRenderer()
 
-		logger.useRenderer(renderer)
-		const spinner = new Spinner('hello world', logger, true)
-		spinner.start()
-		spinner.stop()
+    logger.useRenderer(renderer)
+    const spinner = new Spinner('hello world', logger, true)
+    spinner.start()
+    spinner.stop()
 
-		assert.deepEqual(renderer.logs, [
-			{
-				message: 'hello world ...',
-				stream: 'stdout',
-			},
-		])
-	})
+    assert.deepEqual(renderer.logs, [
+      {
+        message: 'hello world ...',
+        stream: 'stdout',
+      },
+    ])
+  })
 })
