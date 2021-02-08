@@ -112,8 +112,8 @@ export class Instructions {
    * Wraps content inside the left and right vertical lines
    */
   private wrapInVerticalLines(content: string, leftWhitespace: string, rightWhitespace: string) {
-    return `${this.dim(BOX.vertical)}${leftWhitespace}${content}${rightWhitespace}${this.dim(
-      BOX.vertical
+    return `${this.dim(BOX.left)}${leftWhitespace}${content}${rightWhitespace}${this.dim(
+      BOX.right
     )}`
   }
 
@@ -122,7 +122,7 @@ export class Instructions {
    */
   private getTopLine(): string {
     const horizontalLength = this.widestLineLength + this.leftPadding + this.rightPadding
-    const horizontalLine = this.repeat(this.dim(BOX.horizontal), horizontalLength)
+    const horizontalLine = this.repeat(this.dim(BOX.top), horizontalLength)
     return `${this.dim(BOX.topLeft)}${horizontalLine}${this.dim(BOX.topRight)}`
   }
 
@@ -131,7 +131,7 @@ export class Instructions {
    */
   private getBottomLine(): string {
     const horizontalLength = this.widestLineLength + this.leftPadding + this.rightPadding
-    const horizontalLine = this.repeat(this.dim(BOX.horizontal), horizontalLength)
+    const horizontalLine = this.repeat(this.dim(BOX.bottom), horizontalLength)
     return `${this.dim(BOX.bottomLeft)}${horizontalLine}${this.dim(BOX.bottomRight)}`
   }
 
@@ -172,7 +172,7 @@ export class Instructions {
      * Creating the heading border bottom
      */
     const horizontalLength = this.widestLineLength + this.leftPadding + this.rightPadding
-    const borderLine = this.repeat(this.dim(boxes.single.horizontal), horizontalLength)
+    const borderLine = this.repeat(this.dim(boxes.single.top), horizontalLength)
     const border = this.wrapInVerticalLines(borderLine, '', '')
 
     return `${headingContent}\n${border}`
