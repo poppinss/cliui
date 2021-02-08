@@ -53,7 +53,7 @@ export class Task implements TaskContract {
   public start() {
     this.state = 'running'
     this.startTime = process.hrtime()
-    this.onUpdateListener?.(this)
+    this.onUpdateListener && this.onUpdateListener(this)
     return this
   }
 
@@ -64,7 +64,7 @@ export class Task implements TaskContract {
     this.state = 'succeeded'
     this.duration = prettyHrtime(process.hrtime(this.startTime))
     this.completionMessage = message
-    this.onUpdateListener?.(this)
+    this.onUpdateListener && this.onUpdateListener(this)
     return this
   }
 
@@ -75,7 +75,7 @@ export class Task implements TaskContract {
     this.state = 'failed'
     this.duration = prettyHrtime(process.hrtime(this.startTime))
     this.completionMessage = error
-    this.onUpdateListener?.(this)
+    this.onUpdateListener && this.onUpdateListener(this)
     return this
   }
 }
