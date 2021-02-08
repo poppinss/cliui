@@ -147,7 +147,7 @@ test.group('Logger | fatal', () => {
 
     assert.lengthOf(renderer.logs, 1)
     assert.equal(renderer.logs[0].stream, 'stderr')
-    assert.equal(renderer.logs[0].message.split('\n')[1], `dim(    at ${__filename}:146:16)`)
+    assert.equal(renderer.logs[0].message.split('\n')[1], `dim(    at ${__filename}:146:18)`)
   })
 })
 
