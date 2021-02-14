@@ -10,7 +10,7 @@
 import CliTable from 'cli-table3'
 import { getBest } from '../Colors'
 import { ConsoleRenderer } from '../Renderer/Console'
-import { RendererContract, TableOptions } from '../Contracts'
+import { RendererContract, TableOptions, TableRow } from '../Contracts'
 
 /**
  * Default config options
@@ -26,7 +26,7 @@ export class Table {
   private state: {
     colWidths?: number[]
     head: string[]
-    rows: string[][]
+    rows: TableRow[]
   } = {
     head: [],
     rows: [],
@@ -82,7 +82,7 @@ export class Table {
   /**
    * Add a new table row
    */
-  public row(row: string[]): this {
+  public row(row: TableRow): this {
     this.state.rows.push(row)
     return this
   }
@@ -101,7 +101,18 @@ export class Table {
   public render() {
     if (this.testing) {
       this.getRenderer().log(this.state.head.join('|'))
-      this.state.rows.forEach((row) => this.getRenderer().log(row.join('|')))
+      this.state.rows.forEach((row) => {
+        const content = Array.isArray(row)
+          ? row.map((cell) => {
+              if (typeof cell === 'string') {
+                return cell
+              }
+              return cell.content
+            })
+          : Object.keys(row)
+
+        this.getRenderer().log(content.join('|'))
+      })
       return
     }
 

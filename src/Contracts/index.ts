@@ -89,6 +89,14 @@ export type TableOptions = {
   colors: boolean
 }
 
+export type TableRow =
+  | (
+      | string
+      | { colSpan?: number; hAlign?: 'left' | 'center' | 'right'; content: string }
+      | { rowSpan?: number; vAlign?: 'top' | 'center' | 'bottom'; content: string }
+    )[]
+  | { [key: string]: string[] }
+
 /**
  * Options accepted by instructions
  */
