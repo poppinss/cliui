@@ -9,6 +9,7 @@
 
 import colorSupport from 'color-support'
 
+import { icons } from './src/Icons'
 import { Table } from './src/Table'
 import { Logger } from './src/Logger'
 import { TaskManager } from './src/Task/Manager'
@@ -106,6 +107,7 @@ export function instantiate(testing: boolean) {
   return {
     table,
     tasks,
+    icons,
     logger,
     sticker,
     instructions,

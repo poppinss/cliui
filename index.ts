@@ -45,6 +45,11 @@ export const consoleRenderer = ui.consoleRenderer
 export const logger = ui.logger
 
 /**
+ * Icons
+ */
+export const icons = ui.icons
+
+/**
  * Reference to the instructions block to render a set of lines inside
  * a box.
  */
