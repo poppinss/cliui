@@ -1,6 +1,6 @@
 {
   "name": "@poppinss/cliui",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Highly opinionated command line UI KIT",
   "main": "build/index.js",
   "files": [
