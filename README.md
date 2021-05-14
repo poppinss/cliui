@@ -8,7 +8,7 @@ This repo is a command line UI Kit used by the AdonisJS framework to design its 
 
 The kit is highly opinionated and we will not allow configurable settings in the near future. We want to be consistent with our UI's without worrying about the configuration.
 
-[![circleci-image]][circleci-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url] [![synk-image]][synk-url]
+[![gh-workflow-image]][gh-workflow-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url] [![synk-image]][synk-url]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -346,13 +346,17 @@ tasks.verbose().add().add().run()
 
 ![](./assets/tasks-verbose.gif)
 
-[circleci-image]: https://img.shields.io/circleci/project/github/poppinss/cliui/master.svg?style=for-the-badge&logo=circleci
-[circleci-url]: https://circleci.com/gh/poppinss/cliui 'circleci'
+[gh-workflow-image]: https://img.shields.io/github/workflow/status/poppinss/cliui/test?style=for-the-badge
+[gh-workflow-url]: https://github.com/poppinss/cliui/actions/workflows/test.yml "Github action"
+
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
 [typescript-url]: "typescript"
+
 [npm-image]: https://img.shields.io/npm/v/@poppinss/cliui.svg?style=for-the-badge&logo=npm
 [npm-url]: https://npmjs.org/package/@poppinss/cliui 'npm'
+
 [license-image]: https://img.shields.io/npm/l/@poppinss/cliui?color=blueviolet&style=for-the-badge
 [license-url]: LICENSE.md 'license'
+
 [synk-image]: https://img.shields.io/snyk/vulnerabilities/github/poppinss/cliui?label=Synk%20Vulnerabilities&style=for-the-badge
 [synk-url]: https://snyk.io/test/github/poppinss/cliui?targetFile=package.json 'synk'
