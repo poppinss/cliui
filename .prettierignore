@@ -4,3 +4,5 @@ config.json
 .eslintrc.json
 package.json
 *.html
+*.md
+*.txt
