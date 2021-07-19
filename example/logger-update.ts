@@ -1,6 +1,6 @@
 import { logger } from '../index'
 
-const sleep = () => new Promise((resolve) => setTimeout(resolve, 50))
+const sleep = () => new Promise<void>((resolve) => setTimeout(resolve, 50))
 
 async function run() {
   for (let i = 0; i <= 100; i = i + 2) {

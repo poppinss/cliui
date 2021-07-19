@@ -1,6 +1,6 @@
 import { tasks } from '../index'
 
-const sleep = (time: number) => new Promise((resolve) => setTimeout(resolve, time))
+const sleep = (time: number) => new Promise<void>((resolve) => setTimeout(resolve, time))
 
 tasks()
   .add('clone repo', async (logger, task) => {
