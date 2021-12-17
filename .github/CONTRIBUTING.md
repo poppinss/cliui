@@ -10,7 +10,7 @@ We love pull requests. And following this guidelines will make your pull request
 
 ## Coding style
 
-We make use of Typescript along with [Tslint](https://palantir.github.io/tslint) to ensure a consistent coding style. All of the rules are defined inside the `tslint.json` file.
+We make use of [standard](https://standardjs.com/) to lint our code. Standard does not need a config file and comes with set of non-configurable rules.
 
 ## Development work-flow
 
@@ -32,7 +32,6 @@ npm run lint
 
 - Do not change version number inside the `package.json` file.
 - Do not update `CHANGELOG.md` file.
-- Do not update `tslint.json` or `tslint.js` file. If something prevents you writing code, please create an issue for same.
 
 ## Need help?
 
