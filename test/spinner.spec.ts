@@ -7,13 +7,13 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 import { Logger } from '../src/Logger'
 import { Spinner } from '../src/Logger/Spinner'
 import { MemoryRenderer } from '../src/Renderer/Memory'
 
 test.group('Spinner', () => {
-  test('print the message with progress bar', (assert) => {
+  test('print the message with progress bar', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -29,7 +29,7 @@ test.group('Spinner', () => {
     ])
   })
 
-  test('update message on the update call', async (assert) => {
+  test('update message on the update call', async ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -51,7 +51,7 @@ test.group('Spinner', () => {
     ])
   })
 
-  test('stop in test mode must be a noop', async (assert) => {
+  test('stop in test mode must be a noop', async ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 

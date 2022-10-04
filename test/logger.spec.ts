@@ -7,12 +7,12 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 import { Logger } from '../src/Logger'
 import { MemoryRenderer } from '../src/Renderer/Memory'
 
 test.group('Logger | label', () => {
-  test('do not add color to label when labelColors property is set to false', (assert) => {
+  test('do not add color to label when labelColors property is set to false', ({ assert }) => {
     const logger = new Logger({ labelColors: false }, true)
     const renderer = new MemoryRenderer()
 
@@ -27,7 +27,7 @@ test.group('Logger | label', () => {
     ])
   })
 
-  test('do not add color to label when colors property is set to false', (assert) => {
+  test('do not add color to label when colors property is set to false', ({ assert }) => {
     const logger = new Logger({ colors: false }, true)
     const renderer = new MemoryRenderer()
 
@@ -42,7 +42,7 @@ test.group('Logger | label', () => {
     ])
   })
 
-  test('dim labels when dimLabels property is set to true', (assert) => {
+  test('dim labels when dimLabels property is set to true', ({ assert }) => {
     const logger = new Logger({ dimLabels: true }, true)
     const renderer = new MemoryRenderer()
 
@@ -57,7 +57,7 @@ test.group('Logger | label', () => {
     ])
   })
 
-  test('dim labels when dim property is set to true', (assert) => {
+  test('dim labels when dim property is set to true', ({ assert }) => {
     const logger = new Logger({ dim: true }, true)
     const renderer = new MemoryRenderer()
 
@@ -74,7 +74,7 @@ test.group('Logger | label', () => {
 })
 
 test.group('Logger | success', () => {
-  test('log success message with icon', (assert) => {
+  test('log success message with icon', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -91,7 +91,7 @@ test.group('Logger | success', () => {
 })
 
 test.group('Logger | error', () => {
-  test('log error message with label', (assert) => {
+  test('log error message with label', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -106,7 +106,7 @@ test.group('Logger | error', () => {
     ])
   })
 
-  test('log error instance as error', (assert) => {
+  test('log error instance as error', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -123,7 +123,7 @@ test.group('Logger | error', () => {
 })
 
 test.group('Logger | fatal', () => {
-  test('log fatal message with icon', (assert) => {
+  test('log fatal message with icon', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -138,7 +138,7 @@ test.group('Logger | fatal', () => {
     ])
   })
 
-  test('log error instance as a fatal message', (assert) => {
+  test('log error instance as a fatal message', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -146,13 +146,17 @@ test.group('Logger | fatal', () => {
     logger.fatal(new Error('Hello world'))
 
     assert.lengthOf(renderer.logs, 1)
+
     assert.equal(renderer.logs[0].stream, 'stderr')
-    assert.equal(renderer.logs[0].message.split('\n')[1], `dim(    at ${__filename}:146:18)`)
+    assert.equal(
+      renderer.logs[0].message.split('\n')[1],
+      `dim(    at Object.executor (${__filename}:146:18))`
+    )
   })
 })
 
 test.group('Logger | warning', () => {
-  test('log warning message with icon', (assert) => {
+  test('log warning message with icon', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -169,7 +173,7 @@ test.group('Logger | warning', () => {
 })
 
 test.group('Logger | info', () => {
-  test('log info message with icon', (assert) => {
+  test('log info message with icon', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -186,7 +190,7 @@ test.group('Logger | info', () => {
 })
 
 test.group('Logger | debug', () => {
-  test('log debug message with icon', (assert) => {
+  test('log debug message with icon', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -203,7 +207,7 @@ test.group('Logger | debug', () => {
 })
 
 test.group('Logger | await', () => {
-  test('start spinner', (assert) => {
+  test('start spinner', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -219,7 +223,7 @@ test.group('Logger | await', () => {
     ])
   })
 
-  test('start spinner with a custom prefix', (assert) => {
+  test('start spinner with a custom prefix', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -235,7 +239,7 @@ test.group('Logger | await', () => {
     ])
   })
 
-  test('updating spinner text must retain the prefix', (assert) => {
+  test('updating spinner text must retain the prefix', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -256,7 +260,7 @@ test.group('Logger | await', () => {
     ])
   })
 
-  test('update spinner with new prefix', (assert) => {
+  test('update spinner with new prefix', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -277,7 +281,7 @@ test.group('Logger | await', () => {
     ])
   })
 
-  test('start spinner with a custom suffix', (assert) => {
+  test('start spinner with a custom suffix', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -293,7 +297,7 @@ test.group('Logger | await', () => {
     ])
   })
 
-  test('updating spinner text must retain the suffix', (assert) => {
+  test('updating spinner text must retain the suffix', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 
@@ -314,7 +318,7 @@ test.group('Logger | await', () => {
     ])
   })
 
-  test('update spinner with new suffix', (assert) => {
+  test('update spinner with new suffix', ({ assert }) => {
     const logger = new Logger({}, true)
     const renderer = new MemoryRenderer()
 

@@ -7,12 +7,12 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 import { Table } from '../src/Table'
 import { MemoryRenderer } from '../src/Renderer/Memory'
 
 test.group('Table', () => {
-  test('render table', (assert) => {
+  test('render table', ({ assert }) => {
     const table = new Table({}, true)
     const renderer = new MemoryRenderer()
 
@@ -33,7 +33,7 @@ test.group('Table', () => {
     ])
   })
 
-  test('render table with mutliple rows', (assert) => {
+  test('render table with mutliple rows', ({ assert }) => {
     const table = new Table({}, true)
     const renderer = new MemoryRenderer()
 
@@ -59,7 +59,7 @@ test.group('Table', () => {
     ])
   })
 
-  test('disable colors', (assert) => {
+  test('disable colors', ({ assert }) => {
     const table = new Table({ colors: false }, true)
     const renderer = new MemoryRenderer()
 

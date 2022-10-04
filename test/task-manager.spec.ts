@@ -7,13 +7,13 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 // import { icons } from '../src/Icons'
 import { TaskManager } from '../src/Task/Manager'
 import { MemoryRenderer } from '../src/Renderer/Memory'
 
 test.group('TaskManager', () => {
-  test('run multiple tasks in sequence', async (assert) => {
+  test('run multiple tasks in sequence', async ({ assert }) => {
     const renderer = new MemoryRenderer()
     const manager = new TaskManager({}, true)
 
@@ -60,7 +60,7 @@ test.group('TaskManager', () => {
     ])
   })
 
-  test('do not run next task when previous one fails', async (assert) => {
+  test('do not run next task when previous one fails', async ({ assert }) => {
     const renderer = new MemoryRenderer()
     const manager = new TaskManager({}, true)
 
@@ -116,7 +116,7 @@ test.group('TaskManager', () => {
     ])
   })
 
-  test('handle exceptions to auto fail the tasks', async (assert) => {
+  test('handle exceptions to auto fail the tasks', async ({ assert }) => {
     const renderer = new MemoryRenderer()
     const manager = new TaskManager({}, true)
 
@@ -172,7 +172,7 @@ test.group('TaskManager', () => {
     ])
   })
 
-  test('disable colors', async (assert) => {
+  test('disable colors', async ({ assert }) => {
     const renderer = new MemoryRenderer()
     const manager = new TaskManager({ colors: false }, true)
 

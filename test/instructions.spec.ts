@@ -7,14 +7,14 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 
 import { icons } from '../src/Icons'
 import { Instructions } from '../src/Instructions'
 import { MemoryRenderer } from '../src/Renderer/Memory'
 
 test.group('Instructions', () => {
-  test('render instruction line', (assert) => {
+  test('render instruction line', ({ assert }) => {
     const instructions = new Instructions({}, true)
     const renderer = new MemoryRenderer()
 
@@ -30,7 +30,7 @@ test.group('Instructions', () => {
     ])
   })
 
-  test('render multiple instruction lines', (assert) => {
+  test('render multiple instruction lines', ({ assert }) => {
     const instructions = new Instructions({}, true)
     const renderer = new MemoryRenderer()
 
@@ -51,7 +51,7 @@ test.group('Instructions', () => {
     ])
   })
 
-  test('render instruction heading', (assert) => {
+  test('render instruction heading', ({ assert }) => {
     const instructions = new Instructions({}, true)
     const renderer = new MemoryRenderer()
 
@@ -77,7 +77,7 @@ test.group('Instructions', () => {
     ])
   })
 
-  test('disable icons', (assert) => {
+  test('disable icons', ({ assert }) => {
     const instructions = new Instructions({ icons: false }, true)
     const renderer = new MemoryRenderer()
 

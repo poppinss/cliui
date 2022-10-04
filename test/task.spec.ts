@@ -7,16 +7,16 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 import { Task } from '../src/Task'
 
 test.group('Task', () => {
-  test('initiate task in idle mode', (assert) => {
+  test('initiate task in idle mode', ({ assert }) => {
     const task = new Task('install deps')
     assert.equal(task.state, 'idle')
   })
 
-  test('starting a task should notify listener', (assert, done) => {
+  test('starting a task should notify listener', ({ assert }, done) => {
     assert.plan(1)
 
     const task = new Task('install deps')
@@ -26,9 +26,9 @@ test.group('Task', () => {
     })
 
     task.start()
-  })
+  }).waitForDone()
 
-  test('update task state to running after calling the start method', (assert) => {
+  test('update task state to running after calling the start method', ({ assert }) => {
     assert.plan(1)
 
     const task = new Task('install deps')
@@ -37,7 +37,7 @@ test.group('Task', () => {
     assert.equal(task.state, 'running')
   })
 
-  test('mark test as completed', (assert, done) => {
+  test('mark test as completed', ({ assert }, done) => {
     assert.plan(1)
 
     const task = new Task('install deps')
@@ -49,9 +49,9 @@ test.group('Task', () => {
     })
 
     task.complete()
-  })
+  }).waitForDone()
 
-  test('mark test as completed with summary', (assert, done) => {
+  test('mark test as completed with summary', ({ assert }, done) => {
     assert.plan(2)
 
     const task = new Task('install deps')
@@ -64,9 +64,9 @@ test.group('Task', () => {
     })
 
     task.complete('All good')
-  })
+  }).waitForDone()
 
-  test('mark test as failed', (assert, done) => {
+  test('mark test as failed', ({ assert }, done) => {
     assert.plan(2)
 
     const task = new Task('install deps')
@@ -79,9 +79,9 @@ test.group('Task', () => {
     })
 
     task.fail('Something went wrong')
-  })
+  }).waitForDone()
 
-  test('pass error instance as task failure message', (assert, done) => {
+  test('pass error instance as task failure message', ({ assert }, done) => {
     assert.plan(2)
 
     const task = new Task('install deps')
@@ -94,5 +94,5 @@ test.group('Task', () => {
     })
 
     task.fail(new Error('Something went wrong'))
-  })
+  }).waitForDone()
 })

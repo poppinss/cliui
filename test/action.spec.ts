@@ -7,14 +7,14 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 
 import { Logger } from '../src/Logger'
 import { Action } from '../src/Logger/Action'
 import { MemoryRenderer } from '../src/Renderer/Memory'
 
 test.group('Action', () => {
-  test('log action in succeeded state', (assert) => {
+  test('log action in succeeded state', ({ assert }) => {
     const action = new Action('create', new Logger({}, true))
     const renderer = new MemoryRenderer()
 
@@ -29,7 +29,7 @@ test.group('Action', () => {
     ])
   })
 
-  test('log action in failed state', (assert) => {
+  test('log action in failed state', ({ assert }) => {
     const action = new Action('create', new Logger({}, true))
     const renderer = new MemoryRenderer()
 
@@ -44,7 +44,7 @@ test.group('Action', () => {
     ])
   })
 
-  test('log action in skipped state', (assert) => {
+  test('log action in skipped state', ({ assert }) => {
     const action = new Action('create', new Logger({}, true))
     const renderer = new MemoryRenderer()
 
@@ -59,7 +59,7 @@ test.group('Action', () => {
     ])
   })
 
-  test('disable colors', (assert) => {
+  test('disable colors', ({ assert }) => {
     const action = new Action('create', new Logger({ colors: false }, true))
     const renderer = new MemoryRenderer()
 
@@ -74,7 +74,7 @@ test.group('Action', () => {
     ])
   })
 
-  test('dim message', (assert) => {
+  test('dim message', ({ assert }) => {
     const action = new Action('create', new Logger({ dim: true }, true))
     const renderer = new MemoryRenderer()
 
@@ -89,7 +89,7 @@ test.group('Action', () => {
     ])
   })
 
-  test('add skip reason to the log', (assert) => {
+  test('add skip reason to the log', ({ assert }) => {
     const action = new Action('create', new Logger({}, true))
     const renderer = new MemoryRenderer()
 
