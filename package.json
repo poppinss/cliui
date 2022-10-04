@@ -73,7 +73,7 @@
     "anyBranch": false
   },
   "dependencies": {
-    "@poppinss/colors": "^3.0.2",
+    "@poppinss/colors": "^3.0.3",
     "cli-boxes": "^3.0.0",
     "cli-table3": "^0.6.3",
     "color-support": "^1.1.3",
