@@ -4,8 +4,8 @@ const logger = ui.logger
 
 console.log()
 
-logger.action('create').succeeded('config/auth.ts')
-logger.action('update').succeeded('.tsconfig.json')
-logger.action('create').skipped('app/Models/User.ts', 'File already exists')
-logger.action('create').failed('server.ts', 'File already exists')
-logger.action('create').failed('server.ts', new Error('File already exists'))
+logger.action('Creating config/auth.ts').displayDuration().succeeded()
+logger.action('Updating .tsconfig.json').succeeded()
+logger.action('Creating app/Models/User.ts').skipped('File already exists')
+logger.action('Creating server.ts').failed('File already exists')
+logger.action('Creating server.ts').failed(new Error('File already exists'))

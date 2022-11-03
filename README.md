@@ -4,7 +4,7 @@
 [![gh-workflow-image]][gh-workflow-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url] [![synk-image]][synk-url]
 
 ## Why this package exists?
-CLI UI is an opinionated UI Kit to **log messages**, **render tables**, **display spinners**, and much more. Following are some of the reasons we created this package.
+CLI UI is an opinionated UI Kit to **log messages**, **render tables**, **display spinners**, and much more. Following are some of the reasons for creating this package.
 
 - First-class support for testing the UI kit output.
 - Using a standard set of design elements without allowing them to be configurable. Choosing consistency over configurability.
@@ -114,6 +114,16 @@ loader.update('unpacking packages', { suffix: undefined })
 loader.stop()
 ```
 
+### Preparing messages without writing them
+You can also use the logger to just prepare the message (with colors and formatting) without writing it to the output stream. Just prefix the log message with `prepare` and it will return a string value.
+
+```ts
+const debugMessage = logger.prepareDebug('Something just happened')
+const infoMessage = logger.prepareInfo('This is an info message')
+const successMessage = logger.prepareSuccess('Account created')
+const warningMessage = logger.prepareWarning('Running out of disk space')
+```
+
 ### Testing logger output
 First, you must instantiate the `cliui` in raw mode to collect all logs messages within memory. And then you can access the logs using `logger.getRenderer()` to write assertions.
 
@@ -124,6 +134,32 @@ ui.logger.info('Hello world')
 
 const logs = ui.logger.getRenderer().getLogs()
 console.log(logs)
+```
+
+## Logger actions
+Logger actions are pre-styled logs to display the outcome of an action. For example, the action can be to create/update or delete a file. 
+
+![](./assets/actions.png)
+
+You can create an action by calling the `logger.action` method and pass the message to display. Once, done perfoming the underlying operation, you can either mark the action as `succeeded`, `skipped`, or `failed`.
+
+```ts
+logger
+  .action('Creating config/auth.ts')
+  .displayDuration()
+  .succeeded()
+
+logger
+  .action('Updating .tsconfig.json')
+  .succeeded()
+
+logger
+  .action('Creating app/Models/User.ts')
+  .skipped('File already exists')
+
+logger
+  .action('Creating server.ts')
+  .failed(new Error('File already exists'))
 ```
 
 ## Table
@@ -273,6 +309,8 @@ console.log(logs)
 ## Tasks
 The tasks widget allows rendering a list of tasks to perform. Each task has an associated async callback to **perform the task**, **report its progress**, and also **mark it as succeeded or failed**.
 
+![](./assets/tasks-minimal.gif)
+
 - The return value of the callback function is used as the success message.
 - You can throw an Error to mark the task as failed. Or, call the `task.error` method to prepare an error from a string value.
 
@@ -314,6 +352,8 @@ tasks
 
 ### Using verbose renderer
 The `verbose` renderer displays all the log messages instead of just the latest one. Also, the task output is rendered differently from the minimal renderer. Please, check the [example](./example/tasks.ts) file for the same.
+
+![](./assets/tasks-verbose.gif)
 
 You can create the tasks instance with a `verbose` renderer as follows. The rest of the API is the same.
 

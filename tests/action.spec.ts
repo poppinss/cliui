@@ -15,96 +15,96 @@ import { MemoryRenderer } from '../src/renderers/memory.js'
 
 test.group('Action', () => {
   test('log action in succeeded state', ({ assert }) => {
-    const action = new Action('create')
+    const action = new Action('creating file')
     const renderer = new MemoryRenderer()
 
     action.useRenderer(renderer)
     action.useColors(useColors({ raw: true }))
-    action.succeeded('hello world')
+    action.succeeded()
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `green(${'CREATE:'}) hello world`,
+        message: `green(${'DONE:'})    creating file`,
         stream: 'stdout',
       },
     ])
   })
 
   test('log action in failed state', ({ assert }) => {
-    const action = new Action('create')
+    const action = new Action('creating file')
     const renderer = new MemoryRenderer()
 
     action.useRenderer(renderer)
     action.useColors(useColors({ raw: true }))
-    action.failed('hello world', 'File already exists')
+    action.failed('File already exists')
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `red(ERROR:)  hello world \n        red(File already exists)`,
+        message: `red(FAILED:)  creating file \n         red(File already exists)`,
         stream: 'stderr',
       },
     ])
   })
 
   test('log action in skipped state', ({ assert }) => {
-    const action = new Action('create')
+    const action = new Action('creating file')
     const renderer = new MemoryRenderer()
 
     action.useRenderer(renderer)
     action.useColors(useColors({ raw: true }))
-    action.skipped('hello world')
+    action.skipped()
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `cyan(SKIP:)   hello world`,
+        message: `cyan(SKIPPED:) creating file`,
         stream: 'stdout',
       },
     ])
   })
 
   test('disable colors', ({ assert }) => {
-    const action = new Action('create')
+    const action = new Action('creating file')
     const renderer = new MemoryRenderer()
 
     action.useRenderer(renderer)
     action.useColors(useColors({ silent: true }))
-    action.succeeded('hello world')
+    action.succeeded()
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `CREATE: hello world`,
+        message: `DONE:    creating file`,
         stream: 'stdout',
       },
     ])
   })
 
   test('dim message', ({ assert }) => {
-    const action = new Action('create', { dim: true })
+    const action = new Action('creating file', { dim: true })
     const renderer = new MemoryRenderer()
 
     action.useRenderer(renderer)
     action.useColors(useColors({ raw: true }))
-    action.succeeded('hello world')
+    action.succeeded()
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `dim(green(CREATE:)) dim(hello world)`,
+        message: `dim(green(DONE:))    dim(creating file)`,
         stream: 'stdout',
       },
     ])
   })
 
   test('add skip reason to the log', ({ assert }) => {
-    const action = new Action('create')
+    const action = new Action('creating file')
     const renderer = new MemoryRenderer()
 
     action.useRenderer(renderer)
     action.useColors(useColors({ raw: true }))
-    action.skipped('hello world', 'invalid message')
+    action.skipped('invalid message')
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `cyan(SKIP:)   hello world dim((invalid message))`,
+        message: `cyan(SKIPPED:) creating file dim((invalid message))`,
         stream: 'stdout',
       },
     ])

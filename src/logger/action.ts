@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
+import prettyHrtime from 'pretty-hrtime'
 import type { Colors } from '@poppinss/colors/types'
 
 import { useColors } from '../colors.js'
@@ -21,15 +22,17 @@ import type { ActionOptions, RendererContract } from '../types.js'
  * - skipped
  */
 export class Action {
+  #startTime?: [number, number]
+
   /**
    * Action options
    */
   #options: ActionOptions
 
   /**
-   * Action label
+   * Action message
    */
-  #label: string
+  #message: string
 
   /**
    * Reference to the colors implementation
@@ -41,8 +44,14 @@ export class Action {
    */
   #renderer?: RendererContract
 
-  constructor(label: string, options: Partial<ActionOptions> = {}) {
-    this.#label = label
+  /**
+   * Whether or not to display duration of the action
+   */
+  #displayDuration: boolean = false
+
+  constructor(message: string, options: Partial<ActionOptions> = {}) {
+    this.#message = message
+    this.#startTime = process.hrtime()
     this.#options = {
       dim: options.dim === undefined ? false : options.dim,
     }
@@ -73,11 +82,11 @@ export class Action {
   }
 
   /**
-   * Format the skip reason
+   * Format the suffix
    */
-  #formatSkipReason(skipReason: string) {
-    skipReason = `(${skipReason})`
-    return this.getColors().dim(skipReason)
+  #formatSuffix(message: string) {
+    message = `(${message})`
+    return this.getColors().dim(message)
   }
 
   /**
@@ -93,7 +102,7 @@ export class Action {
           line = this.getColors().dim(line)
         }
 
-        return `    ${this.getColors().red(line)}`
+        return `     ${this.getColors().red(line)}`
       })
       .join('\n')}`
   }
@@ -137,31 +146,48 @@ export class Action {
   }
 
   /**
+   * Toggle whether to display duration for completed
+   * tasks or not.
+   */
+  displayDuration(displayDuration: boolean = true) {
+    this.#displayDuration = displayDuration
+    return this
+  }
+
+  /**
    * Prepares the message to mark action as successful
    */
-  prepareSucceeded(message: string) {
-    const formattedLabel = this.#formatLabel(this.#label, 'green')
-    const formattedMessage = this.#formatMessage(message)
-    return `${formattedLabel} ${formattedMessage}`
+  prepareSucceeded() {
+    const formattedLabel = this.#formatLabel('done', 'green')
+    const formattedMessage = this.#formatMessage(this.#message)
+
+    let logMessage = `${formattedLabel}    ${formattedMessage}`
+    if (this.#displayDuration) {
+      logMessage = `${logMessage} ${this.#formatSuffix(
+        prettyHrtime(process.hrtime(this.#startTime))
+      )}`
+    }
+
+    return logMessage
   }
 
   /**
    * Mark action as successful
    */
-  succeeded(message: string) {
-    this.getRenderer().log(this.prepareSucceeded(message))
+  succeeded() {
+    this.getRenderer().log(this.prepareSucceeded())
   }
 
   /**
    * Prepares the message to mark action as skipped
    */
-  prepareSkipped(message: string, skipReason?: string) {
-    const formattedLabel = this.#formatLabel('skip', 'cyan')
-    const formattedMessage = this.#formatMessage(message)
+  prepareSkipped(skipReason?: string) {
+    const formattedLabel = this.#formatLabel('skipped', 'cyan')
+    const formattedMessage = this.#formatMessage(this.#message)
 
-    let logMessage = `${formattedLabel}   ${formattedMessage}`
+    let logMessage = `${formattedLabel} ${formattedMessage}`
     if (skipReason) {
-      logMessage = `${logMessage} ${this.#formatSkipReason(skipReason)}`
+      logMessage = `${logMessage} ${this.#formatSuffix(skipReason)}`
     }
 
     return logMessage
@@ -171,16 +197,16 @@ export class Action {
    * Mark action as skipped. An optional skip reason can be
    * supplied
    */
-  skipped(message: string, skipReason?: string) {
-    this.getRenderer().log(this.prepareSkipped(message, skipReason))
+  skipped(skipReason?: string) {
+    this.getRenderer().log(this.prepareSkipped(skipReason))
   }
 
   /**
    * Prepares the message to mark action as failed
    */
-  prepareFailed(message: string, error: string | Error) {
-    const formattedLabel = this.#formatLabel('error', 'red')
-    const formattedMessage = this.#formatMessage(message)
+  prepareFailed(error: string | Error) {
+    const formattedLabel = this.#formatLabel('failed', 'red')
+    const formattedMessage = this.#formatMessage(this.#message)
     const formattedError = this.#formatError(error)
 
     const logMessage = `${formattedLabel}  ${formattedMessage} ${formattedError}`
@@ -190,7 +216,7 @@ export class Action {
   /**
    * Mark action as failed. An error message is required
    */
-  failed(message: string, error: string | Error) {
-    this.getRenderer().logError(this.prepareFailed(message, error))
+  failed(error: string | Error) {
+    this.getRenderer().logError(this.prepareFailed(error))
   }
 }
