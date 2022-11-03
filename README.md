@@ -1,5 +1,5 @@
 # @poppinss/cliui
-> Opinionated UI for the terminals
+> Opinionated UI KIT for Command Line apps
 
 [![gh-workflow-image]][gh-workflow-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url] [![synk-image]][synk-url]
 
