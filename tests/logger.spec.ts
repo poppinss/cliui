@@ -126,10 +126,7 @@ test.group('Logger | fatal', () => {
     assert.lengthOf(renderer.getLogs(), 1)
 
     assert.equal(renderer.getLogs()[0].stream, 'stderr')
-    assert.equal(
-      renderer.getLogs()[0].message.split('\n')[1],
-      `      red(    at Object.executor (${import.meta.url}:124:18))`
-    )
+    assert.match(renderer.getLogs()[0].message.split('\n')[1], new RegExp(import.meta.url))
   })
 })
 
