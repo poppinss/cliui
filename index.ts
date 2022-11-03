@@ -1,71 +1,104 @@
 /*
  * @poppinss/cliui
  *
- * (c) Harminder Virk <virk@adonisjs.com>
+ * (c) Poppinss
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-import { instantiate } from './api'
-const ui = instantiate(!!process.env.CLI_UI_IS_TESTING)
+import supportsColor from 'supports-color'
+
+import { icons } from './src/icons.js'
+import { Table } from './src/table.js'
+import { useColors } from './src/colors.js'
+import { Logger } from './src/logger/main.js'
+import { Instructions } from './src/instructions.js'
+import { TaskManager } from './src/tasks/manager.js'
+import { MemoryRenderer } from './src/renderers/memory.js'
+import { ConsoleRenderer } from './src/renderers/console.js'
+import type { TableOptions, TaskManagerOptions } from './src/types.js'
 
 /**
- * Is terminal interactive or not. The code is copied from
- * https://github.com/sindresorhus/is-interactive/blob/master/index.js.
+ * Create a new CLI UI instance.
  *
- * Yes, we can install it as a dependency, but decided to copy/paste 4
- * lines. NO STRONG REASONS BEHIND IT
+ * - The "raw" mode is tailored for testing
+ * - The "silent" mode should be used when the terminal does not support colors. We
+ *   automatically perform the detection
  */
-export const isInteractive = ui.isInteractive
+export default function cliui(options: Partial<{ raw: boolean; silent: boolean }> = {}) {
+  const normalizedOptions = Object.assign(
+    {
+      raw: false,
+      silent: !supportsColor.stdout,
+    },
+    options
+  )
 
-/**
- * Whether or not colors are enabled. They are enabled by default,
- * unless the terminal doesn't support color. Also "FORCE_COLOR"
- * env variable enables them forcefully.
- */
-export const supportsColors = ui.supportsColors
+  /**
+   * Renderer to use
+   */
+  const renderer = normalizedOptions.raw ? new MemoryRenderer() : new ConsoleRenderer()
 
-/**
- * The renderer used in the testing mode. One can access it to listen
- * for the log messages. Also, the memory renderer only works when
- * the "CLI_UI_IS_TESTING" flag is set
- */
-export const testingRenderer = ui.testingRenderer
+  /**
+   * Colors instance in use
+   */
+  const colors = useColors(normalizedOptions)
 
-/**
- * Console renderer outputs to the console. We do not export it, since one
- * cannot do much by having an access to it.
- */
-export const consoleRenderer = ui.consoleRenderer
+  /**
+   * Logger
+   */
+  const logger = new Logger()
+  logger.useRenderer(renderer)
+  logger.useColors(colors)
 
-/**
- * Logger
- */
-export const logger = ui.logger
+  /**
+   * Render instructions inside a box
+   */
+  const instructions = () => {
+    const instructionsInstance = new Instructions({ icons: true, raw: normalizedOptions.raw })
+    instructionsInstance.useRenderer(renderer)
+    instructionsInstance.useColors(colors)
+    return instructionsInstance
+  }
 
-/**
- * Icons
- */
-export const icons = ui.icons
+  /**
+   * Similar to instructions. But without the `pointer` icon
+   */
+  const sticker = () => {
+    const instructionsInstance = new Instructions({ icons: false, raw: normalizedOptions.raw })
+    instructionsInstance.useRenderer(renderer)
+    instructionsInstance.useColors(colors)
+    return instructionsInstance
+  }
 
-/**
- * Reference to the instructions block to render a set of lines inside
- * a box.
- */
-export const instructions = ui.instructions
+  /**
+   * Initiates a group of tasks
+   */
+  const tasks = (tasksOptions?: Partial<TaskManagerOptions>) => {
+    const manager = new TaskManager({ raw: normalizedOptions.raw, ...tasksOptions })
+    manager.useRenderer(renderer)
+    manager.useColors(colors)
+    return manager
+  }
 
-/**
- * Similar to instructions. But the lines are not prefix with a pointer `>`
- */
-export const sticker = ui.sticker
+  /**
+   * Instantiate a new table
+   */
+  const table = (tableOptions?: Partial<TableOptions>) => {
+    const tableInstance = new Table({ raw: normalizedOptions.raw, ...tableOptions })
+    tableInstance.useRenderer(renderer)
+    tableInstance.useColors(colors)
+    return tableInstance
+  }
 
-/**
- * Initiates a group of tasks
- */
-export const tasks = ui.tasks
-
-/**
- * Instantiate a new table
- */
-export const table = ui.table
+  return {
+    colors,
+    logger,
+    table,
+    tasks,
+    icons,
+    sticker,
+    instructions,
+  }
+}
