@@ -41,6 +41,10 @@ export class Logger implements RendererContract {
    */
   #renderer?: RendererContract
 
+  getLogs(): { message: string; stream: 'stdout' | 'stderr' }[] {
+    return this.getRenderer().getLogs()
+  }
+
   constructor(options: Partial<LoggerOptions> = {}) {
     const dimOutput = options.dim === undefined ? false : options.dim
 

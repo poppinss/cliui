@@ -27,11 +27,11 @@ await tasks
 
     await sleep(200)
     task.update(`downloaded ${ui.colors.cyan('90%')}`)
-    return ui.logger.action('Download').prepareSucceeded('Completed succesfully')
+    return ui.logger.action('Downloading').prepareSucceeded()
   })
   .add('update package file', async (task) => {
     await sleep(200)
-    task.update(ui.logger.action('update').prepareSucceeded('package.json'))
+    task.update(ui.logger.action('Update package.json').prepareSucceeded())
     await sleep(500)
     return 'Updated'
   })
