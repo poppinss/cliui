@@ -1,6 +1,6 @@
 {
   "name": "@poppinss/cliui",
-  "version": "3.0.5",
+  "version": "4.0.0-0",
   "description": "Opinionated UI KIT for Command Line apps",
   "main": "build/index.js",
   "type": "module",
