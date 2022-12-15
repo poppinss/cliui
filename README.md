@@ -22,7 +22,7 @@ yarn add @poppinss/cliui
 Import the `cliui` and create an instance of it.
 
 ```ts
-import cliui from '@poppinss/cliui'
+import { cliui } from '@poppinss/cliui'
 const ui = cliui()
 
 ui.logger.info('This is an info message')
@@ -72,7 +72,7 @@ The logger displays all the log messages with consistent styling. Following are 
 ![](./assets/logger.png)
 
 ```ts
-import cliui from '@poppinss/cliui'
+import { cliui } from '@poppinss/cliui'
 const ui = cliui()
 
 // Writes to stdout

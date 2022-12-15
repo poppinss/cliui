@@ -19,6 +19,8 @@ import { MemoryRenderer } from './src/renderers/memory.js'
 import { ConsoleRenderer } from './src/renderers/console.js'
 import type { TableOptions, TaskManagerOptions } from './src/types.js'
 
+export { Logger, Table, TaskManager, Instructions, icons }
+
 /**
  * Create a new CLI UI instance.
  *
@@ -26,7 +28,7 @@ import type { TableOptions, TaskManagerOptions } from './src/types.js'
  * - The "silent" mode should be used when the terminal does not support colors. We
  *   automatically perform the detection
  */
-export default function cliui(options: Partial<{ raw: boolean; silent: boolean }> = {}) {
+export function cliui(options: Partial<{ raw: boolean; silent: boolean }> = {}) {
   const normalizedOptions = Object.assign(
     {
       raw: false,

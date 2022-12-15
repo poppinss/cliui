@@ -1,4 +1,4 @@
-import cliui from '../index.js'
+import { cliui } from '../index.js'
 const ui = cliui()
 const sticker = ui.sticker()
 
