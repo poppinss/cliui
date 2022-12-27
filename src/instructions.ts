@@ -72,15 +72,11 @@ export class Instructions {
    */
   #options: InstructionsOptions
 
-  #totalColumns = process.stdout.columns - 2
-
-  #getHorizontalLength() {
-    const length = this.#widestLineLength + this.#leftPadding + this.#rightPadding
-    if (length > this.#totalColumns) {
-      return this.#totalColumns
-    }
-
-    return length
+  /**
+   * Draws the border
+   */
+  #drawBorder: (border: string, colors: Colors) => string = (border, colors) => {
+    return colors.dim(border)
   }
 
   constructor(options: Partial<InstructionsOptions> = {}) {
@@ -88,6 +84,13 @@ export class Instructions {
       icons: options.icons === undefined ? true : options.icons,
       raw: options.raw === undefined ? false : options.raw,
     }
+  }
+
+  /**
+   * Returns the length of the horizontal line
+   */
+  #getHorizontalLength() {
+    return this.#widestLineLength + this.#leftPadding + this.#rightPadding
   }
 
   /**
@@ -101,9 +104,10 @@ export class Instructions {
    * Wraps content inside the left and right vertical lines
    */
   #wrapInVerticalLines(content: string, leftWhitespace: string, rightWhitespace: string) {
-    return `${this.getColors().dim(
-      BOX.left
-    )}${leftWhitespace}${content}${rightWhitespace}${this.getColors().dim(BOX.right)}`
+    return `${this.#drawBorder(
+      BOX.left,
+      this.getColors()
+    )}${leftWhitespace}${content}${rightWhitespace}${this.#drawBorder(BOX.right, this.getColors())}`
   }
 
   /**
@@ -111,10 +115,14 @@ export class Instructions {
    */
   #getTopLine(): string {
     const horizontalLength = this.#getHorizontalLength()
-    const horizontalLine = this.#repeat(this.getColors().dim(BOX.top), horizontalLength)
+    const horizontalLine = this.#repeat(
+      this.#drawBorder(BOX.top, this.getColors()),
+      horizontalLength
+    )
 
-    return `${this.getColors().dim(BOX.topLeft)}${horizontalLine}${this.getColors().dim(
-      BOX.topRight
+    return `${this.#drawBorder(BOX.topLeft, this.getColors())}${horizontalLine}${this.#drawBorder(
+      BOX.topRight,
+      this.getColors()
     )}`
   }
 
@@ -123,10 +131,26 @@ export class Instructions {
    */
   #getBottomLine(): string {
     const horizontalLength = this.#getHorizontalLength()
-    const horizontalLine = this.#repeat(this.getColors().dim(BOX.bottom), horizontalLength)
-    return `${this.getColors().dim(BOX.bottomLeft)}${horizontalLine}${this.getColors().dim(
-      BOX.bottomRight
-    )}`
+    const horizontalLine = this.#repeat(
+      this.#drawBorder(BOX.bottom, this.getColors()),
+      horizontalLength
+    )
+    return `${this.#drawBorder(
+      BOX.bottomLeft,
+      this.getColors()
+    )}${horizontalLine}${this.#drawBorder(BOX.bottomRight, this.getColors())}`
+  }
+
+  /**
+   * Returns the heading border bottom
+   */
+  #getHeadingBorderBottom(): string {
+    const horizontalLength = this.#getHorizontalLength()
+    const horizontalLine = this.#repeat(
+      this.#drawBorder(boxes.single.top, this.getColors()),
+      horizontalLength
+    )
+    return this.#wrapInVerticalLines(horizontalLine, '', '')
   }
 
   /**
@@ -134,45 +158,41 @@ export class Instructions {
    * lines
    */
   #getContentLine(line: { text: string; width: number }): string {
+    const leftWhitespace = this.#repeat(' ', this.#leftPadding)
     const rightWhitespace = this.#repeat(
       ' ',
       this.#widestLineLength - line.width + this.#rightPadding
     )
-    const leftWhitespace = this.#repeat(' ', this.#leftPadding)
     return this.#wrapInVerticalLines(line.text, leftWhitespace, rightWhitespace)
   }
 
   /**
-   * Returns the heading line with the border bottom
+   * Returns the heading line by applying padding
    */
   #getHeading(): string | undefined {
     if (!this.#state.heading) {
       return
     }
 
-    /**
-     * Creating the header text
-     */
-    const leftWhitespace = this.#repeat(' ', this.#leftPadding)
-    const rightWhitespace = this.#repeat(
-      ' ',
-      this.#widestLineLength - this.#state.heading.width + this.#rightPadding
-    )
+    return this.#getContentLine(this.#state.heading)
+  }
 
-    const headingContent = this.#wrapInVerticalLines(
-      this.#state.heading.text,
-      leftWhitespace,
-      rightWhitespace
-    )
+  /**
+   * Returns the formatted body
+   */
+  #getBody(): string | undefined {
+    if (!this.#state.content || !this.#state.content.length) {
+      return
+    }
 
-    /**
-     * Creating the heading border bottom
-     */
-    const horizontalLength = this.#widestLineLength + this.#leftPadding + this.#rightPadding
-    const borderLine = this.#repeat(this.getColors().dim(boxes.single.top), horizontalLength)
-    const border = this.#wrapInVerticalLines(borderLine, '', '')
+    const top = new Array(this.#paddingTop).fill('').map(this.#getEmptyLineNode)
+    const bottom = new Array(this.#paddingBottom).fill('').map(this.#getEmptyLineNode)
 
-    return `${headingContent}\n${border}`
+    return top
+      .concat(this.#state.content)
+      .concat(bottom)
+      .map((line) => this.#getContentLine(line))
+      .join('\n')
   }
 
   /**
@@ -180,15 +200,6 @@ export class Instructions {
    */
   #getEmptyLineNode() {
     return { text: '', width: 0 }
-  }
-
-  /**
-   * Returns instructions lines with the padding
-   */
-  #getLinesWithPadding() {
-    const top = new Array(this.#paddingTop).fill('').map(this.#getEmptyLineNode)
-    const bottom = new Array(this.#paddingBottom).fill('').map(this.#getEmptyLineNode)
-    return top.concat(this.#state.content).concat(bottom)
   }
 
   /**
@@ -227,6 +238,25 @@ export class Instructions {
    */
   useColors(color: Colors): this {
     this.#colors = color
+    return this
+  }
+
+  /**
+   * Draw the instructions box in fullscreen
+   */
+  fullScreen(): this {
+    const borderWidth = 2
+    this.#widestLineLength =
+      process.stdout.columns - (this.#leftPadding + this.#rightPadding) - borderWidth
+
+    return this
+  }
+
+  /**
+   * Attach a callback to self draw the borders
+   */
+  drawBorder(callback: (borderChar: string, colors: Colors) => string) {
+    this.#drawBorder = callback
     return this
   }
 
@@ -274,22 +304,39 @@ export class Instructions {
       return
     }
 
-    if (this.#widestLineLength > process.stdout.columns) {
-      this.#widestLineLength = process.stdout.columns
-    }
-
     const top = this.#getTopLine()
     const heading = this.#getHeading()
-    const body = this.#getLinesWithPadding()
-      .map((line) => this.#getContentLine(line))
-      .join('\n')
+    const headingBorderBottom = this.#getHeadingBorderBottom()
+    const body = this.#getBody()
     const bottom = this.#getBottomLine()
 
     let output = `${top}\n`
+
+    /**
+     * Draw heading if it exists
+     */
     if (heading) {
-      output = `${output}${heading}\n`
+      output = `${output}${heading}`
     }
 
-    renderer.log(`${output}${body}\n${bottom}`)
+    /**
+     * Draw the border between the heading and the body if
+     * both exists
+     */
+    if (heading && body) {
+      output = `${output}\n${headingBorderBottom}\n`
+    }
+
+    /**
+     * Draw body if it exists
+     */
+    if (body) {
+      output = `${output}${body}`
+    }
+
+    /**
+     * Log the output with a bottom border
+     */
+    renderer.log(`${output}\n${bottom}`)
   }
 }

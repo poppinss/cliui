@@ -5,6 +5,8 @@ const sticker = ui.sticker()
 console.log('')
 
 sticker
+  .fullScreen()
+  .drawBorder((borderChar, colors) => colors.cyan(borderChar))
   .add('Started HTTP server')
   .add('')
   .add(`Local address:    ${ui.colors.cyan('http://localhost:3333')}`)
