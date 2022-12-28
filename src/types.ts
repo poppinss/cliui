@@ -8,6 +8,9 @@
  */
 
 import { CharName } from 'cli-table3'
+import type { Colors } from '@poppinss/colors/types'
+
+export { Colors }
 
 /**
  * Shape of the renderer contract. Renderers are responsible for

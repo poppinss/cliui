@@ -13,9 +13,9 @@ import type { Colors } from '@poppinss/colors/types'
 /**
  * Returns the colors instance based upon the environment.
  *
- * - The "useRaw" option returns the colors instance that prefix the color
+ * - The "raw" option returns the colors instance that prefix the color
  *   transformations as raw text
- * - The "turnOffColors" option returns the colors instance that performs no
+ * - The "silent" option returns the colors instance that performs no
  *   color transformations
  */
 export function useColors(options: { raw?: boolean; silent?: boolean } = {}): Colors {

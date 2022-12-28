@@ -8,6 +8,8 @@
  */
 
 import supportsColor from 'supports-color'
+import { Colors } from '@poppinss/colors/types'
+import { default as poppinssColors } from '@poppinss/colors'
 
 import { icons } from './src/icons.js'
 import { Table } from './src/table.js'
@@ -17,9 +19,18 @@ import { Instructions } from './src/instructions.js'
 import { TaskManager } from './src/tasks/manager.js'
 import { MemoryRenderer } from './src/renderers/memory.js'
 import { ConsoleRenderer } from './src/renderers/console.js'
-import type { TableOptions, TaskManagerOptions } from './src/types.js'
+import type { RendererContract, TableOptions, TaskManagerOptions } from './src/types.js'
 
-export { Logger, Table, TaskManager, Instructions, icons }
+export {
+  icons,
+  Table,
+  Logger,
+  TaskManager,
+  Instructions,
+  MemoryRenderer,
+  ConsoleRenderer,
+  poppinssColors as colors,
+}
 
 /**
  * Create a new CLI UI instance.
@@ -28,24 +39,25 @@ export { Logger, Table, TaskManager, Instructions, icons }
  * - The "silent" mode should be used when the terminal does not support colors. We
  *   automatically perform the detection
  */
-export function cliui(options: Partial<{ raw: boolean; silent: boolean }> = {}) {
-  const normalizedOptions = Object.assign(
-    {
-      raw: false,
-      silent: !supportsColor.stdout,
-    },
-    options
-  )
+export function cliui(options: Partial<{ mode: 'raw' | 'silent' | 'normal' }> = {}) {
+  let mode = options.mode
+
+  /**
+   * Use silent mode when not explicit mode is defined
+   */
+  if (!mode && !supportsColor.stdout) {
+    mode = 'silent'
+  }
 
   /**
    * Renderer to use
    */
-  const renderer = normalizedOptions.raw ? new MemoryRenderer() : new ConsoleRenderer()
+  let renderer: RendererContract = mode === 'raw' ? new MemoryRenderer() : new ConsoleRenderer()
 
   /**
    * Colors instance in use
    */
-  const colors = useColors(normalizedOptions)
+  let colors = useColors({ silent: mode === 'silent', raw: mode === 'raw' })
 
   /**
    * Logger
@@ -58,7 +70,7 @@ export function cliui(options: Partial<{ raw: boolean; silent: boolean }> = {}) 
    * Render instructions inside a box
    */
   const instructions = () => {
-    const instructionsInstance = new Instructions({ icons: true, raw: normalizedOptions.raw })
+    const instructionsInstance = new Instructions({ icons: true, raw: mode === 'raw' })
     instructionsInstance.useRenderer(renderer)
     instructionsInstance.useColors(colors)
     return instructionsInstance
@@ -68,7 +80,7 @@ export function cliui(options: Partial<{ raw: boolean; silent: boolean }> = {}) 
    * Similar to instructions. But without the `pointer` icon
    */
   const sticker = () => {
-    const instructionsInstance = new Instructions({ icons: false, raw: normalizedOptions.raw })
+    const instructionsInstance = new Instructions({ icons: false, raw: mode === 'raw' })
     instructionsInstance.useRenderer(renderer)
     instructionsInstance.useColors(colors)
     return instructionsInstance
@@ -78,7 +90,7 @@ export function cliui(options: Partial<{ raw: boolean; silent: boolean }> = {}) 
    * Initiates a group of tasks
    */
   const tasks = (tasksOptions?: Partial<TaskManagerOptions>) => {
-    const manager = new TaskManager({ raw: normalizedOptions.raw, ...tasksOptions })
+    const manager = new TaskManager({ raw: mode === 'raw', ...tasksOptions })
     manager.useRenderer(renderer)
     manager.useColors(colors)
     return manager
@@ -88,7 +100,7 @@ export function cliui(options: Partial<{ raw: boolean; silent: boolean }> = {}) 
    * Instantiate a new table
    */
   const table = (tableOptions?: Partial<TableOptions>) => {
-    const tableInstance = new Table({ raw: normalizedOptions.raw, ...tableOptions })
+    const tableInstance = new Table({ raw: mode === 'raw', ...tableOptions })
     tableInstance.useRenderer(renderer)
     tableInstance.useColors(colors)
     return tableInstance
@@ -102,5 +114,29 @@ export function cliui(options: Partial<{ raw: boolean; silent: boolean }> = {}) 
     icons,
     sticker,
     instructions,
+    switchMode(modeToUse: 'raw' | 'silent' | 'normal') {
+      mode = modeToUse
+
+      /**
+       * Use memory renderer in raw mode, otherwise switch to
+       * console renderer
+       */
+      if (mode === 'raw') {
+        this.useRenderer(new MemoryRenderer())
+      } else {
+        this.useRenderer(new ConsoleRenderer())
+      }
+
+      this.useColors(useColors({ silent: mode === 'silent', raw: mode === 'raw' }))
+    },
+    useRenderer(rendererToUse: RendererContract) {
+      renderer = rendererToUse
+      logger.useRenderer(renderer)
+    },
+    useColors(colorsToUse: Colors) {
+      colors = colorsToUse
+      logger.useColors(colors)
+      this.colors = colors
+    },
   }
 }
