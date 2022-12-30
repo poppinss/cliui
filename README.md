@@ -384,7 +384,7 @@ const logs = tasks.getRenderer().getLogs()
 console.log(logs)
 ```
 
-[gh-workflow-image]: https://img.shields.io/github/workflow/status/poppinss/cliui/test?style=for-the-badge
+[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/poppinss/cliui/test.yml?style=for-the-badge
 [gh-workflow-url]: https://github.com/poppinss/cliui/actions/workflows/test.yml "Github action"
 
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
