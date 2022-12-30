@@ -289,19 +289,18 @@ export class Instructions {
     return this
   }
 
-  /**
-   * Render instructions
-   */
-  render() {
-    const renderer = this.getRenderer()
-
+  prepare(): string {
     /**
      * Render content as it is in raw mode
      */
     if (this.#options.raw) {
-      this.#state.heading && renderer.log(this.#state.heading.text)
-      this.#state.content.forEach(({ text }) => renderer.log(text))
-      return
+      let output: string[] = []
+      if (this.#state.heading) {
+        output.push(this.#state.heading.text)
+      }
+
+      output = output.concat(this.#state.content.map(({ text }) => text))
+      return output.join('\n')
     }
 
     const top = this.#getTopLine()
@@ -334,9 +333,13 @@ export class Instructions {
       output = `${output}${body}`
     }
 
-    /**
-     * Log the output with a bottom border
-     */
-    renderer.log(`${output}\n${bottom}`)
+    return `${output}\n${bottom}`
+  }
+
+  /**
+   * Render instructions
+   */
+  render() {
+    this.getRenderer().log(this.prepare())
   }
 }
