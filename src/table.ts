@@ -12,6 +12,7 @@ import stringWidth from 'string-width'
 import type { Colors } from '@poppinss/colors/types'
 
 import { useColors } from './colors.js'
+import { TERMINAL_SIZE } from './helpers.js'
 import { ConsoleRenderer } from './renderers/console.js'
 import type { RendererContract, TableHead, TableOptions, TableRow } from './types.js'
 
@@ -100,7 +101,7 @@ export class Table {
     /**
      * The terminal columns
      */
-    let columns = process.stdout.columns - (this.#columnSizes.length + 1)
+    let columns = TERMINAL_SIZE - (this.#columnSizes.length + 1)
 
     this.#state.colWidths = this.#state.colWidths || []
     this.#columnSizes.forEach((column, index) => {

@@ -1,5 +1,5 @@
 /*
- * @poppinss/utils
+ * @poppinss/cliui
  *
  * (c) Poppinss
  *

@@ -13,6 +13,7 @@ import type { Colors } from '@poppinss/colors/types'
 
 import { icons } from './icons.js'
 import { useColors } from './colors.js'
+import { TERMINAL_SIZE } from './helpers.js'
 import { ConsoleRenderer } from './renderers/console.js'
 import type { InstructionsOptions, RendererContract } from './types.js'
 
@@ -246,8 +247,7 @@ export class Instructions {
    */
   fullScreen(): this {
     const borderWidth = 2
-    this.#widestLineLength =
-      process.stdout.columns - (this.#leftPadding + this.#rightPadding) - borderWidth
+    this.#widestLineLength = TERMINAL_SIZE - (this.#leftPadding + this.#rightPadding) - borderWidth
 
     return this
   }
