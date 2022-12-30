@@ -11,6 +11,7 @@
   ],
   "exports": {
     ".": "./build/index.js",
+    "./helpers": "./build/src/helpers.js",
     "./types": "./build/src/types.js"
   },
   "scripts": {
