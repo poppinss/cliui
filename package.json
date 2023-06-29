@@ -18,6 +18,7 @@
     "pretest": "npm run lint",
     "test": "npm run vscode:test",
     "clean": "del-cli build",
+    "typecheck": "tsc --noEmit",
     "compile": "npm run lint && npm run clean && tsc",
     "build": "npm run compile",
     "prepublishOnly": "npm run build",

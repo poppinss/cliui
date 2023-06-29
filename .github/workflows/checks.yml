@@ -1,0 +1,14 @@
+name: checks
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    uses: poppinss/.github/.github/workflows/test.yml@main
+
+  lint:
+    uses: poppinss/.github/.github/workflows/lint.yml@main
+
+  typecheck:
+    uses: poppinss/.github/.github/workflows/typecheck.yml@main
