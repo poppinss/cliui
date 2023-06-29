@@ -36,6 +36,9 @@
   "author": "virk,poppinss",
   "license": "MIT",
   "devDependencies": {
+    "@adonisjs/eslint-config": "^1.1.6",
+    "@adonisjs/prettier-config": "^1.1.6",
+    "@adonisjs/tsconfig": "^1.1.6",
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
     "@japa/assert": "^2.0.0-1",
@@ -47,9 +50,6 @@
     "cross-env": "^7.0.3",
     "del-cli": "^5.0.0",
     "eslint": "^8.43.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-adonis": "^3.0.3",
-    "eslint-plugin-prettier": "^4.2.1",
     "github-label-sync": "^2.3.1",
     "husky": "^8.0.3",
     "np": "^8.0.4",
@@ -77,36 +77,6 @@
     "url": "https://github.com/poppinss/cliui/issues"
   },
   "homepage": "https://github.com/poppinss/cliui#readme",
-  "eslintConfig": {
-    "extends": [
-      "plugin:adonis/typescriptPackage",
-      "prettier"
-    ],
-    "plugins": [
-      "prettier"
-    ],
-    "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "endOfLine": "auto"
-        }
-      ]
-    }
-  },
-  "eslintIgnore": [
-    "build"
-  ],
-  "prettier": {
-    "trailingComma": "es5",
-    "semi": false,
-    "singleQuote": true,
-    "useTabs": false,
-    "quoteProps": "consistent",
-    "bracketSpacing": true,
-    "arrowParens": "always",
-    "printWidth": 100
-  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
@@ -121,5 +91,9 @@
     "tag": "next",
     "branch": "main",
     "anyBranch": false
-  }
+  },
+  "eslintConfig": {
+    "extends": "@adonisjs/eslint-config/package"
+  },
+  "prettier": "@adonisjs/prettier-config"
 }
