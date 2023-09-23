@@ -1,7 +1,7 @@
 # @poppinss/cliui
 > Opinionated UI KIT for Command Line apps
 
-[![gh-workflow-image]][gh-workflow-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url] [![synk-image]][synk-url]
+[![gh-workflow-image]][gh-workflow-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url]
 
 ## Why this package exists?
 CLI UI is an opinionated UI Kit to **log messages**, **render tables**, **display spinners**, and much more. Following are some of the reasons for creating this package.
@@ -384,8 +384,8 @@ const logs = tasks.getRenderer().getLogs()
 console.log(logs)
 ```
 
-[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/poppinss/cliui/test.yml?style=for-the-badge
-[gh-workflow-url]: https://github.com/poppinss/cliui/actions/workflows/test.yml "Github action"
+[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/poppinss/cliui/checks.yml?style=for-the-badge
+[gh-workflow-url]: https://github.com/poppinss/cliui/actions/workflows/checks.yml "Github action"
 
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
 [typescript-url]: "typescript"
@@ -395,6 +395,3 @@ console.log(logs)
 
 [license-image]: https://img.shields.io/npm/l/@poppinss/cliui?color=blueviolet&style=for-the-badge
 [license-url]: LICENSE.md 'license'
-
-[synk-image]: https://img.shields.io/snyk/vulnerabilities/github/poppinss/cliui?label=Synk%20Vulnerabilities&style=for-the-badge
-[synk-url]: https://snyk.io/test/github/poppinss/cliui?targetFile=package.json 'synk'
