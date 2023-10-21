@@ -280,7 +280,7 @@ The sticker widget is the same as the `instructions` widget. But it does not pre
 
 ```ts
 const ui = cliui()
-const sticker = ui.instructions()
+const sticker = ui.sticker()
 
 sticker
   .add('Started HTTP server')
