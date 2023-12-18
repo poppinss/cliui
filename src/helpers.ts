@@ -8,9 +8,9 @@
  */
 
 import wordwrap from 'wordwrap'
-import terminalSize from 'term-size'
 import stringWidth from 'string-width'
 import cliTruncate from 'cli-truncate'
+import terminalSize from 'terminal-size'
 
 /**
  * Total number of columns for the terminal

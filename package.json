@@ -73,7 +73,7 @@
     "pretty-hrtime": "^1.0.3",
     "string-width": "^7.0.0",
     "supports-color": "^9.4.0",
-    "term-size": "^4.0.0",
+    "terminal-size": "^4.0.0",
     "wordwrap": "^1.0.0"
   },
   "repository": {
