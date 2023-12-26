@@ -144,9 +144,13 @@ export class MinimalRenderer {
    * Renders all tasks
    */
   #renderTasks() {
+    const lastTaskState = this.#registeredTasks[this.#registeredTasks.length - 1].getState()
     this.getRenderer().logUpdate(
       this.#registeredTasks.map((task) => this.#renderTask(task)).join('\n')
     )
+    if (lastTaskState === 'succeeded' || lastTaskState === 'failed') {
+      this.getRenderer().logUpdatePersist()
+    }
   }
 
   /**
@@ -200,7 +204,9 @@ export class MinimalRenderer {
    * Render all tasks
    */
   render() {
-    this.#registeredTasks.forEach((task) => task.onUpdate(() => this.#renderTasks()))
+    this.#registeredTasks.forEach((task) => {
+      task.onUpdate(() => this.#renderTasks())
+    })
     this.#renderTasks()
   }
 }
