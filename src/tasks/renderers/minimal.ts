@@ -50,7 +50,7 @@ export class MinimalRenderer {
    * Format error
    */
   #formatError(error: string | { message: string; stack?: string }) {
-    let message = typeof error === 'string' ? error : error.stack || error.message
+    let message = typeof error === 'string' ? error : error.message
     message = this.getColors().red(message)
 
     return `\n  ${message

@@ -33,6 +33,11 @@ function TRANSFORM_ERROR<T extends string | Error>(error: T) {
  */
 export class TaskManager {
   /**
+   * Last handled error
+   */
+  error?: any
+
+  /**
    * Options
    */
   #options: TaskManagerOptions
@@ -113,6 +118,7 @@ export class TaskManager {
       }
     } catch (error) {
       this.#state = 'failed'
+      this.error = error
       task.task.markAsFailed(error)
     }
   }
