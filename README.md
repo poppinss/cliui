@@ -114,6 +114,25 @@ loader.update('unpacking packages', { suffix: undefined })
 loader.stop()
 ```
 
+### Spinner in silent mode
+If you writing conditionals around the spinning animation to start it in certain conditions, then you might want to create the spinner in silent mode. In silent mode, the spinner will not output any logs.
+
+```ts
+const loader = logger.await('installing packages', {
+  suffix: 'npm i',
+  silent: true // 👈
+})
+
+// Prints nothing
+loader.start()
+
+// Prints nothing
+loader.update('unpacking packages', { suffix: undefined })
+
+// Prints nothing
+loader.stop()
+```
+
 ### Preparing messages without writing them
 You can also use the logger to just prepare the message (with colors and formatting) without writing it to the output stream. Just prefix the log message with `prepare` and it will return a string value.
 
