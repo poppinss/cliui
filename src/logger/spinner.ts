@@ -60,6 +60,13 @@ export class Spinner {
       return
     }
 
+    /**
+     * Do not write when in silent mode
+     */
+    if (this.#message.silent) {
+      return
+    }
+
     const frame = this.#animator.getFrame()
 
     if (this.#spinnerWriter) {
@@ -121,7 +128,7 @@ export class Spinner {
     this.#state = 'stopped'
     this.#animator.index = 0
 
-    if (!this.#spinnerWriter) {
+    if (!this.#spinnerWriter && !this.#message.silent) {
       this.getRenderer().logUpdate(`${this.#message.render()} ${this.#animator.frames[2]}`)
       this.getRenderer().logUpdatePersist()
     }

@@ -429,4 +429,48 @@ test.group('Logger | await', () => {
       },
     ])
   })
+
+  test('do not write in silent mode', ({ assert }) => {
+    const logger = new Logger({})
+    const renderer = new MemoryRenderer()
+
+    logger.useRenderer(renderer)
+    logger.useColors(useColors({ raw: true }))
+    const spinner = logger.await('installing', { silent: true })
+    spinner.start()
+    spinner.stop()
+
+    assert.deepEqual(renderer.getLogs(), [])
+  })
+
+  test('do not write after update in silent mode', ({ assert }) => {
+    const logger = new Logger({})
+    const renderer = new MemoryRenderer()
+
+    logger.useRenderer(renderer)
+    logger.useColors(useColors({ raw: true }))
+    const spinner = logger.await('installing', { silent: true })
+    spinner.start()
+    spinner.update('foo')
+    spinner.stop()
+
+    assert.deepEqual(renderer.getLogs(), [])
+  })
+
+  test('do not invoke tap callback in silent mode', ({ assert }) => {
+    const logger = new Logger({})
+    const renderer = new MemoryRenderer()
+
+    logger.useRenderer(renderer)
+    logger.useColors(useColors({ raw: true }))
+    const spinner = logger.await('installing', { silent: true })
+    spinner.tap(() => {
+      throw new Error('Never expected to be called')
+    })
+    spinner.start()
+    spinner.update('foo')
+    spinner.stop()
+
+    assert.deepEqual(renderer.getLogs(), [])
+  })
 })

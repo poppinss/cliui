@@ -192,6 +192,7 @@ export type TableRow =
 export type LoggerMessageOptions = {
   prefix?: string
   suffix?: string
+  silent?: boolean
 }
 
 /**
@@ -199,5 +200,6 @@ export type LoggerMessageOptions = {
  */
 export type SpinnerMessage = {
   text: string
+  silent?: boolean
   render(): string
 }
