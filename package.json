@@ -20,7 +20,7 @@
   },
   "scripts": {
     "pretest": "npm run lint",
-    "test": "npm run vscode:test",
+    "test": "npm run quick:test",
     "clean": "del-cli build",
     "typecheck": "tsc --noEmit",
     "precompile": "npm run lint && npm run clean",
@@ -32,7 +32,7 @@
     "version": "npm run build",
     "lint": "eslint . --ext=.ts",
     "sync-labels": "github-label-sync --labels .github/labels.json poppinss/cliui",
-    "vscode:test": "cross-env FORCE_COLOR=true node --loader=ts-node/esm bin/test.ts"
+    "quick:test": "cross-env FORCE_COLOR=true node --loader=ts-node/esm bin/test.ts"
   },
   "keywords": [
     "cliui",

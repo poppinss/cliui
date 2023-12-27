@@ -139,6 +139,26 @@ export class TaskManager {
   }
 
   /**
+   * Register a new task, when the "conditional = true"
+   */
+  addIf(conditional: boolean, title: string, callback: TaskCallback): this {
+    if (conditional) {
+      this.add(title, callback)
+    }
+    return this
+  }
+
+  /**
+   * Register a new task, when the "conditional = false"
+   */
+  addUnless(conditional: boolean, title: string, callback: TaskCallback): this {
+    if (!conditional) {
+      this.add(title, callback)
+    }
+    return this
+  }
+
+  /**
    * Get access to registered tasks
    */
   tasks() {

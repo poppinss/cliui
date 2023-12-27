@@ -68,6 +68,82 @@ test.group('TaskManager', () => {
     ])
   })
 
+  test('add tasks conditionally', async ({ assert }) => {
+    const renderer = new MemoryRenderer()
+
+    const manager = new TaskManager({ verbose: true })
+    manager.useRenderer(renderer)
+    manager.useColors(useColors({ raw: true }))
+
+    const logger = new Logger()
+    logger.useRenderer(renderer)
+    logger.useColors(useColors({ raw: true }))
+
+    await manager
+      .add('task 1', async () => {
+        assert.equal(manager.getState(), 'running')
+        logger.log('log task 1')
+        return ''
+      })
+      .addIf(true, 'task 2', async () => {
+        assert.equal(manager.getState(), 'running')
+        logger.log('log task 2')
+        return ''
+      })
+      .addIf(false, 'task 3', async () => {
+        assert.equal(manager.getState(), 'running')
+        logger.log('log task 3')
+        return ''
+      })
+      .addUnless(false, 'task 4', async () => {
+        assert.equal(manager.getState(), 'running')
+        logger.log('log task 4')
+        return ''
+      })
+      .run()
+
+    assert.equal(manager.getState(), 'succeeded')
+
+    assert.deepEqual(renderer.getLogs(), [
+      {
+        message: 'dim(┌ )task 1',
+        stream: 'stdout',
+      },
+      {
+        message: 'log task 1',
+        stream: 'stdout',
+      },
+      {
+        message: renderer.getLogs()[2].message,
+        stream: 'stdout',
+      },
+      {
+        message: 'dim(┌ )task 2',
+        stream: 'stdout',
+      },
+      {
+        message: 'log task 2',
+        stream: 'stdout',
+      },
+      {
+        message: renderer.getLogs()[5].message,
+        stream: 'stdout',
+      },
+      {
+        message: 'dim(┌ )task 4',
+        stream: 'stdout',
+      },
+      {
+        message: 'log task 4',
+        stream: 'stdout',
+      },
+      {
+        message: renderer.getLogs()[8].message,
+        stream: 'stdout',
+      },
+    ])
+  })
+
   test('do not run next task when previous one fails', async ({ assert }) => {
     const renderer = new MemoryRenderer()
 
