@@ -474,3 +474,26 @@ test.group('Logger | await', () => {
     assert.deepEqual(renderer.getLogs(), [])
   })
 })
+
+test.group('Logger | flushLogs', () => {
+  test('flush logs should empty logs array', ({ assert }) => {
+    const logger = new Logger({})
+    const renderer = new MemoryRenderer()
+
+    logger.useRenderer(renderer)
+
+    logger.log('Hello world');
+
+    assert.deepEqual(renderer.getLogs(), [
+      {
+        message: `Hello world`,
+        stream: 'stdout',
+      },
+    ]);
+
+    logger.flushLogs();
+
+    assert.deepEqual(renderer.getLogs(), []);
+  })
+})
+
