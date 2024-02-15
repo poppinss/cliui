@@ -20,7 +20,7 @@ export class MemoryRenderer implements RendererContract {
   }
 
   flushLogs(): void {
-    this.#logs = [];
+    this.#logs = []
   }
 
   /**

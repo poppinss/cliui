@@ -482,18 +482,17 @@ test.group('Logger | flushLogs', () => {
 
     logger.useRenderer(renderer)
 
-    logger.log('Hello world');
+    logger.log('Hello world')
 
     assert.deepEqual(renderer.getLogs(), [
       {
         message: `Hello world`,
         stream: 'stdout',
       },
-    ]);
+    ])
 
-    logger.flushLogs();
+    logger.flushLogs()
 
-    assert.deepEqual(renderer.getLogs(), []);
+    assert.deepEqual(renderer.getLogs(), [])
   })
 })
-

@@ -42,11 +42,11 @@ export class Logger implements RendererContract {
   #renderer?: RendererContract
 
   getLogs(): { message: string; stream: 'stdout' | 'stderr' }[] {
-    return this.getRenderer().getLogs();
+    return this.getRenderer().getLogs()
   }
 
   flushLogs(): void {
-     this.getRenderer().flushLogs();
+    this.getRenderer().flushLogs()
   }
 
   constructor(options: Partial<LoggerOptions> = {}) {
