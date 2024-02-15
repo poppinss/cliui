@@ -155,6 +155,17 @@ const logs = ui.logger.getRenderer().getLogs()
 console.log(logs)
 ```
 
+You can also flush all logs by calling `flushLogs`.
+
+```ts
+ui.logger.info('Hello world')
+
+const logs = ui.logger.getRenderer().getLogs()
+console.log(logs.length); // 1
+ui.logger.getRenderer().flushLogs();
+console.log(logs.length); // 0
+```
+
 ## Logger actions
 Logger actions are pre-styled logs to display the outcome of an action. For example, the action can be to create/update or delete a file. 
 
