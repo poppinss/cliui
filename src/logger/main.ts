@@ -45,6 +45,10 @@ export class Logger implements RendererContract {
     return this.getRenderer().getLogs()
   }
 
+  flushLogs(): void {
+    this.getRenderer().flushLogs()
+  }
+
   constructor(options: Partial<LoggerOptions> = {}) {
     const dimOutput = options.dim === undefined ? false : options.dim
 

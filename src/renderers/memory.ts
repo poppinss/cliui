@@ -19,6 +19,10 @@ export class MemoryRenderer implements RendererContract {
     return this.#logs
   }
 
+  flushLogs(): void {
+    this.#logs = []
+  }
+
   /**
    * Log message
    */

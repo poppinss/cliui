@@ -18,6 +18,8 @@ export class ConsoleRenderer implements RendererContract {
     return []
   }
 
+  flushLogs(): void {}
+
   log(message: string) {
     console.log(message)
   }

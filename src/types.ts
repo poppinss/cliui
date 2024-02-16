@@ -18,6 +18,7 @@ export { Colors }
  */
 export interface RendererContract {
   getLogs(): { message: string; stream: 'stdout' | 'stderr' }[]
+  flushLogs(): void
 
   /**
    * Log a message
