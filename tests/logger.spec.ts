@@ -8,7 +8,6 @@
  */
 
 import { test } from '@japa/runner'
-import { fileURLToPath } from 'node:url'
 
 import { useColors } from '../src/colors.js'
 import { Logger } from '../src/logger/main.js'
@@ -128,10 +127,7 @@ test.group('Logger | fatal', () => {
     assert.lengthOf(renderer.getLogs(), 1)
 
     assert.equal(renderer.getLogs()[0].stream, 'stderr')
-    assert.match(
-      renderer.getLogs()[0].message.split('\n')[1],
-      new RegExp(fileURLToPath(import.meta.url))
-    )
+    assert.match(renderer.getLogs()[0].message.split('\n')[1], /logger\.spec\.ts/)
   })
 })
 
