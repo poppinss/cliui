@@ -2,7 +2,6 @@
   "name": "@poppinss/cliui",
   "version": "6.4.1",
   "description": "Opinionated UI KIT for Command Line apps",
-  "main": "build/index.js",
   "type": "module",
   "files": [
     "build",
@@ -44,7 +43,6 @@
     "@types/node": "^22.10.2",
     "@types/pretty-hrtime": "^1.0.3",
     "@types/wordwrap": "^1.0.3",
-    "cross-env": "^7.0.3",
     "del-cli": "^6.0.0",
     "eslint": "^9.17.0",
     "prettier": "^3.4.2",
