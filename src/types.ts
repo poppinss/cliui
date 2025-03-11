@@ -57,11 +57,9 @@ export type TaskCallback = (task: {
   error<T extends string | Error>(error: T): T extends string ? { message: T; isError: true } : T
 }) =>
   | Error
-  | Promise<Error>
   | { isError: true; message: string }
-  | Promise<{ isError: true; message: string }>
   | string
-  | Promise<string>
+  | Promise<Error | { isError: true; message: string } | string>
 
 /**
  * Options accepted by the tasks renderers
