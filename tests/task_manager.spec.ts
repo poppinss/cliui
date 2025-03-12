@@ -339,4 +339,11 @@ test.group('TaskManager', () => {
       },
     ])
   })
+
+  test('non-deterministic async tasks (typecheck-only test)', async ({}) => {
+    const manager = new TaskManager()
+    manager.add('non-deterministic async task', async (task) => {
+      return Math.random() < 0.5 ? 'success' : task.error('failure')
+    })
+  })
 })
