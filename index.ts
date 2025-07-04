@@ -8,7 +8,7 @@
  */
 
 import supportsColor from 'supports-color'
-import { Colors } from '@poppinss/colors/types'
+import { type Colors } from '@poppinss/colors/types'
 import { default as poppinssColors } from '@poppinss/colors'
 
 import { icons } from './src/icons.js'

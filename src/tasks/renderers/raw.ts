@@ -9,7 +9,7 @@
 
 import type { Colors } from '@poppinss/colors/types'
 
-import { Task } from '../task.js'
+import { type Task } from '../task.js'
 import { useColors } from '../../colors.js'
 import type { RendererContract } from '../../types.js'
 import { ConsoleRenderer } from '../../renderers/console.js'

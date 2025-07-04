@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { CharName } from 'cli-table3'
+import { type CharName } from 'cli-table3'
 import type { Colors } from '@poppinss/colors/types'
 
 export { Colors }
