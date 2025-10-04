@@ -20,6 +20,7 @@ import type {
   RendererContract,
   LoggerMessageOptions,
 } from '../types.js'
+import prettyHrtime from 'pretty-hrtime'
 
 /**
  * CLI logger to log messages to the console. The output is consistently
@@ -101,6 +102,17 @@ export class Logger implements RendererContract {
     }
 
     return `${message} ${this.getColors().dim().yellow(`(${suffix})`)}`
+  }
+
+  /**
+   * Appends duration to the message
+   */
+  #addDuration(message: string, duration?: [number, number]): string {
+    if (!duration) {
+      return message
+    }
+
+    return `${message} ${this.getColors().dim(`(${prettyHrtime(process.hrtime(duration))})`)}`
   }
 
   /**
@@ -231,6 +243,7 @@ export class Logger implements RendererContract {
     message = this.#prefixLabel(message, this.#getLabel('success'))
     message = this.#addPrefix(message, options?.prefix)
     message = this.#addSuffix(message, options?.suffix)
+    message = this.#addDuration(message, options?.startTime)
     return message
   }
 
@@ -250,6 +263,7 @@ export class Logger implements RendererContract {
     message = this.#prefixLabel(message, this.#getLabel('error'))
     message = this.#addPrefix(message, options?.prefix)
     message = this.#addSuffix(message, options?.suffix)
+    message = this.#addDuration(message, options?.startTime)
 
     return message
   }
@@ -275,6 +289,7 @@ export class Logger implements RendererContract {
     message = this.#prefixLabel(message, this.#getLabel('error'))
     message = this.#addPrefix(message, options?.prefix)
     message = this.#addSuffix(message, options?.suffix)
+    message = this.#addDuration(message, options?.startTime)
 
     return `${message}${stack}`
   }
@@ -294,6 +309,7 @@ export class Logger implements RendererContract {
     message = this.#prefixLabel(message, this.#getLabel('warning'))
     message = this.#addPrefix(message, options?.prefix)
     message = this.#addSuffix(message, options?.suffix)
+    message = this.#addDuration(message, options?.startTime)
 
     return message
   }
@@ -313,6 +329,7 @@ export class Logger implements RendererContract {
     message = this.#prefixLabel(message, this.#getLabel('info'))
     message = this.#addPrefix(message, options?.prefix)
     message = this.#addSuffix(message, options?.suffix)
+    message = this.#addDuration(message, options?.startTime)
 
     return message
   }
@@ -332,6 +349,7 @@ export class Logger implements RendererContract {
     message = this.#prefixLabel(message, this.#getLabel('debug'))
     message = this.#addPrefix(message, options?.prefix)
     message = this.#addSuffix(message, options?.suffix)
+    message = this.#addDuration(message, options?.startTime)
 
     return message
   }

@@ -12,8 +12,10 @@ logger.fatal(new Error('Unable to write. Disk full'))
 logger.debug('Something just happened')
 logger.success('Account created')
 
+let startTime = process.hrtime()
 const spinner = logger.await('installing dependencies', { suffix: 'npm install --production' })
 spinner.start()
 setTimeout(() => {
   spinner.stop()
+  logger.success('Installation completed', { startTime })
 }, 2000)

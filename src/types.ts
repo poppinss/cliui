@@ -191,6 +191,7 @@ export type TableRow =
 export type LoggerMessageOptions = {
   prefix?: string
   suffix?: string
+  startTime?: [number, number]
   silent?: boolean
 }
 
