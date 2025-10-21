@@ -7,10 +7,10 @@
  * file that was distributed with this source code.
  */
 
-import wordwrap from 'wordwrap'
 import stringWidth from 'string-width'
 import cliTruncate from 'cli-truncate'
 import terminalSize from 'terminal-size'
+import { createWordWrapper } from './utils.ts'
 
 /**
  * Total number of columns for the terminal
@@ -103,7 +103,7 @@ export function wrap(
     trimStart?: boolean
   }
 ) {
-  const wrapper = wordwrap(options.startColumn, options.endColumn)
+  const wrapper = createWordWrapper(options.startColumn, options.endColumn)
   if (options.trimStart) {
     return columns.map((column) => wrapper(column).trimStart())
   }

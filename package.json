@@ -39,7 +39,6 @@
     "@release-it/conventional-changelog": "^10.0.1",
     "@types/node": "^24.6.2",
     "@types/pretty-hrtime": "^1.0.3",
-    "@types/wordwrap": "^1.0.3",
     "del-cli": "^7.0.0",
     "eslint": "^9.37.0",
     "prettier": "^3.6.2",
@@ -56,8 +55,7 @@
     "pretty-hrtime": "^1.0.3",
     "string-width": "^8.1.0",
     "supports-color": "^10.2.2",
-    "terminal-size": "^4.0.0",
-    "wordwrap": "^1.0.0"
+    "terminal-size": "^4.0.0"
   },
   "homepage": "https://github.com/poppinss/cliui#readme",
   "repository": {
