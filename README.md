@@ -298,8 +298,8 @@ const ui = cliui()
 const instructions = ui.instructions()
 
 instructions
-  .add(`cd ${colors.cyan('hello-world')}`)
-  .add(`Run ${colors.cyan('node ace serve --watch')} to start the server`)
+  .add(`cd ${ui.colors.cyan('hello-world')}`)
+  .add(`Run ${ui.colors.cyan('node ace serve --watch')} to start the server`)
   .render()
 ```
 
@@ -315,8 +315,8 @@ const sticker = ui.sticker()
 sticker
   .add('Started HTTP server')
   .add('')
-  .add(`Local address:    ${colors.cyan('http://localhost:3333')}`)
-  .add(`Network address:  ${colors.cyan('http://192.168.1.2:3333')}`)
+  .add(`Local address:    ${ui.colors.cyan('http://localhost:3333')}`)
+  .add(`Network address:  ${ui.colors.cyan('http://192.168.1.2:3333')}`)
   .render()
 ```
 
@@ -328,8 +328,8 @@ const ui = cliui({ raw: true })
 const instructions = ui.instructions()
 
 instructions
-  .add(`cd ${colors.cyan('hello-world')}`)
-  .add(`Run ${colors.cyan('node ace serve --watch')} to start the server`)
+  .add(`cd ${ui.colors.cyan('hello-world')}`)
+  .add(`Run ${ui.colors.cyan('node ace serve --watch')} to start the server`)
   .render()
 
 const logs = instructions.getRenderer().getLogs()
