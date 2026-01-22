@@ -323,6 +323,8 @@ sticker
 ## Steps
 The steps widget allows you to display a series of sequential steps with counters, titles, and optional content. Steps are visually connected with a vertical border.
 
+![](./assets/steps.png)
+
 ```ts
 const ui = cliui()
 const steps = ui.steps()

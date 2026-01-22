@@ -18,31 +18,31 @@ steps.add(
   'Add routes to your application',
   `${ui.colors.dim('File:')} ${ui.colors.cyan('start/routes.ts')}\n` +
     `${ui.colors.dim('Add these routes at the end of the file:')}\n\n` +
-    ui.colors.gray("router.get('/users', 'UsersController.index')\n") +
-    ui.colors.gray("router.post('/users', 'UsersController.store')\n") +
-    ui.colors.gray("router.get('/users/:id', 'UsersController.show')\n") +
-    ui.colors.gray("router.put('/users/:id', 'UsersController.update')\n") +
-    ui.colors.gray("router.delete('/users/:id', 'UsersController.destroy')")
+    ui.colors.yellow("router.get('/users', 'UsersController.index')\n") +
+    ui.colors.yellow("router.post('/users', 'UsersController.store')\n") +
+    ui.colors.yellow("router.get('/users/:id', 'UsersController.show')\n") +
+    ui.colors.yellow("router.put('/users/:id', 'UsersController.update')\n") +
+    ui.colors.yellow("router.delete('/users/:id', 'UsersController.destroy')")
 )
 
 steps.add(
   'Configure database connection',
   `${ui.colors.dim('File:')} ${ui.colors.cyan('.env')}\n` +
     `${ui.colors.dim('Update your database credentials:')}\n\n` +
-    ui.colors.gray('DB_CONNECTION=pg\n') +
-    ui.colors.gray('DB_HOST=127.0.0.1\n') +
-    ui.colors.gray('DB_PORT=5432\n') +
-    ui.colors.gray('DB_USER=your_username\n') +
-    ui.colors.gray('DB_PASSWORD=your_password\n') +
-    ui.colors.gray('DB_DATABASE=your_database')
+    ui.colors.green('DB_CONNECTION=pg\n') +
+    ui.colors.green('DB_HOST=127.0.0.1\n') +
+    ui.colors.green('DB_PORT=5432\n') +
+    ui.colors.green('DB_USER=your_username\n') +
+    ui.colors.green('DB_PASSWORD=your_password\n') +
+    ui.colors.green('DB_DATABASE=your_database')
 )
 
 steps.add(
   'Run migrations',
-  `Execute the migration command:\n${ui.colors.gray('node ace migration:run')}`
+  `Execute the migration command:\n${ui.colors.green('node ace migration:run')}`
 )
 
-steps.add('Start the development server', ui.colors.gray('node ace serve --watch'))
+steps.add('Start the development server', ui.colors.green('node ace serve --watch'))
 
 steps.render()
 

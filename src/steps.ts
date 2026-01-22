@@ -131,7 +131,7 @@ export class Steps {
             lines.push(line)
           } else {
             // In normal mode, add border and indentation
-            lines.push(`${colors.dim(icons.borderVertical)}  ${line}`)
+            lines.push(`${colors.grey().dim(icons.borderVertical)}  ${line}`)
           }
         })
       }
@@ -139,7 +139,7 @@ export class Steps {
       // Add connector to next step (unless it's the last step)
       // Skip in raw mode for easier assertions
       if (!isLast && !this.#options.raw) {
-        lines.push(colors.dim(icons.borderVertical))
+        lines.push(colors.grey().dim(icons.borderVertical))
       }
     })
 
