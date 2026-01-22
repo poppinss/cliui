@@ -23,6 +23,7 @@ export const icons =
         info: 'i',
         warning: '‼',
         squareSmallFilled: '[█]',
+        borderVertical: '|',
       }
     : {
         tick: '✔',
@@ -33,4 +34,5 @@ export const icons =
         info: 'ℹ',
         warning: '⚠',
         squareSmallFilled: '◼',
+        borderVertical: '│',
       }

@@ -13,6 +13,7 @@ import { default as poppinssColors } from '@poppinss/colors'
 
 import { icons } from './src/icons.js'
 import { Table } from './src/table.js'
+import { Steps } from './src/steps.js'
 import { useColors } from './src/colors.js'
 import { Logger } from './src/logger/main.js'
 import { Instructions } from './src/instructions.js'
@@ -24,6 +25,7 @@ import type { RendererContract, TableOptions, TaskManagerOptions } from './src/t
 export {
   icons,
   Table,
+  Steps,
   Logger,
   TaskManager,
   Instructions,
@@ -106,11 +108,22 @@ export function cliui(options: Partial<{ mode: 'raw' | 'silent' | 'normal' }> = 
     return tableInstance
   }
 
+  /**
+   * Instantiate a new steps display
+   */
+  const steps = () => {
+    const stepsInstance = new Steps({ raw: mode === 'raw' })
+    stepsInstance.useRenderer(renderer)
+    stepsInstance.useColors(colors)
+    return stepsInstance
+  }
+
   return {
     colors,
     logger,
     table,
     tasks,
+    steps,
     icons,
     sticker,
     instructions,

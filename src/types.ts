@@ -203,3 +203,29 @@ export type SpinnerMessage = {
   silent?: boolean
   render(): string
 }
+
+/**
+ * Options accepted by steps
+ */
+export type StepsOptions = {
+  /**
+   * Display steps without any ansi output
+   */
+  raw: boolean
+}
+
+/**
+ * A single step item containing title and optional content
+ */
+export type StepItem = {
+  /**
+   * The step title/heading
+   */
+  title: string
+
+  /**
+   * Optional content/description for the step.
+   * Supports ANSI formatting and multiline text.
+   */
+  content?: string
+}

@@ -320,6 +320,56 @@ sticker
   .render()
 ```
 
+## Steps
+The steps widget allows you to display a series of sequential steps with counters, titles, and optional content. Steps are visually connected with a vertical border.
+
+```ts
+const ui = cliui()
+const steps = ui.steps()
+
+steps
+  .add('Install dependencies', 'Run npm install to get started')
+  .add('Configure app', 'Create a .env file with your settings')
+  .add('Start server', 'Use npm start to launch the application')
+  .render()
+```
+
+Each step is numbered automatically and can include:
+- A **title** (required): The main heading for the step
+- **content** (optional): Additional details or instructions for the step
+
+The content supports multiline text and ANSI formatting:
+
+```ts
+steps.add(
+  'Configure environment',
+  `Copy .env.example to .env\nUpdate API keys and credentials`
+)
+```
+
+You can also use the `prepare()` method to get the formatted output without rendering:
+
+```ts
+const output = steps.prepare()
+console.log(output)
+```
+
+### Testing steps output
+First, you must instantiate the `cliui` in raw mode to collect all logs messages within memory. In raw mode, the visual borders and indentation are omitted to make assertions easier.
+
+```ts
+const ui = cliui({ raw: true })
+const steps = ui.steps()
+
+steps
+  .add('Install dependencies', 'Run npm install')
+  .add('Start server', 'Run npm start')
+  .render()
+
+const logs = steps.getRenderer().getLogs()
+console.log(logs)
+```
+
 ### Testing instructions and sticker output
 First, you must instantiate the `cliui` in raw mode to collect all logs messages within memory. And then you can access the instructions/sticker output using `logger.getRenderer()` to write assertions.
 
