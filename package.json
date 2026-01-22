@@ -50,7 +50,6 @@
   },
   "dependencies": {
     "@poppinss/colors": "^4.1.6",
-    "@speed-highlight/core": "^1.2.14",
     "cli-table3": "^0.6.5",
     "cli-truncate": "^5.1.1",
     "log-update": "^7.0.2",
