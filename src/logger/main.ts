@@ -13,6 +13,7 @@ import { Action } from './action.js'
 import { Spinner } from './spinner.js'
 import { useColors } from '../colors.js'
 import { ConsoleRenderer } from '../renderers/console.js'
+import { MemoryRenderer } from '../renderers/memory.js'
 
 import type {
   LoggingTypes,
@@ -397,5 +398,17 @@ export class Logger implements RendererContract {
     return new (this.constructor as typeof Logger)(options)
       .useColors(this.getColors())
       .useRenderer(this.getRenderer())
+  }
+
+  /**
+   * Create a dummy logger that silently discards all output.
+   * Useful when output must be suppressed, for example
+   * inside a tasks-manager callback where the task widget
+   * owns the terminal.
+   */
+  dummy(): Logger {
+    return new (this.constructor as typeof Logger)()
+      .useColors(this.getColors())
+      .useRenderer(new MemoryRenderer())
   }
 }
