@@ -119,7 +119,7 @@ export class TaskManager {
     } catch (error) {
       this.#state = 'failed'
       this.error = error
-      task.task.markAsFailed(error)
+      task.task.markAsFailed(error as Error)
     }
   }
 
