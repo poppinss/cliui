@@ -9,7 +9,6 @@
 
 import type { Colors } from '@poppinss/colors/types'
 
-import { icons } from './icons.js'
 import { useColors } from './colors.js'
 import { ConsoleRenderer } from './renderers/console.js'
 import type { RendererContract, StepItem, StepsOptions } from './types.js'
@@ -131,7 +130,7 @@ export class Steps {
             lines.push(line)
           } else {
             // In normal mode, add border and indentation
-            lines.push(`${colors.grey().dim(icons.borderVertical)}  ${line}`)
+            lines.push(`   ${line}`)
           }
         })
       }
@@ -139,7 +138,7 @@ export class Steps {
       // Add connector to next step (unless it's the last step)
       // Skip in raw mode for easier assertions
       if (!isLast && !this.#options.raw) {
-        lines.push(colors.grey().dim(icons.borderVertical))
+        lines.push('')
       }
     })
 
