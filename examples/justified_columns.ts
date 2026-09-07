@@ -34,6 +34,7 @@ function renderList() {
   const justifiedTitles = justify(titles, {
     maxWidth: TERMINAL_SIZE - largestTiming,
     align: 'left',
+    paddingChar: '.',
   })
   const justifiedTimings = wrap(justify(timings, { maxWidth: largestTiming }), {
     startColumn: TERMINAL_SIZE - largestTiming,

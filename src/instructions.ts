@@ -10,10 +10,12 @@
 import boxes from 'cli-boxes'
 import stringWidth from 'string-width'
 import type { Colors } from '@poppinss/colors/types'
+import { note as clackNote } from '@clack/prompts'
 
 import { icons } from './icons.js'
 import { useColors } from './colors.js'
 import { TERMINAL_SIZE } from './helpers.js'
+import { captureClackOutput } from './renderers/clack.js'
 import { ConsoleRenderer } from './renderers/console.js'
 import type { InstructionsOptions, RendererContract } from './types.js'
 
@@ -72,6 +74,12 @@ export class Instructions {
    * Options
    */
   #options: InstructionsOptions
+
+  /**
+   * Fullscreen and custom-border layouts continue using the legacy renderer,
+   * since Clack's note helper intentionally does not expose those controls.
+   */
+  #useLegacyLayout = false
 
   /**
    * Draws the border
@@ -248,6 +256,7 @@ export class Instructions {
   fullScreen(): this {
     const borderWidth = 2
     this.#widestLineLength = TERMINAL_SIZE - (this.#leftPadding + this.#rightPadding) - borderWidth
+    this.#useLegacyLayout = true
 
     return this
   }
@@ -257,6 +266,7 @@ export class Instructions {
    */
   drawBorder(callback: (borderChar: string, colors: Colors) => string) {
     this.#drawBorder = callback
+    this.#useLegacyLayout = true
     return this
   }
 
@@ -301,6 +311,22 @@ export class Instructions {
 
       output = output.concat(this.#state.content.map(({ text }) => text))
       return output.join('\n')
+    }
+
+    /**
+     * Clack's note helper is the default instructions renderer. Capturing its
+     * output keeps the existing prepare/useRenderer APIs intact.
+     */
+    if (!this.#useLegacyLayout) {
+      const message = this.#state.content.map(({ text }) => text).join('\n')
+      const isSilent = this.getColors().gray('__color_probe__') === '__color_probe__'
+
+      return captureClackOutput(
+        (output) => {
+          clackNote(message, this.#state.heading?.text || '', { output, withGuide: false })
+        },
+        { stripAnsi: isSilent }
+      )
     }
 
     const top = this.#getTopLine()

@@ -24,7 +24,7 @@ test.group('Action', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `green(${'DONE:'})    creating file`,
+        message: `green(◇)  creating file`,
         stream: 'stdout',
       },
     ])
@@ -40,7 +40,7 @@ test.group('Action', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `red(FAILED:)  creating file \n         red(File already exists)`,
+        message: `red(■)  creating file\ngray(│)  red(File already exists)`,
         stream: 'stderr',
       },
     ])
@@ -56,7 +56,7 @@ test.group('Action', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `cyan(SKIPPED:) creating file`,
+        message: `gray(○)  creating file`,
         stream: 'stdout',
       },
     ])
@@ -72,7 +72,7 @@ test.group('Action', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `DONE:    creating file`,
+        message: `◇  creating file`,
         stream: 'stdout',
       },
     ])
@@ -88,7 +88,7 @@ test.group('Action', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `dim(green(DONE:))    dim(creating file)`,
+        message: `dim(green(◇))  dim(creating file)`,
         stream: 'stdout',
       },
     ])
@@ -104,7 +104,7 @@ test.group('Action', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `cyan(SKIPPED:) creating file dim((invalid message))`,
+        message: `gray(○)  creating file dim((invalid message))`,
         stream: 'stdout',
       },
     ])

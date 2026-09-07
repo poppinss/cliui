@@ -8,9 +8,9 @@
  */
 
 import type { Colors } from '@poppinss/colors/types'
+import { S_BAR, S_ERROR, S_RADIO_INACTIVE, S_STEP_SUBMIT, unicodeOr } from '@clack/prompts'
 
 import { type Task } from '../task.js'
-import { icons } from '../../icons.js'
 import { useColors } from '../../colors.js'
 import { ConsoleRenderer } from '../../renderers/console.js'
 import type { TaskRendererOptions, RendererContract } from '../../types.js'
@@ -52,30 +52,30 @@ export class MinimalRenderer {
   #formatError(error: string | { message: string; stack?: string }) {
     let message = typeof error === 'string' ? error : error.message
     message = this.getColors().red(message)
+    const guide = this.#getSymbol(S_BAR, 'gray')
 
-    return `\n  ${message
+    return `\n${message
       .split('\n')
-      .map((line) => `${line}`)
+      .map((line) => `${guide}${line}`)
       .join('\n')}`
   }
 
   /**
-   * Returns the pointer icon, if icons are not disabled.
+   * Returns a Clack symbol, if icons are not disabled.
    */
-  #getPointerIcon(color: keyof Colors) {
-    const icon = this.#options.icons ? `${icons.pointer} ` : ''
-    if (!icon) {
-      return icon
+  #getSymbol(symbol: string, color: keyof Colors) {
+    if (!this.#options.icons) {
+      return ''
     }
 
-    return this.getColors()[color](icon)
+    return `${this.getColors()[color](symbol)}  `
   }
 
   /**
    * Returns the display string for an idle task
    */
   #renderIdleTask(task: Task) {
-    return `${this.#getPointerIcon('dim')}${this.getColors().dim(task.title)}`
+    return `${this.#getSymbol(S_RADIO_INACTIVE, 'gray')}${this.getColors().dim(task.title)}`
   }
 
   /**
@@ -83,16 +83,17 @@ export class MinimalRenderer {
    */
   #renderRunningTask(task: Task) {
     const lastLogLine = task.getLastLoggedLine()
-    const title = this.#options.icons ? `${icons.pointer} ${task.title}` : task.title
+    const title = `${this.#getSymbol(unicodeOr('◒', '•'), 'magenta')}${task.title}`
+    const guide = this.#getSymbol(S_BAR, 'gray')
 
-    return `${title}\n  ${lastLogLine || ''}`
+    return `${title}\n${guide}${lastLogLine || ''}`
   }
 
   /**
    * Returns the display string for a failed task
    */
   #renderFailedTask(task: Task) {
-    const pointer = this.#getPointerIcon('red')
+    const pointer = this.#getSymbol(S_ERROR, 'red')
     const duration = this.getColors().dim(`(${task.getDuration()!})`)
 
     let message = `${pointer}${task.title} ${duration}`
@@ -110,7 +111,7 @@ export class MinimalRenderer {
    * Returns the display string for a succeeded task
    */
   #renderSucceededTask(task: Task) {
-    const pointer = this.#getPointerIcon('green')
+    const pointer = this.#getSymbol(S_STEP_SUBMIT, 'green')
     const duration = this.getColors().dim(`(${task.getDuration()!})`)
 
     let message = `${pointer}${task.title} ${duration}`
@@ -120,7 +121,7 @@ export class MinimalRenderer {
       return `${message}\n`
     }
 
-    message = `${message}\n  ${this.getColors().green(successMessage)}`
+    message = `${message}\n${this.#getSymbol(S_BAR, 'gray')}${this.getColors().green(successMessage)}`
     return message
   }
 

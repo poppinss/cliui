@@ -47,6 +47,7 @@
     "typescript": "^6.0.2"
   },
   "dependencies": {
+    "@clack/prompts": "^1.1.0",
     "@poppinss/colors": "^4.1.6",
     "cli-boxes": "^4.0.1",
     "cli-table3": "^0.6.5",

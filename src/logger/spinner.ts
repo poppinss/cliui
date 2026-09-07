@@ -7,6 +7,10 @@
  * file that was distributed with this source code.
  */
 
+import type { Colors } from '@poppinss/colors/types'
+import { S_STEP_SUBMIT, unicodeOr } from '@clack/prompts'
+
+import { useColors } from '../colors.js'
 import { ConsoleRenderer } from '../renderers/console.js'
 import type { LoggerMessageOptions, RendererContract, SpinnerMessage } from '../types.js'
 
@@ -16,14 +20,19 @@ import type { LoggerMessageOptions, RendererContract, SpinnerMessage } from '../
  */
 export class Spinner {
   #animator = {
-    frames: ['.  ', '.. ', '...', ' ..', '  .', '   '],
-    interval: 200,
+    frames: [unicodeOr('◒', '•'), unicodeOr('◐', 'o'), unicodeOr('◓', 'O'), unicodeOr('◑', '0')],
+    interval: process.platform === 'win32' && !process.env.WT_SESSION ? 120 : 80,
     index: 0,
+    tick: 0,
     getFrame() {
       return this.frames[this.index]
     },
+    getDots() {
+      return '.'.repeat(Math.floor(this.tick / 8) % 4)
+    },
     advance() {
       this.index = this.index + 1 === this.frames.length ? 0 : this.index + 1
+      this.tick++
       return this.index
     },
   }
@@ -42,6 +51,11 @@ export class Spinner {
    * The renderer to use for writing to the console
    */
   #renderer?: RendererContract
+
+  /**
+   * Reference to the colors implementation
+   */
+  #colors?: Colors
 
   /**
    * Custom method to handle animation result
@@ -67,12 +81,13 @@ export class Spinner {
       return
     }
 
-    const frame = this.#animator.getFrame()
+    const frame = this.getColors().magenta(this.#animator.getFrame())
+    const line = `${frame}  ${this.#message.render()}${this.#animator.getDots()}`
 
     if (this.#spinnerWriter) {
-      this.#spinnerWriter(`${this.#message.render()} ${frame}`)
+      this.#spinnerWriter(line)
     } else {
-      this.getRenderer().logUpdate(`${this.#message.render()} ${frame}`)
+      this.getRenderer().logUpdate(line)
     }
 
     setTimeout(() => {
@@ -97,6 +112,25 @@ export class Spinner {
    */
   useRenderer(renderer: RendererContract): this {
     this.#renderer = renderer
+    return this
+  }
+
+  /**
+   * Returns the colors implementation in use
+   */
+  getColors(): Colors {
+    if (!this.#colors) {
+      this.#colors = useColors()
+    }
+
+    return this.#colors
+  }
+
+  /**
+   * Define a custom colors implementation
+   */
+  useColors(colors: Colors): this {
+    this.#colors = colors
     return this
   }
 
@@ -127,10 +161,15 @@ export class Spinner {
   stop() {
     this.#state = 'stopped'
     this.#animator.index = 0
+    this.#animator.tick = 0
 
     if (!this.#spinnerWriter && !this.#message.silent) {
-      this.getRenderer().logUpdate(`${this.#message.render()} ${this.#animator.frames[2]}`)
+      this.getRenderer().logUpdate(
+        `${this.getColors().green(S_STEP_SUBMIT)}  ${this.#message.render()}`
+      )
       this.getRenderer().logUpdatePersist()
+    } else if (this.#spinnerWriter && !this.#message.silent) {
+      this.#spinnerWriter(`${this.getColors().green(S_STEP_SUBMIT)}  ${this.#message.render()}`)
     }
   }
 

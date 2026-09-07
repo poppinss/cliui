@@ -8,10 +8,20 @@
  */
 
 import type { Colors } from '@poppinss/colors/types'
+import {
+  log as clackLog,
+  S_BAR,
+  S_ERROR,
+  S_INFO,
+  S_STEP_ACTIVE,
+  S_SUCCESS,
+  S_WARN,
+} from '@clack/prompts'
 
 import { Action } from './action.js'
 import { Spinner } from './spinner.js'
 import { useColors } from '../colors.js'
+import { captureClackOutput } from '../renderers/clack.js'
 import { ConsoleRenderer } from '../renderers/console.js'
 import { MemoryRenderer } from '../renderers/memory.js'
 
@@ -61,37 +71,34 @@ export class Logger implements RendererContract {
   }
 
   /**
-   * Color the logger label
+   * Returns the symbol for a given logging type
    */
-  #colorizeLabel(color: keyof Colors, text: string): string {
-    text = this.getColors()[color](text) as string
+  #getSymbol(type: LoggingTypes): string {
+    let symbol: string
 
-    if (this.#options.dimLabels) {
-      return `[ ${this.getColors().dim(text)} ]`
-    }
-
-    return `[ ${text} ]`
-  }
-
-  /**
-   * Returns the label for a given logging type
-   */
-  #getLabel(type: LoggingTypes): string {
     switch (type) {
       case 'success':
-        return this.#colorizeLabel('green', type)
+        symbol = this.getColors().green(S_SUCCESS)
+        break
       case 'error':
       case 'fatal':
-        return this.#colorizeLabel('red', type)
+        symbol = this.getColors().red(S_ERROR)
+        break
       case 'warning':
-        return this.#colorizeLabel('yellow', 'warn')
+        symbol = this.getColors().yellow(S_WARN)
+        break
       case 'info':
-        return this.#colorizeLabel('blue', type)
+        symbol = this.getColors().blue(S_INFO)
+        break
       case 'debug':
-        return this.#colorizeLabel('cyan', type)
+        symbol = this.getColors().gray(S_BAR)
+        break
       case 'await':
-        return this.#colorizeLabel('cyan', 'wait')
+        symbol = this.getColors().magenta(S_STEP_ACTIVE)
+        break
     }
+
+    return this.#options.dimLabels ? this.getColors().dim(symbol) : symbol
   }
 
   /**
@@ -130,13 +137,6 @@ export class Logger implements RendererContract {
   }
 
   /**
-   * Prepends the prefix to the message
-   */
-  #prefixLabel(message: string, label: string) {
-    return `${label} ${message}`
-  }
-
-  /**
    * Decorate message string
    */
   #decorateMessage(message: string): string {
@@ -166,6 +166,25 @@ export class Logger implements RendererContract {
         return `      ${this.getColors().red(line)}`
       })
       .join('\n')}`
+  }
+
+  /**
+   * Applies message details and the shared symbol-based layout.
+   */
+  #prepareMessage(type: LoggingTypes, message: string, options?: LoggerMessageOptions) {
+    message = this.#decorateMessage(message)
+    message = this.#addPrefix(message, options?.prefix)
+    message = this.#addSuffix(message, options?.suffix)
+    message = this.#addDuration(message, options?.startTime)
+
+    return captureClackOutput((output) => {
+      clackLog.message(message, {
+        output,
+        symbol: this.#getSymbol(type),
+        spacing: 0,
+        secondarySymbol: this.getColors().gray(S_BAR),
+      })
+    })
   }
 
   /**
@@ -240,12 +259,7 @@ export class Logger implements RendererContract {
    * Prepares the success message
    */
   prepareSuccess(message: string, options?: LoggerMessageOptions) {
-    message = this.#decorateMessage(message)
-    message = this.#prefixLabel(message, this.#getLabel('success'))
-    message = this.#addPrefix(message, options?.prefix)
-    message = this.#addSuffix(message, options?.suffix)
-    message = this.#addDuration(message, options?.startTime)
-    return message
+    return this.#prepareMessage('success', message, options)
   }
 
   /**
@@ -260,13 +274,7 @@ export class Logger implements RendererContract {
    */
   prepareError(message: string | { message: string }, options?: LoggerMessageOptions) {
     message = typeof message === 'string' ? message : message.message
-    message = this.#decorateMessage(message)
-    message = this.#prefixLabel(message, this.#getLabel('error'))
-    message = this.#addPrefix(message, options?.prefix)
-    message = this.#addSuffix(message, options?.suffix)
-    message = this.#addDuration(message, options?.startTime)
-
-    return message
+    return this.#prepareMessage('error', message, options)
   }
 
   /**
@@ -285,14 +293,8 @@ export class Logger implements RendererContract {
   ) {
     const stack = this.#formatStack(typeof message === 'string' ? undefined : message.stack)
 
-    message = typeof message === 'string' ? message : message.message
-    message = this.#decorateMessage(message)
-    message = this.#prefixLabel(message, this.#getLabel('error'))
-    message = this.#addPrefix(message, options?.prefix)
-    message = this.#addSuffix(message, options?.suffix)
-    message = this.#addDuration(message, options?.startTime)
-
-    return `${message}${stack}`
+    message = `${typeof message === 'string' ? message : message.message}${stack}`
+    return this.#prepareMessage('fatal', message, options)
   }
 
   /**
@@ -306,13 +308,7 @@ export class Logger implements RendererContract {
    * Prepares the warning message
    */
   prepareWarning(message: string, options?: LoggerMessageOptions) {
-    message = this.#decorateMessage(message)
-    message = this.#prefixLabel(message, this.#getLabel('warning'))
-    message = this.#addPrefix(message, options?.prefix)
-    message = this.#addSuffix(message, options?.suffix)
-    message = this.#addDuration(message, options?.startTime)
-
-    return message
+    return this.#prepareMessage('warning', message, options)
   }
 
   /**
@@ -326,13 +322,7 @@ export class Logger implements RendererContract {
    * Prepares the info message
    */
   prepareInfo(message: string, options?: LoggerMessageOptions) {
-    message = this.#decorateMessage(message)
-    message = this.#prefixLabel(message, this.#getLabel('info'))
-    message = this.#addPrefix(message, options?.prefix)
-    message = this.#addSuffix(message, options?.suffix)
-    message = this.#addDuration(message, options?.startTime)
-
-    return message
+    return this.#prepareMessage('info', message, options)
   }
 
   /**
@@ -346,13 +336,7 @@ export class Logger implements RendererContract {
    * Prepares the debug message
    */
   prepareDebug(message: string, options?: LoggerMessageOptions) {
-    message = this.#decorateMessage(message)
-    message = this.#prefixLabel(message, this.#getLabel('debug'))
-    message = this.#addPrefix(message, options?.prefix)
-    message = this.#addSuffix(message, options?.suffix)
-    message = this.#addDuration(message, options?.startTime)
-
-    return message
+    return this.#prepareMessage('debug', message, options)
   }
 
   /**
@@ -372,14 +356,13 @@ export class Logger implements RendererContract {
       ...options,
       render() {
         let decorated = this.logger.#decorateMessage(this.text)
-        decorated = this.logger.#prefixLabel(decorated, this.logger.#getLabel('await'))
         decorated = this.logger.#addPrefix(decorated, this.prefix)
         decorated = this.logger.#addSuffix(decorated, this.suffix)
         return decorated
       },
     }
 
-    return new Spinner(message).useRenderer(this.getRenderer())
+    return new Spinner(message).useColors(this.getColors()).useRenderer(this.getRenderer())
   }
 
   /**

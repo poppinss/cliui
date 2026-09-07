@@ -8,6 +8,7 @@
  */
 
 import CliTable from 'cli-table3'
+import boxes from 'cli-boxes'
 import stringWidth from 'string-width'
 import type { Colors } from '@poppinss/colors/types'
 
@@ -15,6 +16,35 @@ import { useColors } from './colors.js'
 import { TERMINAL_SIZE } from './helpers.js'
 import { ConsoleRenderer } from './renderers/console.js'
 import type { RendererContract, TableHead, TableOptions, TableRow } from './types.js'
+
+const MINIMAL_CHARS = {
+  'top': '',
+  'top-mid': '',
+  'top-left': '',
+  'top-right': '',
+  'bottom': '',
+  'bottom-mid': '',
+  'bottom-left': '',
+  'bottom-right': '',
+  'left': '',
+  'left-mid': '',
+  'mid': '─',
+  'mid-mid': '  ',
+  'right': '',
+  'right-mid': '',
+  'middle': '  ',
+}
+
+const BOXED_CHARS = {
+  'top': boxes.round.top,
+  'top-mid': '┬',
+  'top-left': boxes.round.topLeft,
+  'top-right': boxes.round.topRight,
+  'bottom': boxes.round.bottom,
+  'bottom-mid': '┴',
+  'bottom-left': boxes.round.bottomLeft,
+  'bottom-right': boxes.round.bottomRight,
+}
 
 /**
  * Exposes the API to represent a table
@@ -64,11 +94,12 @@ export class Table {
   /**
    * Padding for columns
    */
-  #padding: number = 2
+  #padding: number = 1
 
   constructor(options: Partial<TableOptions> = {}) {
     this.#options = {
       raw: options.raw === undefined ? false : options.raw,
+      minimal: options.minimal === undefined ? false : options.minimal,
       chars: options.chars,
     }
   }
@@ -101,7 +132,11 @@ export class Table {
     /**
      * The terminal columns
      */
-    let columns = TERMINAL_SIZE - (this.#columnSizes.length + 1)
+    const padding = this.#options.minimal ? 0 : this.#padding
+    const separatorWidth = this.#options.minimal
+      ? Math.max(this.#columnSizes.length - 1, 0) * 2
+      : this.#columnSizes.length + 1
+    let columns = TERMINAL_SIZE - separatorWidth
 
     this.#state.colWidths = this.#state.colWidths || []
     this.#columnSizes.forEach((column, index) => {
@@ -109,7 +144,7 @@ export class Table {
        * The column width will be the size of the biggest
        * text + padding left + padding right
        */
-      this.#state.colWidths![index] = this.#state.colWidths![index] || column + this.#padding * 2
+      this.#state.colWidths![index] = this.#state.colWidths![index] || column + padding * 2
 
       /**
        * Compute remaining columns
@@ -245,10 +280,19 @@ export class Table {
      */
     const cliTable = new CliTable({
       head: this.#state.head,
-      style: { 'head': [], 'border': ['dim'], 'padding-left': 2, 'padding-right': 2 },
+      style: {
+        'head': [],
+        'border': ['dim'],
+        'compact': this.#options.minimal,
+        'padding-left': this.#options.minimal ? 0 : 1,
+        'padding-right': this.#options.minimal ? 0 : 1,
+      },
       wordWrap: true,
       ...(this.#state.colWidths ? { colWidths: this.#state.colWidths } : {}),
-      chars: this.#options.chars,
+      chars: {
+        ...(this.#options.minimal ? MINIMAL_CHARS : BOXED_CHARS),
+        ...this.#options.chars,
+      },
     } as any)
 
     this.#state.rows.forEach((row) => cliTable.push(row))

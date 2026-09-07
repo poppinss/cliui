@@ -8,10 +8,12 @@
  */
 
 import type { Colors } from '@poppinss/colors/types'
+import { log as clackLog, S_BAR, S_ERROR, S_STEP_SUBMIT, S_SUCCESS } from '@clack/prompts'
 
 import { type Task } from '../task.js'
 import { useColors } from '../../colors.js'
 import type { RendererContract } from '../../types.js'
+import { captureClackOutput } from '../../renderers/clack.js'
 import { ConsoleRenderer } from '../../renderers/console.js'
 
 /**
@@ -43,25 +45,31 @@ export class VerboseRenderer {
    */
   #formatError(error: string | { message: string; stack?: string }) {
     if (typeof error === 'string') {
-      return `${this.#getAnsiIcon('│', 'dim')}${this.getColors().red(error)}`
+      return this.getColors().red(error)
     }
 
     if (!error.stack) {
-      return `${this.#getAnsiIcon('│', 'dim')}${this.getColors().red(error.message)}`
+      return this.getColors().red(error.message)
     }
 
     return `${error.stack
       .split('\n')
-      .map((line) => `${this.#getAnsiIcon('│', 'dim')} ${this.getColors().red(line)}`)
+      .map((line) => this.getColors().red(line))
       .join('\n')}`
   }
 
   /**
-   * Returns the ansi icon back when icons are enabled
-   * or an empty string
+   * Render a message through Clack while preserving the configured renderer.
    */
-  #getAnsiIcon(icon: string, color: keyof Colors) {
-    return this.getColors()[color](`${icon} `)
+  #formatMessage(message: string, symbol: string) {
+    return captureClackOutput((output) => {
+      clackLog.message(message, {
+        output,
+        symbol,
+        spacing: 0,
+        secondarySymbol: this.getColors().gray(S_BAR),
+      })
+    })
   }
 
   /**
@@ -71,13 +79,13 @@ export class VerboseRenderer {
     if (this.#notifiedTasks.has(task.title)) {
       const lastLoggedLine = task.getLastLoggedLine()
       if (lastLoggedLine) {
-        this.getRenderer().log(`${this.#getAnsiIcon('│', 'dim')}${lastLoggedLine}`)
+        this.getRenderer().log(this.#formatMessage(lastLoggedLine, this.getColors().gray(S_BAR)))
       }
 
       return
     }
 
-    this.getRenderer().log(`${this.#getAnsiIcon('┌', 'dim')}${task.title}`)
+    this.getRenderer().log(this.#formatMessage(task.title, this.getColors().green(S_SUCCESS)))
     this.#notifiedTasks.add(task.title)
   }
 
@@ -86,10 +94,11 @@ export class VerboseRenderer {
    */
   #renderSucceededTask(task: Task) {
     const successMessage = task.getSuccessMessage()
-    const icon = this.#getAnsiIcon('└', 'dim')
     const status = this.getColors().green(successMessage || 'Completed')
     const duration = this.getColors().dim(`(${task.getDuration()})`)
-    this.getRenderer().log(`${icon}${status} ${duration}`)
+    this.getRenderer().log(
+      this.#formatMessage(`${status} ${duration}`, this.getColors().green(S_STEP_SUBMIT))
+    )
   }
 
   /**
@@ -98,13 +107,16 @@ export class VerboseRenderer {
   #renderFailedTask(task: Task) {
     const error = task.getError()
     if (error) {
-      this.getRenderer().logError(this.#formatError(error))
+      this.getRenderer().logError(
+        this.#formatMessage(this.#formatError(error), this.getColors().gray(S_BAR))
+      )
     }
 
-    const icon = this.#getAnsiIcon('└', 'dim')
     const status = this.getColors().red('Failed')
     const duration = this.getColors().dim(`(${task.getDuration()})`)
-    this.getRenderer().logError(`${icon}${status} ${duration}`)
+    this.getRenderer().logError(
+      this.#formatMessage(`${status} ${duration}`, this.getColors().red(S_ERROR))
+    )
   }
 
   /**

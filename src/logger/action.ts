@@ -9,8 +9,10 @@
 
 import prettyHrtime from 'pretty-hrtime'
 import type { Colors } from '@poppinss/colors/types'
+import { log as clackLog, S_BAR, S_ERROR, S_RADIO_INACTIVE, S_STEP_SUBMIT } from '@clack/prompts'
 
 import { useColors } from '../colors.js'
+import { captureClackOutput } from '../renderers/clack.js'
 import { ConsoleRenderer } from '../renderers/console.js'
 import type { ActionOptions, RendererContract } from '../types.js'
 
@@ -58,19 +60,6 @@ export class Action {
   }
 
   /**
-   * Format label
-   */
-  #formatLabel(label: string, color: keyof Colors) {
-    label = this.getColors()[color](`${label.toUpperCase()}:`) as string
-
-    if (this.#options.dim) {
-      return this.getColors().dim(label)
-    }
-
-    return label
-  }
-
-  /**
    * Format message
    */
   #formatMessage(message: string) {
@@ -95,16 +84,34 @@ export class Action {
   #formatError(error: string | Error) {
     let message = typeof error === 'string' ? error : error.stack || error.message
 
-    return `\n    ${message
+    return message
       .split('\n')
       .map((line) => {
         if (this.#options.dim) {
           line = this.getColors().dim(line)
         }
 
-        return `     ${this.getColors().red(line)}`
+        return this.getColors().red(line)
       })
-      .join('\n')}`
+      .join('\n')
+  }
+
+  /**
+   * Render an action through Clack while preserving CLIUI's renderer contract.
+   */
+  #formatAction(message: string, symbol: string) {
+    if (this.#options.dim) {
+      symbol = this.getColors().dim(symbol)
+    }
+
+    return captureClackOutput((output) => {
+      clackLog.message(message, {
+        output,
+        symbol,
+        spacing: 0,
+        secondarySymbol: this.getColors().gray(S_BAR),
+      })
+    })
   }
 
   /**
@@ -158,17 +165,13 @@ export class Action {
    * Prepares the message to mark action as successful
    */
   prepareSucceeded() {
-    const formattedLabel = this.#formatLabel('done', 'green')
-    const formattedMessage = this.#formatMessage(this.#message)
+    let message = this.#formatMessage(this.#message)
 
-    let logMessage = `${formattedLabel}    ${formattedMessage}`
     if (this.#displayDuration) {
-      logMessage = `${logMessage} ${this.#formatSuffix(
-        prettyHrtime(process.hrtime(this.#startTime))
-      )}`
+      message = `${message} ${this.#formatSuffix(prettyHrtime(process.hrtime(this.#startTime)))}`
     }
 
-    return logMessage
+    return this.#formatAction(message, this.getColors().green(S_STEP_SUBMIT))
   }
 
   /**
@@ -182,15 +185,13 @@ export class Action {
    * Prepares the message to mark action as skipped
    */
   prepareSkipped(skipReason?: string) {
-    const formattedLabel = this.#formatLabel('skipped', 'cyan')
-    const formattedMessage = this.#formatMessage(this.#message)
+    let message = this.#formatMessage(this.#message)
 
-    let logMessage = `${formattedLabel} ${formattedMessage}`
     if (skipReason) {
-      logMessage = `${logMessage} ${this.#formatSuffix(skipReason)}`
+      message = `${message} ${this.#formatSuffix(skipReason)}`
     }
 
-    return logMessage
+    return this.#formatAction(message, this.getColors().gray(S_RADIO_INACTIVE))
   }
 
   /**
@@ -205,12 +206,10 @@ export class Action {
    * Prepares the message to mark action as failed
    */
   prepareFailed(error: string | Error) {
-    const formattedLabel = this.#formatLabel('failed', 'red')
-    const formattedMessage = this.#formatMessage(this.#message)
+    const message = this.#formatMessage(this.#message)
     const formattedError = this.#formatError(error)
 
-    const logMessage = `${formattedLabel}  ${formattedMessage} ${formattedError}`
-    return logMessage
+    return this.#formatAction(`${message}\n${formattedError}`, this.getColors().red(S_ERROR))
   }
 
   /**

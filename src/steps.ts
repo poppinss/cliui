@@ -8,6 +8,7 @@
  */
 
 import type { Colors } from '@poppinss/colors/types'
+import { S_BAR, S_STEP_SUBMIT } from '@clack/prompts'
 
 import { useColors } from './colors.js'
 import { ConsoleRenderer } from './renderers/console.js'
@@ -115,11 +116,11 @@ export class Steps {
     this.#steps.forEach((step, index) => {
       const stepNumber = index + 1
       const isLast = stepNumber === stepCount
+      const rail = colors.gray(S_BAR)
 
-      // Step header with counter
-      const counter = colors.cyan(`${stepNumber}.`)
-      const title = colors.bold(step.title)
-      lines.push(`${counter} ${title}`)
+      // Clack's completed-step symbol and rail make the sequence explicit.
+      const symbol = colors.green(S_STEP_SUBMIT)
+      lines.push(`${symbol}  ${stepNumber}. ${step.title}`)
 
       // Step content (if provided)
       if (step.content) {
@@ -129,8 +130,8 @@ export class Steps {
             // In raw mode, no border or indentation for easier assertions
             lines.push(line)
           } else {
-            // In normal mode, add border and indentation
-            lines.push(`   ${line}`)
+            // The rail visually owns content belonging to the current step.
+            lines.push(`${rail}  ${line}`)
           }
         })
       }
@@ -138,7 +139,7 @@ export class Steps {
       // Add connector to next step (unless it's the last step)
       // Skip in raw mode for easier assertions
       if (!isLast && !this.#options.raw) {
-        lines.push('')
+        lines.push(rail)
       }
     })
 

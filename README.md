@@ -26,7 +26,7 @@ import { cliui } from '@poppinss/cliui'
 const ui = cliui()
 
 ui.logger.info('This is an info message')
-// [ info ] This is an info message
+// ●  This is an info message
 ```
 
 Now, let's say you are testing a command and want to assert that an info message is logged during the command's execution.
@@ -45,7 +45,7 @@ const logs = ui.logger.getRenderer().getLogs()
 assert.deepEqual(logs, [
   {
     stream: 'stdout',
-    message: '[ cyan(info) ] This is an info message'
+    message: 'blue(●)  This is an info message'
   }
 ])
 ```
@@ -61,7 +61,7 @@ const logs = ui.logger.getRenderer().getLogs()
 assert.deepEqual(logs, [
   {
     stream: 'stderr',
-    message: '[ red(error) ] Something went wrong'
+    message: 'red(■)  Something went wrong'
   }
 ])
 ```
@@ -230,6 +230,32 @@ table.row([
 ])
 ```
 
+### Minimal tables
+
+Pass the `minimal` option to remove the outer border and vertical separators. Minimal tables keep a single divider below the headings and use spacing to separate columns.
+
+```ts
+const table = ui.table({ minimal: true })
+
+table
+  .head([
+    ui.colors.cyan('Name'),
+    ui.colors.cyan('Status'),
+  ])
+  .row(['cliui', ui.colors.green('Ready')])
+  .row(['prompts', ui.colors.green('Ready')])
+  .render()
+```
+
+```text
+Name     Status
+───────  ──────
+cliui    Ready
+prompts  Ready
+```
+
+See the [runnable minimal table example](./examples/table_minimal.ts) for colored headings and right-aligned status values.
+
 ### Right-align columns
 You can right-align the columns by defining them as objects and using the `hAlign` property. Also, make sure to align the header column right as well.
 
@@ -289,7 +315,7 @@ console.log(logs)
 ```
 
 ## Instructions
-The instructions widget allows you to render a box with steps. Each step gets prefixed with an arrow `>`.
+The instructions widget renders a Clack-style note. Each step is prefixed with an arrow `❯`.
 
 ![](./assets/instructions.png)
 
@@ -321,7 +347,7 @@ sticker
 ```
 
 ## Steps
-The steps widget allows you to display a series of sequential steps with counters, titles, and optional content. Steps are visually connected with a vertical border.
+The steps widget displays a series of sequential steps with counters, titles, and optional content. Each title uses Clack's completed-step marker, with a guide rail connecting the steps and their content.
 
 ![](./assets/steps.png)
 

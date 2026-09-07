@@ -9,8 +9,29 @@
 
 import { test } from '@japa/runner'
 import { cliui } from '../index.js'
+import { Steps } from '../src/steps.js'
+import { useColors } from '../src/colors.js'
 
 test.group('Steps', () => {
+  test('connect steps and their content using the Clack rail', ({ assert }) => {
+    const steps = new Steps()
+    steps.useColors(useColors({ raw: true }))
+
+    steps.add('Install dependencies', 'Run npm install')
+    steps.add('Start server', 'Run npm start')
+
+    assert.equal(
+      steps.prepare(),
+      [
+        'green(◇)  1. Install dependencies',
+        'gray(│)  Run npm install',
+        'gray(│)',
+        'green(◇)  2. Start server',
+        'gray(│)  Run npm start',
+      ].join('\n')
+    )
+  })
+
   test('render steps with titles and content', ({ assert }) => {
     const ui = cliui({ mode: 'raw' })
     const steps = ui.steps()
@@ -23,13 +44,10 @@ test.group('Steps', () => {
     const logs = steps.getRenderer().getLogs()
     assert.lengthOf(logs, 1)
     assert.equal(logs[0].stream, 'stdout')
-    assert.include(logs[0].message, 'cyan(1.)')
-    assert.include(logs[0].message, 'bold(Install dependencies)')
+    assert.include(logs[0].message, 'green(◇)  1. Install dependencies')
     assert.include(logs[0].message, 'Run npm install to get started')
-    assert.include(logs[0].message, 'cyan(2.)')
-    assert.include(logs[0].message, 'bold(Configure app)')
-    assert.include(logs[0].message, 'cyan(3.)')
-    assert.include(logs[0].message, 'bold(Start server)')
+    assert.include(logs[0].message, 'green(◇)  2. Configure app')
+    assert.include(logs[0].message, 'green(◇)  3. Start server')
   })
 
   test('render steps with titles only', ({ assert }) => {
@@ -43,12 +61,9 @@ test.group('Steps', () => {
 
     const logs = steps.getRenderer().getLogs()
     assert.lengthOf(logs, 1)
-    assert.include(logs[0].message, 'cyan(1.)')
-    assert.include(logs[0].message, 'bold(Download files)')
-    assert.include(logs[0].message, 'cyan(2.)')
-    assert.include(logs[0].message, 'bold(Extract archive)')
-    assert.include(logs[0].message, 'cyan(3.)')
-    assert.include(logs[0].message, 'bold(Verify checksums)')
+    assert.include(logs[0].message, 'green(◇)  1. Download files')
+    assert.include(logs[0].message, 'green(◇)  2. Extract archive')
+    assert.include(logs[0].message, 'green(◇)  3. Verify checksums')
   })
 
   test('render steps with multiline content', ({ assert }) => {
@@ -76,9 +91,9 @@ test.group('Steps', () => {
 
     const logs = steps.getRenderer().getLogs()
     assert.lengthOf(logs, 1)
-    assert.include(logs[0].message, 'bold(Step 1)')
-    assert.include(logs[0].message, 'bold(Step 2)')
-    assert.include(logs[0].message, 'bold(Step 3)')
+    assert.include(logs[0].message, 'green(◇)  1. Step 1')
+    assert.include(logs[0].message, 'green(◇)  2. Step 2')
+    assert.include(logs[0].message, 'green(◇)  3. Step 3')
   })
 
   test('prepare without rendering', ({ assert }) => {
@@ -92,11 +107,9 @@ test.group('Steps', () => {
     const logs = steps.getRenderer().getLogs()
 
     assert.lengthOf(logs, 0) // Should not log anything
-    assert.include(output, 'cyan(1.)')
-    assert.include(output, 'bold(Install)')
+    assert.include(output, 'green(◇)  1. Install')
     assert.include(output, 'Run npm install')
-    assert.include(output, 'cyan(2.)')
-    assert.include(output, 'bold(Build)')
+    assert.include(output, 'green(◇)  2. Build')
   })
 
   test('raw mode omits borders and indentation', ({ assert }) => {

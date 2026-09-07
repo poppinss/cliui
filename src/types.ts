@@ -137,6 +137,12 @@ export type TableOptions = {
   raw: boolean
 
   /**
+   * Render a borderless table with a header divider.
+   * Defaults to "false".
+   */
+  minimal?: boolean
+
+  /**
    * Chars to configure the table output
    */
   chars?: Partial<Record<CharName, string>>

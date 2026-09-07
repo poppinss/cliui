@@ -14,6 +14,21 @@ import { TaskManager } from '../src/tasks/manager.js'
 import { MemoryRenderer } from '../src/renderers/memory.js'
 
 test.group('TaskManager', () => {
+  test('render minimal tasks using Clack symbols', async ({ assert }) => {
+    const renderer = new MemoryRenderer()
+    const manager = new TaskManager()
+
+    manager.useRenderer(renderer)
+    manager.useColors(useColors({ raw: true }))
+
+    await manager.add('task 1', async () => 'All done').run()
+
+    const logs = renderer.getLogs()
+    assert.include(logs[0].message, 'gray(○)  dim(task 1)')
+    assert.include(logs.at(-1)!.message, 'green(◇)  task 1')
+    assert.include(logs.at(-1)!.message, 'gray(│)  green(All done)')
+  })
+
   test('run multiple tasks in sequence', async ({ assert }) => {
     const renderer = new MemoryRenderer()
 
@@ -42,7 +57,7 @@ test.group('TaskManager', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: 'dim(┌ )task 1',
+        message: 'green(◆)  task 1',
         stream: 'stdout',
       },
       {
@@ -54,7 +69,7 @@ test.group('TaskManager', () => {
         stream: 'stdout',
       },
       {
-        message: 'dim(┌ )task 2',
+        message: 'green(◆)  task 2',
         stream: 'stdout',
       },
       {
@@ -106,7 +121,7 @@ test.group('TaskManager', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: 'dim(┌ )task 1',
+        message: 'green(◆)  task 1',
         stream: 'stdout',
       },
       {
@@ -118,7 +133,7 @@ test.group('TaskManager', () => {
         stream: 'stdout',
       },
       {
-        message: 'dim(┌ )task 2',
+        message: 'green(◆)  task 2',
         stream: 'stdout',
       },
       {
@@ -130,7 +145,7 @@ test.group('TaskManager', () => {
         stream: 'stdout',
       },
       {
-        message: 'dim(┌ )task 4',
+        message: 'green(◆)  task 4',
         stream: 'stdout',
       },
       {
@@ -183,7 +198,7 @@ test.group('TaskManager', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: 'dim(┌ )task 1',
+        message: 'green(◆)  task 1',
         stream: 'stdout',
       },
       {
@@ -195,7 +210,7 @@ test.group('TaskManager', () => {
         stream: 'stdout',
       },
       {
-        message: 'dim(┌ )task 2',
+        message: 'green(◆)  task 2',
         stream: 'stdout',
       },
       {
@@ -203,7 +218,7 @@ test.group('TaskManager', () => {
         stream: 'stdout',
       },
       {
-        message: 'dim(│ )red(Something went wrong)',
+        message: 'gray(│)  red(Something went wrong)',
         stream: 'stderr',
       },
       {
@@ -252,7 +267,7 @@ test.group('TaskManager', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: 'dim(┌ )task 1',
+        message: 'green(◆)  task 1',
         stream: 'stdout',
       },
       {
@@ -264,7 +279,7 @@ test.group('TaskManager', () => {
         stream: 'stdout',
       },
       {
-        message: 'dim(┌ )task 2',
+        message: 'green(◆)  task 2',
         stream: 'stdout',
       },
       {
@@ -310,7 +325,7 @@ test.group('TaskManager', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: '┌ task 1',
+        message: '◆  task 1',
         stream: 'stdout',
       },
       {
@@ -322,7 +337,7 @@ test.group('TaskManager', () => {
         stream: 'stdout',
       },
       {
-        message: '┌ task 2',
+        message: '◆  task 2',
         stream: 'stdout',
       },
       {
@@ -330,7 +345,7 @@ test.group('TaskManager', () => {
         stream: 'stdout',
       },
       {
-        message: `│ Something went wrong`,
+        message: `│  Something went wrong`,
         stream: 'stderr',
       },
       {

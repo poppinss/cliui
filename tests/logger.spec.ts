@@ -24,7 +24,7 @@ test.group('Logger | label', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ dim(green(success)) ] Hello world`,
+        message: `dim(green(◆))  Hello world`,
         stream: 'stdout',
       },
     ])
@@ -40,7 +40,7 @@ test.group('Logger | label', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ dim(green(success)) ] dim(Hello world)`,
+        message: `dim(green(◆))  dim(Hello world)`,
         stream: 'stdout',
       },
     ])
@@ -58,7 +58,7 @@ test.group('Logger | success', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ green(success) ] Hello world`,
+        message: `green(◆)  Hello world`,
         stream: 'stdout',
       },
     ])
@@ -76,7 +76,7 @@ test.group('Logger | error', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ red(error) ] Hello world`,
+        message: `red(■)  Hello world`,
         stream: 'stderr',
       },
     ])
@@ -92,7 +92,7 @@ test.group('Logger | error', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ red(error) ] Hello world`,
+        message: `red(■)  Hello world`,
         stream: 'stderr',
       },
     ])
@@ -110,7 +110,7 @@ test.group('Logger | fatal', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ red(error) ] Hello world`,
+        message: `red(■)  Hello world`,
         stream: 'stderr',
       },
     ])
@@ -127,7 +127,7 @@ test.group('Logger | fatal', () => {
     assert.lengthOf(renderer.getLogs(), 1)
 
     assert.equal(renderer.getLogs()[0].stream, 'stderr')
-    assert.match(renderer.getLogs()[0].message.split('\n')[1], /logger\.spec\.ts/)
+    assert.match(renderer.getLogs()[0].message, /logger\.spec\.ts/)
   })
 })
 
@@ -142,7 +142,7 @@ test.group('Logger | warning', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ yellow(warn) ] Hello world`,
+        message: `yellow(▲)  Hello world`,
         stream: 'stdout',
       },
     ])
@@ -160,7 +160,7 @@ test.group('Logger | info', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ blue(info) ] Hello world`,
+        message: `blue(●)  Hello world`,
         stream: 'stdout',
       },
     ])
@@ -178,7 +178,7 @@ test.group('Logger | debug', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ cyan(debug) ] Hello world`,
+        message: `gray(│)  Hello world`,
         stream: 'stdout',
       },
     ])
@@ -198,11 +198,11 @@ test.group('Logger | await', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ cyan(wait) ] installing .  `,
+        message: `magenta(◒)  installing`,
         stream: 'stdout',
       },
       {
-        message: `[ cyan(wait) ] installing ...`,
+        message: `green(◇)  installing`,
         stream: 'stdout',
       },
     ])
@@ -220,11 +220,11 @@ test.group('Logger | await', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `dim([npm]) [ cyan(wait) ] installing .  `,
+        message: `magenta(◒)  dim([npm]) installing`,
         stream: 'stdout',
       },
       {
-        message: `dim([npm]) [ cyan(wait) ] installing ...`,
+        message: `green(◇)  dim([npm]) installing`,
         stream: 'stdout',
       },
     ])
@@ -246,20 +246,10 @@ test.group('Logger | await', () => {
     await new Promise((resolve) => setTimeout(resolve, 210))
     spinner.stop()
 
-    assert.deepEqual(renderer.getLogs(), [
-      {
-        message: `dim([npm]) [ cyan(wait) ] installing .  `,
-        stream: 'stdout',
-      },
-      {
-        message: `dim([npm]) [ cyan(wait) ] updating .. `,
-        stream: 'stdout',
-      },
-      {
-        message: `dim([npm]) [ cyan(wait) ] updating ...`,
-        stream: 'stdout',
-      },
-    ])
+    const logs = renderer.getLogs()
+    assert.equal(logs[0].message, `magenta(◒)  dim([npm]) installing`)
+    assert.isTrue(logs.slice(1, -1).every(({ message }) => message.includes('dim([npm]) updating')))
+    assert.equal(logs.at(-1)!.message, `green(◇)  dim([npm]) updating`)
   })
 
   test('update spinner with new prefix', async ({ assert }) => {
@@ -279,20 +269,10 @@ test.group('Logger | await', () => {
     await new Promise((resolve) => setTimeout(resolve, 210))
     spinner.stop()
 
-    assert.deepEqual(renderer.getLogs(), [
-      {
-        message: `dim([npm]) [ cyan(wait) ] installing .  `,
-        stream: 'stdout',
-      },
-      {
-        message: `dim([fs]) [ cyan(wait) ] updating .. `,
-        stream: 'stdout',
-      },
-      {
-        message: `dim([fs]) [ cyan(wait) ] updating ...`,
-        stream: 'stdout',
-      },
-    ])
+    const logs = renderer.getLogs()
+    assert.equal(logs[0].message, `magenta(◒)  dim([npm]) installing`)
+    assert.isTrue(logs.slice(1, -1).every(({ message }) => message.includes('dim([fs]) updating')))
+    assert.equal(logs.at(-1)!.message, `green(◇)  dim([fs]) updating`)
   })
 
   test('start spinner with a custom suffix', ({ assert }) => {
@@ -308,11 +288,11 @@ test.group('Logger | await', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ cyan(wait) ] installing dim(yellow((npm))) .  `,
+        message: `magenta(◒)  installing dim(yellow((npm)))`,
         stream: 'stdout',
       },
       {
-        message: `[ cyan(wait) ] installing dim(yellow((npm))) ...`,
+        message: `green(◇)  installing dim(yellow((npm)))`,
         stream: 'stdout',
       },
     ])
@@ -335,20 +315,12 @@ test.group('Logger | await', () => {
     await new Promise((resolve) => setTimeout(resolve, 210))
     spinner.stop()
 
-    assert.deepEqual(renderer.getLogs(), [
-      {
-        message: `[ cyan(wait) ] installing dim(yellow((npm))) .  `,
-        stream: 'stdout',
-      },
-      {
-        message: `[ cyan(wait) ] updating dim(yellow((npm))) .. `,
-        stream: 'stdout',
-      },
-      {
-        message: `[ cyan(wait) ] updating dim(yellow((npm))) ...`,
-        stream: 'stdout',
-      },
-    ])
+    const logs = renderer.getLogs()
+    assert.equal(logs[0].message, `magenta(◒)  installing dim(yellow((npm)))`)
+    assert.isTrue(
+      logs.slice(1, -1).every(({ message }) => message.includes('updating dim(yellow((npm)))'))
+    )
+    assert.equal(logs.at(-1)!.message, `green(◇)  updating dim(yellow((npm)))`)
   })
 
   test('update spinner with new suffix', async ({ assert }) => {
@@ -369,20 +341,12 @@ test.group('Logger | await', () => {
 
     spinner.stop()
 
-    assert.deepEqual(renderer.getLogs(), [
-      {
-        message: `[ cyan(wait) ] installing dim(yellow((npm))) .  `,
-        stream: 'stdout',
-      },
-      {
-        message: `[ cyan(wait) ] updating dim(yellow((fs))) .. `,
-        stream: 'stdout',
-      },
-      {
-        message: `[ cyan(wait) ] updating dim(yellow((fs))) ...`,
-        stream: 'stdout',
-      },
-    ])
+    const logs = renderer.getLogs()
+    assert.equal(logs[0].message, `magenta(◒)  installing dim(yellow((npm)))`)
+    assert.isTrue(
+      logs.slice(1, -1).every(({ message }) => message.includes('updating dim(yellow((fs)))'))
+    )
+    assert.equal(logs.at(-1)!.message, `green(◇)  updating dim(yellow((fs)))`)
   })
 
   test('log using the child logger', ({ assert }) => {
@@ -396,11 +360,11 @@ test.group('Logger | await', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ green(success) ] Hello world`,
+        message: `green(◆)  Hello world`,
         stream: 'stdout',
       },
       {
-        message: `[ dim(green(success)) ] Hello world`,
+        message: `dim(green(◆))  Hello world`,
         stream: 'stdout',
       },
     ])
@@ -418,14 +382,14 @@ test.group('Logger | await', () => {
 
     assert.deepEqual(renderer.getLogs(), [
       {
-        message: `[ green(success) ] Hello world`,
+        message: `green(◆)  Hello world`,
         stream: 'stdout',
       },
     ])
 
     assert.deepEqual(renderer1.getLogs(), [
       {
-        message: `[ dim(green(success)) ] Hello world`,
+        message: `dim(green(◆))  Hello world`,
         stream: 'stdout',
       },
     ])
